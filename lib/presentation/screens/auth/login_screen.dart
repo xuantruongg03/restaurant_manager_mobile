@@ -211,7 +211,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ],
               ),
-              const SizedBox(height: 20),
+              const Spacer(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -220,7 +220,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(context, RouteNames.signUp);
+                      Navigator.pushReplacementNamed(context, RouteNames.signUp);
                     },
                     child: const Padding(
                       padding: EdgeInsets.only(left: 5.0),
@@ -235,6 +235,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   )
                 ],
               ),
+              const SizedBox(height: 20),
             ],
           ),
         ),
