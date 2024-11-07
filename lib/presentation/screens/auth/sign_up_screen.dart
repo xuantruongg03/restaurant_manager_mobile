@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:restaurant_manager_mobile/config/routes/route_names.dart';
 import 'package:restaurant_manager_mobile/core/theme/color_schemes.dart';
 
 class SignUpScreen extends StatelessWidget {
@@ -19,7 +20,7 @@ class SignUpScreen extends StatelessWidget {
 }
 
 class SignUp extends StatefulWidget {
-  const SignUp({super.key}); 
+  const SignUp({super.key});
 
   @override
   State<SignUp> createState() => _SignUpState();
@@ -44,7 +45,7 @@ class _SignUpState extends State<SignUp> {
                 Text(
                   'EASTERY',
                   style: TextStyle(
-                    color: Colors.orange,
+                    color: AppColors.primary,
                     fontSize: 35,
                     // fontWeight: FontWeight.bold,
                     fontFamily: 'KaiseiDecol',
@@ -53,7 +54,7 @@ class _SignUpState extends State<SignUp> {
                 Text(
                   'The best your choise',
                   style: TextStyle(
-                    color: Colors.orange,
+                    color: AppColors.primary,
                     fontSize: 16,
                     fontFamily: 'KaiseiDecol',
                   ),
@@ -82,12 +83,11 @@ class _SignUpState extends State<SignUp> {
             decoration: InputDecoration(
               filled: true,
               fillColor: Colors.grey[100],
-              border: OutlineInputBorder(
+              focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide.none,
               ),
               prefixIcon: const Icon(Icons.person_outline),
-              hintText: 'Tên đăng nhập',
+              hintText: 'Tên người dùng',
               hintStyle: const TextStyle(
                 color: Colors.grey,
               ),
@@ -98,9 +98,8 @@ class _SignUpState extends State<SignUp> {
             decoration: InputDecoration(
               filled: true,
               fillColor: Colors.grey[100],
-              border: OutlineInputBorder(
+              focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide.none,
               ),
               prefixIcon: const Icon(Icons.email_outlined),
               hintText: 'Email',
@@ -114,9 +113,8 @@ class _SignUpState extends State<SignUp> {
             decoration: InputDecoration(
               filled: true,
               fillColor: Colors.grey[100],
-              border: OutlineInputBorder(
+              focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide.none,
               ),
               prefixIcon: const Icon(Icons.phone_outlined),
               hintText: 'Số điện thoại',
@@ -131,9 +129,8 @@ class _SignUpState extends State<SignUp> {
             decoration: InputDecoration(
               filled: true,
               fillColor: Colors.grey[100],
-              border: OutlineInputBorder(
+              focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide.none,
               ),
               prefixIcon: const Icon(Icons.lock_outline),
               suffixIcon: IconButton(
@@ -188,9 +185,11 @@ class _SignUpState extends State<SignUp> {
                   });
                 },
                 child: Icon(
-                  _isTermsAccepted ? Icons.check_box : Icons.check_box_outline_blank,
+                  _isTermsAccepted
+                      ? Icons.check_box
+                      : Icons.check_box_outline_blank,
                   size: 20,
-                  color: Colors.orange,
+                  color: AppColors.primary,
                 ),
               ),
               const SizedBox(width: 8),
@@ -203,12 +202,12 @@ class _SignUpState extends State<SignUp> {
                           text: 'Bằng cách ấn "Đăng ký", bạn đã đồng ý với '),
                       TextSpan(
                         text: 'chính sách',
-                        style: TextStyle(color: Colors.orange),
+                        style: TextStyle(color: AppColors.primary),
                       ),
                       TextSpan(text: ' và '),
                       TextSpan(
                         text: 'điều kiện',
-                        style: TextStyle(color: Colors.orange),
+                        style: TextStyle(color: AppColors.primary),
                       ),
                       TextSpan(text: ' của chúng tôi'),
                     ],
@@ -227,10 +226,10 @@ class _SignUpState extends State<SignUp> {
                   const TextSpan(text: 'Bạn đã có tài khoản? '),
                   TextSpan(
                     text: 'Đăng nhập',
-                    style: const TextStyle(color: Colors.orange),
+                    style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
-                        Navigator.pushReplacementNamed(context, '/login');
+                        Navigator.pushReplacementNamed(context, RouteNames.login);
                       },
                   ),
                 ],
