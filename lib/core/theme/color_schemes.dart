@@ -21,6 +21,7 @@ class AppColors {
   static const Color darkBackground = Color(0xFF121212);
   static const Color darkSurface = Color(0xFF1E1E1E);
   static const Color disableButton = Color.fromARGB(255, 102, 94, 94);
+  static const Color link = Color(0xFF7C8EA9);
 
   // Light Color Scheme
   static const ColorScheme lightColorScheme = ColorScheme(
