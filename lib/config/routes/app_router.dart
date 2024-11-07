@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:restaurant_manager_mobile/presentation/screens/auth/login_screen.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/home/home_screen.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/splash/splash_screen.dart';
 import '../../presentation/screens/auth/sign_up_screen.dart';
@@ -9,10 +10,10 @@ class AppRouter {
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
-       case RouteNames.splash:
-        return MaterialPageRoute(
-          builder: (_) => const SplashScreen(),
-        );
+      //  case RouteNames.splash:
+      //   return MaterialPageRoute(
+      //     builder: (_) => const SplashScreen(),
+      //   );
 
       case RouteNames.signUp:
         return MaterialPageRoute(
@@ -23,6 +24,11 @@ class AppRouter {
       return MaterialPageRoute(
         builder: (_) => const HomeScreen(),
       );
+
+      case RouteNames.login:
+        return MaterialPageRoute(
+          builder: (_) => const LoginScreen(),
+        );
       // ... other routes ...
         
       default:

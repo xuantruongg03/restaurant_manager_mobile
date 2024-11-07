@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:restaurant_manager_mobile/core/theme/color_schemes.dart';
 
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({super.key});
@@ -26,6 +27,7 @@ class SignUp extends StatefulWidget {
 
 class _SignUpState extends State<SignUp> {
   bool _isPasswordVisible = false;
+  bool _isTermsAccepted = false;
 
   @override
   Widget build(BuildContext context) {
@@ -157,13 +159,14 @@ class _SignUpState extends State<SignUp> {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: _isTermsAccepted ? () {} : null,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.orange,
                 padding: const EdgeInsets.symmetric(vertical: 15),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
+                disabledBackgroundColor: Colors.grey,
               ),
               child: const Text(
                 'Đăng ký',
@@ -178,8 +181,18 @@ class _SignUpState extends State<SignUp> {
           // Terms and conditions
           Row(
             children: [
-              const Icon(Icons.check_box_outline_blank,
-                  size: 20, color: Colors.orange),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _isTermsAccepted = !_isTermsAccepted;
+                  });
+                },
+                child: Icon(
+                  _isTermsAccepted ? Icons.check_box : Icons.check_box_outline_blank,
+                  size: 20,
+                  color: Colors.orange,
+                ),
+              ),
               const SizedBox(width: 8),
               Expanded(
                 child: RichText(
@@ -209,7 +222,7 @@ class _SignUpState extends State<SignUp> {
           Center(
             child: RichText(
               text: TextSpan(
-                style: const TextStyle(color: Colors.black),
+                style: const TextStyle(color: AppColors.disableButton),
                 children: [
                   const TextSpan(text: 'Bạn đã có tài khoản? '),
                   TextSpan(
