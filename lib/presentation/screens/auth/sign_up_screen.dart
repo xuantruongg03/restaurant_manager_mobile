@@ -34,12 +34,10 @@ class _SignUpState extends State<SignUp> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(20.0),
-      child: ConstrainedBox(
-        constraints: BoxConstraints(
-          maxHeight: MediaQuery.of(context).size.height - 70, 
-        ),
+      child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
             const SizedBox(height: 40),
             // Logo and tagline
@@ -225,7 +223,6 @@ class _SignUpState extends State<SignUp> {
             ),
             const SizedBox(height: 20),
             // Login link
-            const Spacer(),
             Center(
               child: RichText(
                 text: TextSpan(

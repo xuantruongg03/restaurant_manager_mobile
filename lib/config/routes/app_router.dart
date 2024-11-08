@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/auth/forgot_password.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/auth/login_screen.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/home/home_screen.dart';
-import 'package:restaurant_manager_mobile/presentation/screens/splash/splash_screen.dart';
 import '../../presentation/screens/auth/sign_up_screen.dart';
+import '../../presentation/screens/auth/verify_screen.dart';
 import 'route_names.dart';
 
 class AppRouter {
@@ -11,10 +11,10 @@ class AppRouter {
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
-       case RouteNames.splash:
-        return MaterialPageRoute(
-          builder: (_) => const SplashScreen(),
-        );
+      //  case RouteNames.splash:
+      //   return MaterialPageRoute(
+      //     builder: (_) => const SplashScreen(),
+      //   );
 
       case RouteNames.signUp:
         return MaterialPageRoute(
@@ -34,6 +34,11 @@ class AppRouter {
       case RouteNames.forgotPassword:
         return MaterialPageRoute(
           builder: (_) => const ForgotPasswordScreen(),
+        );
+
+      case RouteNames.verify:
+        return MaterialPageRoute(
+          builder: (_) => const VerifyScreen(),
         );
         
       default:

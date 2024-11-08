@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:restaurant_manager_mobile/config/routes/app_router.dart';
+import 'package:restaurant_manager_mobile/config/routes/route_names.dart';
 import 'package:restaurant_manager_mobile/core/theme/app_theme.dart';
 
 void main() {
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
       // darkTheme: AppTheme.darkTheme,
       
       // Routing
-      initialRoute: '/sign-up', // Tạm thời set làm màn hình khởi đầu
+      initialRoute: RouteNames.verify, // Tạm thời set làm màn hình khởi đầu
       // initialRoute: RouteNames.splash, // Đặt route ban đầu là splash
       onGenerateRoute: AppRouter.onGenerateRoute,
     );
