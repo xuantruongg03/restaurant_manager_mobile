@@ -14,7 +14,7 @@ class AppTheme {
     // Colors
     colorScheme: AppColors.lightColorScheme,
     primaryColor: AppColors.primary,
-    scaffoldBackgroundColor: AppColors.lightBackground,
+    scaffoldBackgroundColor: const Color.fromARGB(255, 255, 255, 255),
     
     // Typography
     textTheme: AppTextThemes.textTheme,
