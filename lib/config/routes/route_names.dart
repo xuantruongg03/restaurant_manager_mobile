@@ -11,6 +11,7 @@ class RouteNames {
   
   // Main Routes
   static const String home = '/home';
+  static const String feature = '/feature';
   static const String menu = '/menu';
   static const String orders = '/orders';
   static const String tables = '/tables';

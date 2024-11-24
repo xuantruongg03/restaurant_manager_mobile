@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/auth/forgot_password.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/auth/login_screen.dart';
+import 'package:restaurant_manager_mobile/presentation/screens/features/feature_screen.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/home/home_screen.dart';
 import '../../presentation/screens/auth/sign_up_screen.dart';
 import '../../presentation/screens/auth/verify_screen.dart';
@@ -39,6 +40,11 @@ class AppRouter {
       case RouteNames.verify:
         return MaterialPageRoute(
           builder: (_) => const VerifyScreen(),
+        );
+
+      case RouteNames.feature:
+        return MaterialPageRoute(
+          builder: (_) => const FeatureScreen(),
         );
         
       default:
