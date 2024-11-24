@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       // darkTheme: AppTheme.darkTheme,
       
       // Routing
-      initialRoute: RouteNames.verify, // Tạm thời set làm màn hình khởi đầu
+      initialRoute: RouteNames.feature, // Tạm thời set làm màn hình khởi đầu
       // initialRoute: RouteNames.splash, // Đặt route ban đầu là splash
       onGenerateRoute: AppRouter.onGenerateRoute,
     );
