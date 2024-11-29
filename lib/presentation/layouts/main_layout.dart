@@ -50,7 +50,10 @@ class _MainLayoutState extends State<MainLayout> {
             )
           : null,
       body: SafeArea(
-        child: widget.child,
+        child: Container(
+          color: const Color(0xFFF2F4F7),
+          child: widget.child,
+        ),
       ),
       bottomNavigationBar: CustomBottomBar(
         selectedIndex: _selectedIndex,

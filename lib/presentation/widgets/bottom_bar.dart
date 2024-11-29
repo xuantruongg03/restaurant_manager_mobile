@@ -12,25 +12,22 @@ class CustomBottomBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 70,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(20),
-          topRight: Radius.circular(20),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
-            spreadRadius: 1,
-            blurRadius: 8,
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Container(
+          height: 70,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.2),
+                spreadRadius: 1,
+                blurRadius: 8,
+              ),
+            ],
           ),
-        ],
-      ),
-      child: Stack(
-        children: [
-          BottomNavigationBar(
+          child: BottomNavigationBar(
             type: BottomNavigationBarType.fixed,
             selectedItemColor: Colors.orange,
             unselectedItemColor: Colors.grey,
@@ -49,7 +46,7 @@ class CustomBottomBar extends StatelessWidget {
                 label: '',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.home),
+                icon: SizedBox(),
                 label: '',
               ),
               BottomNavigationBarItem(
@@ -62,36 +59,39 @@ class CustomBottomBar extends StatelessWidget {
               ),
             ],
           ),
-          Positioned(
-            left: 0,
-            right: 0,
-            top: -25,
-            child: GestureDetector(
-              onTap: () => onItemTapped(2),
-              child: Container(
-                width: 60,
-                height: 60,
-                decoration: BoxDecoration(
-                  color: Colors.orange,
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.orange.withOpacity(0.3),
-                      spreadRadius: 2,
-                      blurRadius: 8,
-                    ),
-                  ],
-                ),
-                child: const Icon(
-                  Icons.home,
-                  color: Colors.white,
-                  size: 30,
-                ),
+        ),
+        Positioned(
+          top: -30,
+          left: 0,
+          right: 0,
+          child: GestureDetector(
+            onTap: () {
+              // Add your action here
+            },
+            child: Container(
+              width: 60,
+              height: 60,
+              decoration: BoxDecoration(
+                color: Colors.orange,
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    spreadRadius: 2,
+                    blurRadius: 12,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: const Icon(
+                Icons.home_outlined,
+                color: Colors.white,
+                size: 32,
               ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
