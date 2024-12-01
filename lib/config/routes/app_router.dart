@@ -6,61 +6,48 @@ import 'package:restaurant_manager_mobile/presentation/screens/home/home_screen.
 import '../../presentation/screens/auth/sign_up_screen.dart';
 import '../../presentation/screens/auth/verify_screen.dart';
 import '../../presentation/screens/menu/menu_screen.dart';
+import '../../presentation/screens/menu/add_menu.dart';
 import 'route_names.dart';
 
 class AppRouter {
   const AppRouter._();
 
+  static final _authRoutes = <String, WidgetBuilder>{
+    RouteNames.login: (_) => const LoginScreen(),
+    RouteNames.signUp: (_) => const SignUpScreen(),
+    RouteNames.verify: (_) => const VerifyScreen(),
+    RouteNames.forgotPassword: (_) => const ForgotPasswordScreen(),
+  };
+
+  static final _mainRoutes = <String, WidgetBuilder>{
+    RouteNames.home: (_) => const HomeScreen(),
+    RouteNames.feature: (_) => const FeatureScreen(),
+  };
+
+  static final _menuRoutes = <String, WidgetBuilder>{
+    RouteNames.menu: (_) => const MenuScreen(),
+    RouteNames.addMenu: (_) => const AddMenuScreen(),
+  };
+
+  static final _routes = <String, WidgetBuilder>{
+    ..._authRoutes,
+    ..._mainRoutes,
+    ..._menuRoutes,
+  };
+
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
-    switch (settings.name) {
-      //  case RouteNames.splash:
-      //   return MaterialPageRoute(
-      //     builder: (_) => const SplashScreen(),
-      //   );
-
-      case RouteNames.signUp:
-        return MaterialPageRoute(
-          builder: (_) => const SignUpScreen(),
-        );
-      
-      case RouteNames.home:
-      return MaterialPageRoute(
-        builder: (_) => const HomeScreen(),
-      );
-
-      case RouteNames.login:
-        return MaterialPageRoute(
-          builder: (_) => const LoginScreen(),
-        );
-      
-      case RouteNames.forgotPassword:
-        return MaterialPageRoute(
-          builder: (_) => const ForgotPasswordScreen(),
-        );
-
-      case RouteNames.verify:
-        return MaterialPageRoute(
-          builder: (_) => const VerifyScreen(),
-        );
-
-      case RouteNames.feature:
-        return MaterialPageRoute(
-          builder: (_) => const FeatureScreen(),
-        );
-      
-      case RouteNames.menu:
-        return MaterialPageRoute(
-          builder: (_) => const MenuScreen(),
-        );
-        
-      default:
-        return MaterialPageRoute(
-          builder: (_) => Scaffold(
-            body: Center(
-              child: Text('No route defined for ${settings.name}'),
-            ),
-          ),
-        );
+    final builder = _routes[settings.name];
+    
+    if (builder != null) {
+      return MaterialPageRoute(builder: builder);
     }
+
+    return MaterialPageRoute(
+      builder: (_) => Scaffold(
+        body: Center(
+          child: Text('No route defined for ${settings.name}'),
+        ),
+      ),
+    );
   }
 }

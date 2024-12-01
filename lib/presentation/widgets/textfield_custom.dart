@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class TextFieldCustom extends StatelessWidget {
   final String hintText;
-  final IconData prefixIcon;
+  final IconData? prefixIcon;
   final bool obscureText;
   final Widget? suffixIcon;
   final TextEditingController? controller;
@@ -11,7 +11,7 @@ class TextFieldCustom extends StatelessWidget {
   const TextFieldCustom({
     super.key,
     required this.hintText,
-    required this.prefixIcon,
+    this.prefixIcon,
     this.obscureText = false,
     this.suffixIcon,
     this.controller,
@@ -25,17 +25,24 @@ class TextFieldCustom extends StatelessWidget {
       obscureText: obscureText,
       validator: validator,
       decoration: InputDecoration(
-        prefixIcon: Icon(prefixIcon),
+        prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
         hintText: hintText,
-        filled: true,
-        fillColor: Colors.grey[100],
+        fillColor: Colors.grey[50],
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide.none,
+          borderRadius: BorderRadius.circular(10),
+          borderSide: const BorderSide(color: Colors.white),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: const BorderSide(color: Colors.white),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: Colors.orange),
+          borderRadius: BorderRadius.circular(10),
+          borderSide: const BorderSide(color: Colors.blue),
+        ),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 12,
         ),
         hintStyle: const TextStyle(
           color: Colors.grey,

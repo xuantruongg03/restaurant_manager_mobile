@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:restaurant_manager_mobile/core/theme/color_schemes.dart';
 
 class Header extends StatelessWidget {
   final String title;
@@ -17,9 +18,9 @@ class Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 25),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       decoration: BoxDecoration(
-        color: Colors.orange,
+        color: AppColors.primary,
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.2),
