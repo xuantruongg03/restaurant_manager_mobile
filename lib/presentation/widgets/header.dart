@@ -44,13 +44,13 @@ class Header extends StatelessWidget {
                   fontSize: 20,
                   fontWeight: FontWeight.w500,
                 ),
-                textAlign: TextAlign.left,
+                textAlign: showBackButton && showActionButton ? TextAlign.center : TextAlign.left,
               ),
             ),
             if (showActionButton)
-              IconButton(
-                icon: const Icon(Icons.add, color: Colors.white),
-                onPressed: onActionPressed,
+              GestureDetector(
+                onTap: onActionPressed,
+                child: const Text("Thêm", style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500)),
               ),
           ],
         ),

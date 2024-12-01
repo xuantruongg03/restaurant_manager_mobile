@@ -22,4 +22,6 @@ class RouteNames {
   static const String tableDetails = '/tables/details';
   static const String menuItemDetails = '/menu/details';
   static const String settings = '/settings';
+  static const String addMenu = '/add-menu';
+  static const String menuDetail = '/menu/detail';
 }

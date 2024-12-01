@@ -5,6 +5,7 @@ import 'package:restaurant_manager_mobile/presentation/screens/features/feature_
 import 'package:restaurant_manager_mobile/presentation/screens/home/home_screen.dart';
 import '../../presentation/screens/auth/sign_up_screen.dart';
 import '../../presentation/screens/auth/verify_screen.dart';
+import '../../presentation/screens/menu/menu_screen.dart';
 import 'route_names.dart';
 
 class AppRouter {
@@ -45,6 +46,11 @@ class AppRouter {
       case RouteNames.feature:
         return MaterialPageRoute(
           builder: (_) => const FeatureScreen(),
+        );
+      
+      case RouteNames.menu:
+        return MaterialPageRoute(
+          builder: (_) => const MenuScreen(),
         );
         
       default:
