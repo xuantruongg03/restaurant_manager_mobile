@@ -65,7 +65,7 @@ class _MenuScreenState extends State<MenuScreen> {
   }) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, RouteNames.menuDetail);
+        Navigator.pushNamed(context, RouteNames.food);
       },
       child: Container(
         margin: const EdgeInsets.only(bottom: 12),

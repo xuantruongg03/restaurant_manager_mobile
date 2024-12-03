@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:restaurant_manager_mobile/core/theme/color_schemes.dart';
 
 class Filter extends StatelessWidget {
   final String? selectedValue;
@@ -23,8 +25,8 @@ class Filter extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            width: 120,
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            width: 100,
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(12),
@@ -44,17 +46,22 @@ class Filter extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 4),
                 child: Row(
                   children: [
-                    Expanded(
-                      child: Text(
-                        selectedValue ?? 'Lọc',
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                        ),
+                     Icon(
+                      selectedValue == 'Tất cả'
+                          ? PhosphorIconsBold.funnel
+                          : PhosphorIconsBold.funnelX,
+                      color: AppColors.primary,
+                      size: 20,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      selectedValue ?? 'Lọc',
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
-                    const Icon(Icons.filter_list, color: Colors.grey),
                   ],
                 ),
               ),
@@ -82,7 +89,7 @@ class Filter extends StatelessWidget {
               },
               icon: Icon(
                 sorted ? Icons.sort_by_alpha : Icons.sort,
-                color: Colors.blue,
+                color: AppColors.primary,
                 size: 20,
               ),
               label: const Text(
@@ -94,7 +101,7 @@ class Filter extends StatelessWidget {
                 ),
               ),
               style: TextButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding: const EdgeInsets.symmetric(horizontal: 8),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),

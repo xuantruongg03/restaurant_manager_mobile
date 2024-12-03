@@ -7,6 +7,7 @@ class TextFieldCustom extends StatelessWidget {
   final Widget? suffixIcon;
   final TextEditingController? controller;
   final String? Function(String?)? validator;
+  final String? errorText;
 
   const TextFieldCustom({
     super.key,
@@ -16,6 +17,7 @@ class TextFieldCustom extends StatelessWidget {
     this.suffixIcon,
     this.controller,
     this.validator,
+    this.errorText,
   });
 
   @override
@@ -27,7 +29,7 @@ class TextFieldCustom extends StatelessWidget {
       decoration: InputDecoration(
         prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
         hintText: hintText,
-        fillColor: Colors.grey[50],
+        fillColor: Colors.white,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: const BorderSide(color: Colors.white),
@@ -48,6 +50,19 @@ class TextFieldCustom extends StatelessWidget {
           color: Colors.grey,
         ),
         suffixIcon: suffixIcon,
+        errorStyle: const TextStyle(
+          color: Colors.red,
+          fontSize: 12,
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: const BorderSide(color: Colors.red),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: const BorderSide(color: Colors.red),
+        ),
+        errorText: errorText,
       ),
     );
   }

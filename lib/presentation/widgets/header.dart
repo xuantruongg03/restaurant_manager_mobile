@@ -6,6 +6,7 @@ class Header extends StatelessWidget {
   final bool showBackButton;
   final bool showActionButton;
   final VoidCallback? onActionPressed;
+  final String actionButtonText;
 
   const Header({
     super.key,
@@ -13,6 +14,7 @@ class Header extends StatelessWidget {
     this.showBackButton = false,
     this.showActionButton = false,
     this.onActionPressed,
+    this.actionButtonText = 'Thêm',
   });
 
   @override
@@ -51,7 +53,7 @@ class Header extends StatelessWidget {
             if (showActionButton)
               GestureDetector(
                 onTap: onActionPressed,
-                child: const Text("Thêm", style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500)),
+                child: Text(actionButtonText, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500)),
               ),
           ],
         ),

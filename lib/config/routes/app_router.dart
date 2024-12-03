@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/auth/forgot_password.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/auth/login_screen.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/features/feature_screen.dart';
+import 'package:restaurant_manager_mobile/presentation/screens/foods/food_screen.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/home/home_screen.dart';
 import '../../presentation/screens/auth/sign_up_screen.dart';
 import '../../presentation/screens/auth/verify_screen.dart';
 import '../../presentation/screens/menu/menu_screen.dart';
 import '../../presentation/screens/menu/add_menu.dart';
+import '../../presentation/screens/foods/add_food_screen.dart';
 import 'route_names.dart';
 
 class AppRouter {
@@ -29,10 +31,16 @@ class AppRouter {
     RouteNames.addMenu: (_) => const AddMenuScreen(),
   };
 
+  static final _foodRoutes = <String, WidgetBuilder>{
+    RouteNames.food: (_) => const FoodScreen(),
+    RouteNames.addFood: (_) => const AddFoodScreen(),
+  };
+
   static final _routes = <String, WidgetBuilder>{
     ..._authRoutes,
     ..._mainRoutes,
     ..._menuRoutes,
+    ..._foodRoutes,
   };
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
