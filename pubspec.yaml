@@ -40,6 +40,8 @@ dependencies:
   phosphor_flutter: ^2.0.1
   iconsax: ^0.0.8
   image_picker: ^1.1.2
+  marquee: ^2.3.0
+  qr_flutter: ^4.1.0
 
 dev_dependencies:
   flutter_test:

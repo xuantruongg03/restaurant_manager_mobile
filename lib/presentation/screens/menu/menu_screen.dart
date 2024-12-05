@@ -43,8 +43,9 @@ class _MenuScreenState extends State<MenuScreen> {
   List<Map<String, dynamic>> get filteredMenuItems {
     if (_selectedFilter == 'Tất cả') return _menuItems;
     return _menuItems
-        .where((item) =>
-            _selectedFilter == 'Hoạt động' ? item['isActive'] : !item['isActive'])
+        .where((item) => _selectedFilter == 'Hoạt động'
+            ? item['isActive']
+            : !item['isActive'])
         .toList();
   }
 
@@ -161,6 +162,9 @@ class _MenuScreenState extends State<MenuScreen> {
                 Navigator.pushNamed(context, RouteNames.addMenu);
               }),
 
+          const SizedBox(
+            height: 12,
+          ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Row(
@@ -168,7 +172,7 @@ class _MenuScreenState extends State<MenuScreen> {
                 const Expanded(
                   flex: 1,
                   child: Text(
-                    'Menu',
+                    '3 menu',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
@@ -177,32 +181,35 @@ class _MenuScreenState extends State<MenuScreen> {
                   ),
                 ),
                 const SizedBox(width: 16),
-                Expanded(
-                  flex: 3,
-                  child: Filter(
-                    selectedValue: _selectedFilter,
-                    options: MenuScreen.filterOptions,
-                    sorted: _sorted,
-                    onChanged: (value) {
-                      setState(() {
-                        _selectedFilter = value!;
-                      });
-                    },
-                    onSorted: (value) {
-                      setState(() {
-                        _sorted = value;
-                      });
-                    },
-                  ),
-                ),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Filter(
+                        selectedValue: _selectedFilter,
+                        options: MenuScreen.filterOptions,
+                        sorted: _sorted,
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedFilter = value!;
+                          });
+                        },
+                        onSorted: (value) {
+                          setState(() {
+                            _sorted = value;
+                          });
+                        },
+                      ),
+                    ]),
               ],
             ),
           ),
-
+          const SizedBox(
+            height: 12,
+          ),
           // Menu list
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.only(left: 16, right: 16),
               child: ListView(
                 children: sortedMenuItems
                     .map((item) => _buildMenuItem(

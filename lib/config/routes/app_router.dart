@@ -4,11 +4,13 @@ import 'package:restaurant_manager_mobile/presentation/screens/auth/login_screen
 import 'package:restaurant_manager_mobile/presentation/screens/features/feature_screen.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/foods/food_screen.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/home/home_screen.dart';
+import 'package:restaurant_manager_mobile/presentation/screens/tables/table_screen.dart';
 import '../../presentation/screens/auth/sign_up_screen.dart';
 import '../../presentation/screens/auth/verify_screen.dart';
 import '../../presentation/screens/menu/menu_screen.dart';
 import '../../presentation/screens/menu/add_menu.dart';
 import '../../presentation/screens/foods/add_food_screen.dart';
+import '../../presentation/screens/tables/add_table_screen.dart';
 import 'route_names.dart';
 
 class AppRouter {
@@ -36,16 +38,22 @@ class AppRouter {
     RouteNames.addFood: (_) => const AddFoodScreen(),
   };
 
+  static final _tableRoutes = <String, WidgetBuilder>{
+    RouteNames.tables: (_) => const TableScreen(),
+    RouteNames.addTable: (_) => const AddTableScreen(),
+  };
+
   static final _routes = <String, WidgetBuilder>{
     ..._authRoutes,
     ..._mainRoutes,
     ..._menuRoutes,
     ..._foodRoutes,
+    ..._tableRoutes,
   };
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     final builder = _routes[settings.name];
-    
+
     if (builder != null) {
       return MaterialPageRoute(builder: builder);
     }
