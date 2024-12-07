@@ -14,5 +14,7 @@ class StorageKeys {
   static const String role = 'role';
   static const String userId = 'userId';
   static const String isLogin = 'isLogin';
+  static const String name = 'name';
+  static const String statusUser = 'statusUser';
 }
 

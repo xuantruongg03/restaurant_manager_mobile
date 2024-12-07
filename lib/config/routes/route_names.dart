@@ -28,4 +28,5 @@ class RouteNames {
   static const String addFood = '/add-food';
   static const String addTable = '/add-table';
   static const String bill = '/bill';
+  static const String confirmPhone = '/confirm-phone';
 }

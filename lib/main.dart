@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
       // darkTheme: AppTheme.darkTheme,
       
       // Routing
-      initialRoute: RouteNames.signUp, // Tạm thời set làm màn hình khởi đầu
+      initialRoute: RouteNames.home, // Tạm thời set làm màn hình khởi đầu
       // initialRoute: RouteNames.splash, // Đặt route ban đầu là splash
       onGenerateRoute: AppRouter.onGenerateRoute,
     );

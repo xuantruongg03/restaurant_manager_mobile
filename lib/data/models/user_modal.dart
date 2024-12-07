@@ -1,20 +1,25 @@
 class UserModel {
+  final String? name;
   final String username;
-  final String email;
-  final String phone;
+  final String? phone;
   final String password;
 
   UserModel({
+    this.name,
     required this.username,
-    required this.email,
-    required this.phone,
+    this.phone,
     required this.password,
   });
 
   Map<String, dynamic> toJson() => {
-    'username': username,
-    'email': email,
-    'phone': phone,
-    'password': password,
-  };
+        'name': name,
+        'username': username,
+        'phone': phone,
+        'password': password,
+      };
+
+  Map<String, dynamic> toLoginJson() => {
+        'username': username,
+        'password': password,
+      };
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:restaurant_manager_mobile/config/routes/route_names.dart';
 import 'package:restaurant_manager_mobile/core/theme/color_schemes.dart';
 import 'package:restaurant_manager_mobile/data/services/auth_service.dart';
@@ -36,8 +37,8 @@ class _SignUpState extends State<SignUp> {
   final _authService = AuthService();
 
   // Add controllers
+  final _nameController = TextEditingController();
   final _usernameController = TextEditingController();
-  final _emailController = TextEditingController();
   final _phoneController = TextEditingController();
   final _passwordController = TextEditingController();
 
@@ -47,20 +48,28 @@ class _SignUpState extends State<SignUp> {
 
   @override
   void dispose() {
+    _nameController.dispose();
     _usernameController.dispose();
-    _emailController.dispose();
     _phoneController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
 
   Future<void> _register() async {
-    if (!_formKey.currentState!.validate() || !_isTermsAccepted) return;
+    if (!_formKey.currentState!.validate()) return;
+    if (!_isTermsAccepted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Bạn phải đồng ý với điều khoản và điều kiện'),
+        ),
+      );
+      return;
+    }
     setState(() => _isLoading = true);
 
     final user = UserModel(
+      name: _nameController.text,
       username: _usernameController.text,
-      email: _emailController.text,
       phone: _phoneController.text,
       password: _passwordController.text,
     );
@@ -76,7 +85,7 @@ class _SignUpState extends State<SignUp> {
         
       final storageService = await StorageService.getInstance();
 
-        await storageService.setString(StorageKeys.username, user.username);
+        await storageService.setString(StorageKeys.username, user.username ?? '');
         await storageService.setString(StorageKeys.password, user.password);
         await storageService.setBool(StorageKeys.isLogin, true);
 
@@ -97,6 +106,16 @@ class _SignUpState extends State<SignUp> {
   // Thêm các hàm validate
   String? _validateUsername(String? value) {
     if (value == null || value.isEmpty) {
+      return 'Vui lòng nhập tên đăng nhập';
+    }
+    if (value.length < 5) {
+      return 'Tên người dùng phải có ít nhất 5 ký tự';
+    }
+    return null;
+  }
+
+  String? _validateName(String? value) {
+    if (value == null || value.isEmpty) {
       return 'Vui lòng nhập tên người dùng';
     }
     if (value.length < 5) {
@@ -105,16 +124,16 @@ class _SignUpState extends State<SignUp> {
     return null;
   }
 
-  String? _validateEmail(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Vui lòng nhập email';
-    }
-    final emailRegex = RegExp(Regex.email);
-    if (!emailRegex.hasMatch(value)) {
-      return 'Email không đúng định dạng';
-    }
-    return null;
-  }
+  // String? _validateEmail(String? value) {
+  //   if (value == null || value.isEmpty) {
+  //     return 'Vui lòng nhập email';
+  //   }
+  //   final emailRegex = RegExp(Regex.email);
+  //   if (!emailRegex.hasMatch(value)) {
+  //     return 'Email không đúng định dạng';
+  //   }
+  //   return null;
+  // }
 
   String? _validatePhone(String? value) {
     if (value == null || value.isEmpty) {
@@ -205,7 +224,7 @@ class _SignUpState extends State<SignUp> {
               child: Column(
                 children: [
                   TextFormField(
-                    controller: _usernameController,
+                    controller: _nameController,
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: Colors.grey[100],
@@ -223,11 +242,11 @@ class _SignUpState extends State<SignUp> {
                         color: Colors.grey,
                       ),
                     ),
-                    validator: _validateUsername,
+                    validator: _validateName,
                   ),
                   const SizedBox(height: 12),
                   TextFormField(
-                    controller: _emailController,
+                    controller: _usernameController,
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: Colors.grey[100],
@@ -239,13 +258,13 @@ class _SignUpState extends State<SignUp> {
                         borderRadius: BorderRadius.circular(8),
                         borderSide: const BorderSide(color: Colors.white),
                       ),
-                      prefixIcon: const Icon(Icons.email_outlined),
-                      hintText: 'Email',
+                      prefixIcon: const Icon(PhosphorIconsRegular.userCircle),
+                      hintText: 'Tên đăng nhập',
                       hintStyle: const TextStyle(
                         color: Colors.grey,
                       ),
                     ),
-                    validator: _validateEmail,
+                    validator: _validateUsername,
                   ),
                   const SizedBox(height: 12),
                   TextFormField(
