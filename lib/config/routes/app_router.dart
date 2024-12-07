@@ -4,6 +4,7 @@ import 'package:restaurant_manager_mobile/presentation/screens/auth/login_screen
 import 'package:restaurant_manager_mobile/presentation/screens/features/feature_screen.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/foods/food_screen.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/home/home_screen.dart';
+import 'package:restaurant_manager_mobile/presentation/screens/payment/bill_screen.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/tables/table_screen.dart';
 import '../../presentation/screens/auth/sign_up_screen.dart';
 import '../../presentation/screens/auth/verify_screen.dart';
@@ -43,12 +44,17 @@ class AppRouter {
     RouteNames.addTable: (_) => const AddTableScreen(),
   };
 
+  static final _paymentRoutes = <String, WidgetBuilder>{
+    RouteNames.bill: (_) => const BillScreen(),
+  };
+
   static final _routes = <String, WidgetBuilder>{
     ..._authRoutes,
     ..._mainRoutes,
     ..._menuRoutes,
     ..._foodRoutes,
     ..._tableRoutes,
+    ..._paymentRoutes,
   };
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {

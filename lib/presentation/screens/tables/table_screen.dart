@@ -98,6 +98,7 @@ class _TableScreenState extends State<TableScreen> {
       required bool isMerge}) {
     return GestureDetector(
       onLongPress: () => _showQRModal(name, ""),
+      onTap: () => Navigator.pushNamed(context, RouteNames.bill),
       child: Container(
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(

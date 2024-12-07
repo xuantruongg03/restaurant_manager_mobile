@@ -1,7 +1,12 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:restaurant_manager_mobile/config/routes/route_names.dart';
 import 'package:restaurant_manager_mobile/core/theme/color_schemes.dart';
+import 'package:restaurant_manager_mobile/data/services/auth_service.dart';
+import 'package:restaurant_manager_mobile/data/models/user_modal.dart';
+import 'package:restaurant_manager_mobile/data/services/storage_service.dart';
+import 'package:restaurant_manager_mobile/utils/constant.dart';
 
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({super.key});
@@ -27,8 +32,122 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+  final _formKey = GlobalKey<FormState>();
+  final _authService = AuthService();
+
+  // Add controllers
+  final _usernameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _phoneController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  bool _isLoading = false;
   bool _isPasswordVisible = false;
   bool _isTermsAccepted = false;
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _emailController.dispose();
+    _phoneController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _register() async {
+    if (!_formKey.currentState!.validate() || !_isTermsAccepted) return;
+    setState(() => _isLoading = true);
+
+    final user = UserModel(
+      username: _usernameController.text,
+      email: _emailController.text,
+      phone: _phoneController.text,
+      password: _passwordController.text,
+    );
+
+    try {
+      final response = await _authService.signUp(user);
+      if (response['success']) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Đăng ký thành công'),
+          ),
+        );
+        
+      final storageService = await StorageService.getInstance();
+
+        await storageService.setString(StorageKeys.username, user.username);
+        await storageService.setString(StorageKeys.password, user.password);
+        await storageService.setBool(StorageKeys.isLogin, true);
+
+        Navigator.pushReplacementNamed(context, RouteNames.home);
+
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(response['error']),
+          ),
+        );
+      }
+    } finally {
+      setState(() => _isLoading = false);
+    }
+  }
+
+  // Thêm các hàm validate
+  String? _validateUsername(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Vui lòng nhập tên người dùng';
+    }
+    if (value.length < 5) {
+      return 'Tên người dùng phải có ít nhất 5 ký tự';
+    }
+    return null;
+  }
+
+  String? _validateEmail(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Vui lòng nhập email';
+    }
+    final emailRegex = RegExp(Regex.email);
+    if (!emailRegex.hasMatch(value)) {
+      return 'Email không đúng định dạng';
+    }
+    return null;
+  }
+
+  String? _validatePhone(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Vui lòng nhập số điện thoại';
+    }
+    final phoneRegex = RegExp(Regex.phone);
+    if (!phoneRegex.hasMatch(value)) {
+      return 'Số điện thoại không đúng định dạng';
+    }
+    return null;
+  }
+
+  String? _validatePassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Vui lòng nhập mật khẩu';
+    }
+    if (value.length < 8) {
+      return 'Mật khẩu phải có ít nhất 8 ký tự';
+    }
+    if (!RegExp(r'[A-Z]').hasMatch(value)) {
+      return 'Mật khẩu phải chứa ít nhất 1 chữ hoa';
+    }
+    if (!RegExp(r'[a-z]').hasMatch(value)) {
+      return 'Mật khẩu phải chứa ít nhất 1 chữ thường';
+    }
+    if (!RegExp(r'[0-9]').hasMatch(value)) {
+      return 'Mật khẩu phải chứa ít nhất 1 số';
+    }
+    if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value)) {
+      return 'Mật khẩu phải chứa ít nhất 1 ký tự đặc biệt';
+    }
+    return null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,76 +200,116 @@ class _SignUpState extends State<SignUp> {
             ),
             const SizedBox(height: 20),
             // Form fields
-            TextField(
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.grey[100],
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                prefixIcon: const Icon(Icons.person_outline),
-                hintText: 'Tên người dùng',
-                hintStyle: const TextStyle(
-                  color: Colors.grey,
-                ),
-              ),
-            ),
-            const SizedBox(height: 12),
-            TextField(
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.grey[100],
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                prefixIcon: const Icon(Icons.email_outlined),
-                hintText: 'Email',
-                hintStyle: const TextStyle(
-                  color: Colors.grey,
-                ),
-              ),
-            ),
-            const SizedBox(height: 12),
-            TextField(
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.grey[100],
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                prefixIcon: const Icon(Icons.phone_outlined),
-                hintText: 'Số điện thoại',
-                hintStyle: const TextStyle(
-                  color: Colors.grey,
-                ),
-              ),
-            ),
-            const SizedBox(height: 12),
-            TextField(
-              obscureText: !_isPasswordVisible,
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.grey[100],
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                prefixIcon: const Icon(Icons.lock_outline),
-                suffixIcon: IconButton(
-                  icon: Icon(
-                    _isPasswordVisible
-                        ? Icons.visibility_outlined
-                        : Icons.visibility_off_outlined,
+            Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  TextFormField(
+                    controller: _usernameController,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.grey[100],
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(color: Colors.white),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(color: Colors.white),
+                      ),
+                      prefixIcon: const Icon(Icons.person_outline),
+                      hintText: 'Tên người dùng',
+                      hintStyle: const TextStyle(
+                        color: Colors.grey,
+                      ),
+                    ),
+                    validator: _validateUsername,
                   ),
-                  onPressed: () {
-                    setState(() {
-                      _isPasswordVisible = !_isPasswordVisible;
-                    });
-                  },
-                ),
-                hintText: 'Mật khẩu',
-                hintStyle: const TextStyle(
-                  color: Colors.grey,
-                ),
+                  const SizedBox(height: 12),
+                  TextFormField(
+                    controller: _emailController,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.grey[100],
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(color: Colors.white),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(color: Colors.white),
+                      ),
+                      prefixIcon: const Icon(Icons.email_outlined),
+                      hintText: 'Email',
+                      hintStyle: const TextStyle(
+                        color: Colors.grey,
+                      ),
+                    ),
+                    validator: _validateEmail,
+                  ),
+                  const SizedBox(height: 12),
+                  TextFormField(
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      LengthLimitingTextInputFormatter(10),
+                    ],
+                    controller: _phoneController,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.grey[100],
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(color: Colors.white),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(color: Colors.white),
+                      ),
+                      prefixIcon: const Icon(Icons.phone_outlined),
+                      hintText: 'Số điện thoại',
+                      hintStyle: const TextStyle(
+                        color: Colors.grey,
+                      ),
+                    ),
+                    validator: _validatePhone,
+                  ),
+                  const SizedBox(height: 12),
+                  TextFormField(
+                    controller: _passwordController,
+                    obscureText: !_isPasswordVisible,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.grey[100],
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(color: Colors.white),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(color: Colors.white),
+                      ),
+                      prefixIcon: const Icon(Icons.lock_outline),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _isPasswordVisible
+                              ? Icons.visibility_outlined
+                              : Icons.visibility_off_outlined,
+                          color: Colors.black,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _isPasswordVisible = !_isPasswordVisible;
+                          });
+                        },
+                      ),
+                      hintText: 'Mật khẩu',
+                      hintStyle: const TextStyle(
+                        color: Colors.grey,
+                      ),
+                    ),
+                    validator: _validatePassword,
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: 20),
@@ -158,25 +317,10 @@ class _SignUpState extends State<SignUp> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: _isTermsAccepted ? () {} : null,
-                style: ButtonStyle(
-                  backgroundColor: WidgetStateProperty.all<Color>(Colors.orange),
-                  padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
-                    const EdgeInsets.symmetric(vertical: 15),
-                  ),
-                  shape: WidgetStateProperty.all<OutlinedBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                ),
-                child: const Text(
-                  'Đăng ký',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                  ),
-                ),
+                onPressed: _isLoading ? null : _register,
+                child: _isLoading
+                    ? const CircularProgressIndicator(color: Colors.white)
+                    : const Text('Đăng ký'),
               ),
             ),
             const SizedBox(height: 20),
@@ -231,10 +375,13 @@ class _SignUpState extends State<SignUp> {
                     const TextSpan(text: 'Bạn đã có tài khoản? '),
                     TextSpan(
                       text: 'Đăng nhập',
-                      style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                          color: AppColors.primary,
+                          fontWeight: FontWeight.bold),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
-                          Navigator.pushReplacementNamed(context, RouteNames.login);
+                          Navigator.pushReplacementNamed(
+                              context, RouteNames.login);
                         },
                     ),
                   ],
