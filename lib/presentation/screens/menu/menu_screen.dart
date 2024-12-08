@@ -150,82 +150,78 @@ class _MenuScreenState extends State<MenuScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MainLayout(
-      child: Column(
-        children: [
-          // Header with actions
-          Header(
-              title: "Menu",
-              showActionButton: true,
-              showBackButton: true,
-              onActionPressed: () {
-                Navigator.pushNamed(context, RouteNames.addMenu);
-              }),
+    return Column(
+      children: [
+        // Header with actions
+        Header(
+            title: "Menu",
+            showActionButton: true,
+            showBackButton: true,
+            onActionPressed: () {
+              Navigator.pushNamed(context, RouteNames.addMenu);
+            }),
 
-          const SizedBox(
-            height: 12,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Row(
-              children: [
-                const Expanded(
-                  flex: 1,
-                  child: Text(
-                    '3 menu',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black87,
-                    ),
+        const SizedBox(
+          height: 12,
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Row(
+            children: [
+              const Expanded(
+                flex: 1,
+                child: Text(
+                  '3 menu',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black87,
                   ),
                 ),
-                const SizedBox(width: 16),
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Filter(
-                        selectedValue: _selectedFilter,
-                        options: MenuScreen.filterOptions,
-                        sorted: _sorted,
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedFilter = value!;
-                          });
-                        },
-                        onSorted: (value) {
-                          setState(() {
-                            _sorted = value;
-                          });
-                        },
-                      ),
-                    ]),
-              ],
-            ),
-          ),
-          const SizedBox(
-            height: 12,
-          ),
-          // Menu list
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 16, right: 16),
-              child: ListView(
-                children: sortedMenuItems
-                    .map((item) => _buildMenuItem(
-                          context: context,
-                          title: item['title'],
-                          createdBy: item['createdBy'],
-                          createdAt: item['createdAt'],
-                          color: item['color'],
-                          isActive: item['isActive'],
-                        ))
-                    .toList(),
               ),
+              const SizedBox(width: 16),
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                Filter(
+                  selectedValue: _selectedFilter,
+                  options: MenuScreen.filterOptions,
+                  sorted: _sorted,
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedFilter = value!;
+                    });
+                  },
+                  onSorted: (value) {
+                    setState(() {
+                      _sorted = value;
+                    });
+                  },
+                ),
+              ]),
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 12,
+        ),
+        // Menu list
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 16, right: 16),
+            child: ListView(
+              children: sortedMenuItems
+                  .map((item) => _buildMenuItem(
+                        context: context,
+                        title: item['title'],
+                        createdBy: item['createdBy'],
+                        createdAt: item['createdAt'],
+                        color: item['color'],
+                        isActive: item['isActive'],
+                      ))
+                  .toList(),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

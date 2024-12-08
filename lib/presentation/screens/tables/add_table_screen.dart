@@ -7,8 +7,7 @@ class AddTableScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MainLayout(
-      child: Column(
+    return Column(
         children: [
           Header(
             title: 'Thêm bàn',
@@ -81,7 +80,6 @@ class AddTableScreen extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
+      );
   }
 }

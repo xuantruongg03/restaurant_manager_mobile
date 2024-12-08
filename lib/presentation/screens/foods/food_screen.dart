@@ -212,10 +212,9 @@ class _FoodScreenState extends State<FoodScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MainLayout(
-      child: Column(
-        children: [
-          Header(
+    return Column(
+      children: [
+        Header(
               title: 'Thực đơn',
               showActionButton: true,
               showBackButton: true,
@@ -323,7 +322,6 @@ class _FoodScreenState extends State<FoodScreen> {
             ),
           ),
         ],
-      ),
     );
   }
 }

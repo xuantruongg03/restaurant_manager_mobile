@@ -4,8 +4,13 @@ import 'package:restaurant_manager_mobile/config/routes/app_router.dart';
 import 'package:restaurant_manager_mobile/config/routes/route_names.dart';
 import 'package:restaurant_manager_mobile/core/theme/app_theme.dart';
 import 'package:restaurant_manager_mobile/core/theme/color_schemes.dart';
-void main() {
+import 'package:restaurant_manager_mobile/data/services/storage_service.dart';
+import 'package:restaurant_manager_mobile/presentation/screens/home/default_screen.dart';
+import 'package:restaurant_manager_mobile/presentation/widgets/auth_wrapper.dart';
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await StorageService.getInstance();
   // Set fullscreen mode
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: AppColors.primary, // Làm trong suốt thanh trạng thái
@@ -25,11 +30,9 @@ class MyApp extends StatelessWidget {
       
       // Theme
       theme: AppTheme.lightTheme,
-      // darkTheme: AppTheme.darkTheme,
       
       // Routing
-      initialRoute: RouteNames.home, // Tạm thời set làm màn hình khởi đầu
-      // initialRoute: RouteNames.splash, // Đặt route ban đầu là splash
+      initialRoute: RouteNames.home,
       onGenerateRoute: AppRouter.onGenerateRoute,
     );
   }

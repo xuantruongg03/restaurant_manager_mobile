@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:stylish_bottom_bar/stylish_bottom_bar.dart';
+import 'package:restaurant_manager_mobile/config/routes/route_names.dart';
+import 'package:restaurant_manager_mobile/core/theme/color_schemes.dart';
 
 class CustomBottomBar extends StatelessWidget {
   final int selectedIndex;
@@ -12,86 +16,97 @@ class CustomBottomBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        Container(
-          height: 70,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.2),
-                spreadRadius: 1,
-                blurRadius: 8,
+    return Container(
+      height: 70,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.2),
+            spreadRadius: 1,
+            blurRadius: 8,
+          ),
+        ],
+      ),
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          StylishBottomBar(
+            option: BubbleBarOptions(
+              barStyle: BubbleBarStyle.vertical,
+              bubbleFillStyle: BubbleFillStyle.fill,
+              opacity: 0.3,
+            ),
+            items: [
+              BottomBarItem(
+                icon: const Icon(PhosphorIconsBold.list),
+                title: const Text('Chức năng'),
+                selectedColor: AppColors.primary,
+                unSelectedColor: Colors.grey,
+              ),
+              BottomBarItem(
+                icon: const Icon(PhosphorIconsBold.receipt),
+                title: const Text('Đơn hàng'),
+                selectedColor: AppColors.primary,
+                unSelectedColor: Colors.grey,
+              ),
+              // Center empty item for FAB
+              BottomBarItem(
+                icon: const Icon(PhosphorIconsBold.house),
+                title: const Text('Trang chủ'),
+                selectedColor: AppColors.primary,
+                unSelectedColor: Colors.grey,
+              ),
+              BottomBarItem(
+                icon: const Icon(PhosphorIconsBold.bell),
+                title: const Text('Thông báo'),
+                selectedColor: AppColors.primary,
+                unSelectedColor: Colors.grey,
+              ),
+              BottomBarItem(
+                icon: const Icon(PhosphorIconsBold.user),
+                title: const Text('Cá nhân'),
+                selectedColor: AppColors.primary,
+                unSelectedColor: Colors.grey,
               ),
             ],
-          ),
-          child: BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            selectedItemColor: Colors.orange,
-            unselectedItemColor: Colors.grey,
             currentIndex: selectedIndex,
             onTap: onItemTapped,
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            iconSize: 24,
-            items: const [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.menu),
-                label: '',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.article_outlined),
-                label: '',
-              ),
-              BottomNavigationBarItem(
-                icon: SizedBox(),
-                label: '',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.notifications_outlined),
-                label: '',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.person_outline),
-                label: '',
-              ),
-            ],
           ),
-        ),
-        Positioned(
-          top: -30,
-          left: 0,
-          right: 0,
-          child: GestureDetector(
-            onTap: () {
-              // Add your action here
-            },
-            child: Container(
-              width: 60,
-              height: 60,
-              decoration: BoxDecoration(
-                color: Colors.orange,
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.2),
-                    spreadRadius: 2,
-                    blurRadius: 12,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: const Icon(
-                Icons.home_outlined,
-                color: Colors.white,
-                size: 32,
-              ),
-            ),
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
+
+  // Widget _buildCenterButton(BuildContext context) {
+  //   return Positioned(
+  //     top: -30,
+  //     left: 0,
+  //     right: 0,
+  //     child: GestureDetector(
+  //       onTap: () => Navigator.pushNamed(context, RouteNames.home),
+  //       child: Container(
+  //         width: 60,
+  //         height: 60,
+  //         decoration: BoxDecoration(
+  //           color: AppColors.primary,
+  //           shape: BoxShape.circle,
+  //           boxShadow: [
+  //             BoxShadow(
+  //               color: Colors.black.withOpacity(0.2),
+  //               spreadRadius: 2,
+  //               blurRadius: 12,
+  //               offset: const Offset(0, 4),
+  //             ),
+  //           ],
+  //         ),
+  //         child: const Icon(
+  //           PhosphorIconsBold.house,
+  //           color: Colors.white,
+  //           size: 32,
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 }

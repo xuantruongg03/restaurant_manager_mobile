@@ -8,10 +8,9 @@ class BillScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MainLayout(
-      child: Column(
-        children: [
-          const Header(
+    return Column(
+      children: [
+        const Header(
             title: 'Thanh toán',
             showBackButton: true,
           ),
@@ -104,7 +103,6 @@ class BillScreen extends StatelessWidget {
             ),
           ),
         ],
-      ),
     );
   }
 

@@ -1,5 +1,4 @@
 import 'package:shared_preferences/shared_preferences.dart';
-import 'encryption_service.dart';
 
 class StorageService {
   final SharedPreferences _prefs;
@@ -13,75 +12,36 @@ class StorageService {
     return _instance!;
   }
 
-  // Lưu dữ liệu với key tùy chọn
+  // String operations
+  String? getString(String key) {
+    return _prefs.getString(key);
+  }
+
   Future<bool> setString(String key, String value) async {
-    final encrypted = EncryptionService.encrypt(value);
-    return await _prefs.setString(key, encrypted);
+    return await _prefs.setString(key, value);
   }
 
-  Future<bool> setInt(String key, int value) async {
-    return await _prefs.setInt(key, value);
-  }
-
-  Future<bool> setDouble(String key, double value) async {
-    return await _prefs.setDouble(key, value);
+  // Boolean operations
+  bool? getBool(String key) {
+    return _prefs.getBool(key);
   }
 
   Future<bool> setBool(String key, bool value) async {
     return await _prefs.setBool(key, value);
   }
 
-  Future<bool> setStringList(String key, List<String> value) async {
-    return await _prefs.setStringList(key, value);
+  // Check if key exists
+  bool hasKey(String key) {
+    return _prefs.containsKey(key);
   }
 
-  // Lưu object dạng JSON
-  Future<bool> setObject(String key, Map<String, dynamic> value) async {
-    final encrypted = EncryptionService.encryptObject(value);
-    return await _prefs.setString(key, encrypted);
+  // Clear storage
+  Future<bool> clear() async {
+    return await _prefs.clear();
   }
 
-  // Lưu list object dạng JSON
-  Future<bool> setObjectList(String key, List<Map<String, dynamic>> value) async {
-    final encrypted = EncryptionService.encryptList(value);
-    return await _prefs.setString(key, encrypted);
+  // Remove specific key
+  Future<bool> remove(String key) async {
+    return await _prefs.remove(key);
   }
-
-  // Lấy dữ liệu
-  String? getString(String key) {
-    final encrypted = _prefs.getString(key);
-    if (encrypted == null) return null;
-    return EncryptionService.decrypt(encrypted);
-  }
-
-  int? getInt(String key) => _prefs.getInt(key);
-  double? getDouble(String key) => _prefs.getDouble(key);
-  bool? getBool(String key) => _prefs.getBool(key);
-  List<String>? getStringList(String key) => _prefs.getStringList(key);
-
-  // Lấy object dạng JSON
-  Map<String, dynamic>? getObject(String key) {
-    final encrypted = _prefs.getString(key);
-    if (encrypted == null) return null;
-    return EncryptionService.decryptObject(encrypted);
-  }
-
-  // Lấy list object dạng JSON
-  List<Map<String, dynamic>>? getObjectList(String key) {
-    final encrypted = _prefs.getString(key);
-    if (encrypted == null) return null;
-    return EncryptionService.decryptList(encrypted);
-  }
-
-  // Kiểm tra key tồn tại
-  bool hasKey(String key) => _prefs.containsKey(key);
-
-  // Xóa dữ liệu theo key
-  Future<bool> remove(String key) async => await _prefs.remove(key);
-
-  // Xóa tất cả dữ liệu
-  Future<bool> clear() async => await _prefs.clear();
-
-  // Lấy tất cả keys
-  Set<String> getKeys() => _prefs.getKeys();
 }

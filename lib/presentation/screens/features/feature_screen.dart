@@ -39,9 +39,8 @@ class FeatureScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MainLayout(
-      child: Column(
-        children: [
+    return Column(
+      children: [
           // Header
           const Header(title: "Chức năng"),
 
@@ -100,7 +99,6 @@ class FeatureScreen extends StatelessWidget {
             ),
           ),
         ],
-      ),
     );
   }
 }

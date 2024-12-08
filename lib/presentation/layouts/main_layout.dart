@@ -1,26 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:restaurant_manager_mobile/presentation/screens/features/feature_screen.dart';
+import 'package:restaurant_manager_mobile/presentation/screens/home/home_screen.dart';
+import 'package:restaurant_manager_mobile/presentation/screens/orders/order_screen.dart';
+import 'package:restaurant_manager_mobile/presentation/screens/notifications/notifications.dart';
+import 'package:restaurant_manager_mobile/presentation/screens/profile/profile_screen.dart';
 import 'package:restaurant_manager_mobile/presentation/widgets/bottom_bar.dart';
 
 class MainLayout extends StatefulWidget {
-  final Widget child;
-  final String? title;
-  final List<Widget>? actions;
-  final bool showBackButton;
-
-  const MainLayout({
-    super.key,
-    required this.child,
-    this.title,
-    this.actions,
-    this.showBackButton = false,
-  });
+  const MainLayout({super.key});
 
   @override
   State<MainLayout> createState() => _MainLayoutState();
 }
 
 class _MainLayoutState extends State<MainLayout> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 2;
+  
+  // Danh sách các màn hình
+  final List<Widget> _screens = [
+    const FeatureScreen(),
+    const OrderScreen(),
+    const HomeScreen(),
+    const NotificationsScreen(),
+    const ProfileScreen(),
+  ];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -31,30 +34,13 @@ class _MainLayoutState extends State<MainLayout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: widget.title != null
-          ? AppBar(
-              title: Text(
-                widget.title!,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              centerTitle: true,
-              leading: widget.showBackButton
-                  ? IconButton(
-                      icon: const Icon(Icons.arrow_back_ios),
-                      onPressed: () => Navigator.pop(context),
-                    )
-                  : null,
-              actions: widget.actions,
-            )
-          : null,
       body: SafeArea(
         child: Container(
           color: const Color(0xFFF2F4F7),
-          child: widget.child,
+          child: _screens[_selectedIndex],
         ),
       ),
+      extendBody: true, 
       bottomNavigationBar: CustomBottomBar(
         selectedIndex: _selectedIndex,
         onItemTapped: _onItemTapped,

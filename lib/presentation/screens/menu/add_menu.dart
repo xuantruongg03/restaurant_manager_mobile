@@ -7,10 +7,9 @@ class AddMenuScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MainLayout(
-      child: Column(
-        children: [
-          Header(
+    return Column(
+      children: [
+        Header(
             title: 'Thêm menu',
             showBackButton: true,
             showActionButton: true,
@@ -81,7 +80,6 @@ class AddMenuScreen extends StatelessWidget {
             ),
           ),
         ],
-      ),
     );
   }
 }

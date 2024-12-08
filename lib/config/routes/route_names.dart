@@ -16,6 +16,7 @@ class RouteNames {
   static const String orders = '/orders';
   static const String tables = '/tables';
   static const String profile = '/profile';
+  static const String notifications = '/notifications';
   
   // Feature Routes
   static const String orderDetails = '/orders/details';
@@ -29,4 +30,5 @@ class RouteNames {
   static const String addTable = '/add-table';
   static const String bill = '/bill';
   static const String confirmPhone = '/confirm-phone';
+
 }

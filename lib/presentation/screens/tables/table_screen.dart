@@ -214,9 +214,8 @@ class _TableScreenState extends State<TableScreen> {
           ),
         ),
       ),
-      body: MainLayout(
-        child: Column(
-          children: [
+      body: Column(
+        children: [
             Header(
               title: "Bàn",
               showBackButton: true,
@@ -292,7 +291,6 @@ class _TableScreenState extends State<TableScreen> {
             ),
           ],
         ),
-      ),
-    );
+      );
   }
 }

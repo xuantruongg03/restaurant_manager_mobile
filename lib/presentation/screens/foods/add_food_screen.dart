@@ -100,8 +100,7 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MainLayout(
-        child: Column(
+    return Column(
       children: [
         Header(
           title: 'Thêm món ăn',
@@ -178,7 +177,7 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
           ),
         ),
       ],
-    ));
+    );
   }
 
   Future<void> _showCategoryDialog(BuildContext context) async {
