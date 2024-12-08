@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:marquee/marquee.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:restaurant_manager_mobile/config/routes/route_names.dart';
-import 'package:restaurant_manager_mobile/presentation/layouts/main_layout.dart';
-import 'package:restaurant_manager_mobile/presentation/widgets/header.dart';
 import 'package:restaurant_manager_mobile/core/theme/color_schemes.dart';
-import 'package:marquee/marquee.dart';
-import 'package:restaurant_manager_mobile/presentation/screens/modals/qr_modal.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/modals/merge_modal.dart';
+import 'package:restaurant_manager_mobile/presentation/screens/modals/qr_modal.dart';
+import 'package:restaurant_manager_mobile/presentation/widgets/header.dart';
 
 class TableScreen extends StatefulWidget {
   const TableScreen({super.key});

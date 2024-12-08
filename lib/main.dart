@@ -5,8 +5,6 @@ import 'package:restaurant_manager_mobile/config/routes/route_names.dart';
 import 'package:restaurant_manager_mobile/core/theme/app_theme.dart';
 import 'package:restaurant_manager_mobile/core/theme/color_schemes.dart';
 import 'package:restaurant_manager_mobile/data/services/storage_service.dart';
-import 'package:restaurant_manager_mobile/presentation/screens/home/default_screen.dart';
-import 'package:restaurant_manager_mobile/presentation/widgets/auth_wrapper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

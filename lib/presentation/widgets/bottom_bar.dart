@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-import 'package:stylish_bottom_bar/stylish_bottom_bar.dart';
-import 'package:restaurant_manager_mobile/config/routes/route_names.dart';
 import 'package:restaurant_manager_mobile/core/theme/color_schemes.dart';
+import 'package:stylish_bottom_bar/stylish_bottom_bar.dart';
 
 class CustomBottomBar extends StatelessWidget {
   final int selectedIndex;

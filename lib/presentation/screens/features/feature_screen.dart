@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:restaurant_manager_mobile/presentation/layouts/main_layout.dart';
 import 'package:restaurant_manager_mobile/presentation/widgets/header.dart';
 
 class FeatureScreen extends StatelessWidget {
@@ -39,7 +38,8 @@ class FeatureScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Scaffold(
+      body: Column(
       children: [
           // Header
           const Header(title: "Chức năng"),
@@ -99,6 +99,7 @@ class FeatureScreen extends StatelessWidget {
             ),
           ),
         ],
+      ),
     );
   }
 }

@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:restaurant_manager_mobile/config/routes/route_names.dart';
 import 'package:restaurant_manager_mobile/core/theme/color_schemes.dart';
-import 'package:restaurant_manager_mobile/presentation/layouts/main_layout.dart';
+import 'package:restaurant_manager_mobile/presentation/widgets/filter.dart';
 import 'package:restaurant_manager_mobile/presentation/widgets/header.dart';
 import 'package:restaurant_manager_mobile/presentation/widgets/textfield_custom.dart';
 import 'package:restaurant_manager_mobile/utils/formats.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
-import 'package:restaurant_manager_mobile/presentation/widgets/filter.dart';
-import 'package:restaurant_manager_mobile/config/routes/route_names.dart';
 
 class FoodScreen extends StatefulWidget {
   const FoodScreen({super.key});
@@ -33,7 +32,7 @@ class _FoodScreenState extends State<FoodScreen> {
       'id': '2',
       'category': 'Đồ ăn',
     },
-        {
+    {
       'name': 'Bún bò',
       'price': 180000,
       'image': 'assets/images/image-food-demo.png',
@@ -41,7 +40,7 @@ class _FoodScreenState extends State<FoodScreen> {
       'id': '2',
       'category': 'Đồ ăn',
     },
-        {
+    {
       'name': 'Bún bò',
       'price': 180000,
       'image': 'assets/images/image-food-demo.png',
@@ -49,7 +48,7 @@ class _FoodScreenState extends State<FoodScreen> {
       'id': '2',
       'category': 'Đồ ăn',
     },
-        {
+    {
       'name': 'Bún bò',
       'price': 180000,
       'image': 'assets/images/image-food-demo.png',
@@ -57,7 +56,7 @@ class _FoodScreenState extends State<FoodScreen> {
       'id': '2',
       'category': 'Đồ ăn',
     },
-        {
+    {
       'name': 'Bún bò',
       'price': 180000,
       'image': 'assets/images/image-food-demo.png',
@@ -65,7 +64,7 @@ class _FoodScreenState extends State<FoodScreen> {
       'id': '2',
       'category': 'Đồ ăn',
     },
-        {
+    {
       'name': 'Bún bò',
       'price': 180000,
       'image': 'assets/images/image-food-demo.png',
@@ -77,7 +76,14 @@ class _FoodScreenState extends State<FoodScreen> {
 
   String _selectedFilter = 'Tất cả';
   bool _sorted = false;
-  static const filterOptions = ['Tất cả', 'Chiên', 'Nướng', 'Xào', 'Hấp', 'Trộn'];
+  static const filterOptions = [
+    'Tất cả',
+    'Chiên',
+    'Nướng',
+    'Xào',
+    'Hấp',
+    'Trộn'
+  ];
   final List<String> _categories = ['Tất cả', 'Đồ ăn', 'Đồ uống', 'Khác'];
   int _selectedIndex = 0;
   String _selectedCategory = 'Tất cả';
@@ -86,15 +92,14 @@ class _FoodScreenState extends State<FoodScreen> {
     var items = List<Map<String, dynamic>>.from(_foods);
 
     if (_selectedCategory != 'Tất cả') {
-      items = items.where((item) => 
-        item['category'] == _selectedCategory).toList();
+      items =
+          items.where((item) => item['category'] == _selectedCategory).toList();
     }
-    
+
     if (_selectedFilter != 'Tất cả') {
-      items = items.where((item) =>
-        item['type'] == _selectedFilter).toList();
+      items = items.where((item) => item['type'] == _selectedFilter).toList();
     }
-    
+
     return items;
   }
 
@@ -212,9 +217,10 @@ class _FoodScreenState extends State<FoodScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Header(
+    return Scaffold(
+      body: Column(
+        children: [
+          Header(
               title: 'Thực đơn',
               showActionButton: true,
               showBackButton: true,
@@ -322,6 +328,7 @@ class _FoodScreenState extends State<FoodScreen> {
             ),
           ),
         ],
+      ),
     );
   }
 }

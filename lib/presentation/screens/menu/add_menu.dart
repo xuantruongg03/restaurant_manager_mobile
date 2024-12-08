@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:restaurant_manager_mobile/presentation/layouts/main_layout.dart';
 import 'package:restaurant_manager_mobile/presentation/widgets/header.dart';
 import 'package:restaurant_manager_mobile/presentation/widgets/textfield_custom.dart';
+
 class AddMenuScreen extends StatelessWidget {
   const AddMenuScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Header(
+    return Scaffold(
+      body: Column(
+        children: [
+          Header(
             title: 'Thêm menu',
             showBackButton: true,
             showActionButton: true,
@@ -33,7 +34,6 @@ class AddMenuScreen extends StatelessWidget {
                               fontSize: 14,
                             ),
                           ),
-                          
                           TextSpan(
                             text:
                                 'Đặt tên menu cho nhà hàng của bạn, điều đó giúp bạn dễ dàng quản lý chúng.',
@@ -80,6 +80,7 @@ class AddMenuScreen extends StatelessWidget {
             ),
           ),
         ],
+      ),
     );
   }
 }

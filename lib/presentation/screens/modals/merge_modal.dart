@@ -4,7 +4,7 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 class MergeModal extends StatefulWidget {
   final String? initialTable1;
   final String? initialTable2;
-  
+
   // Nếu có initialTable1, nó sẽ là main table
   bool get hasMainTable => initialTable1 != null;
 
@@ -94,85 +94,91 @@ class _MergeModalState extends State<MergeModal> {
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Scaffold(
+      backgroundColor: Colors.black54,
+      body: Center(
+        child: Dialog(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                const Text(
-                  'Gộp bàn',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Gộp bàn',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.close),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // First table
+                    widget.hasMainTable
+                        ? _buildMainTable()
+                        : _buildSelectableTable(
+                            isFirstTable: true,
+                            selectedTable: selectedTable1,
+                          ),
+                    const SizedBox(width: 16),
+                    Transform.rotate(
+                      angle: 80 * 3.14159 / 180,
+                      child: const Icon(PhosphorIconsBold.link, size: 24),
+                    ),
+                    const SizedBox(width: 16),
+                    // Second table - luôn có thể chọn
+                    _buildSelectableTable(
+                      isFirstTable: false,
+                      selectedTable: selectedTable2,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: _canMergeTables() ? () {} : null,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.orange,
+                    minimumSize: const Size(double.infinity, 48),
+                  ),
+                  child: const Text(
+                    'Gộp',
+                    style: TextStyle(color: Colors.white),
                   ),
                 ),
-                IconButton(
-                  icon: const Icon(Icons.close),
-                  onPressed: () => Navigator.pop(context),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // First table
-                widget.hasMainTable 
-                  ? _buildMainTable() 
-                  : _buildSelectableTable(
-                      isFirstTable: true,
-                      selectedTable: selectedTable1,
+                const SizedBox(height: 12),
+                OutlinedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  style: OutlinedButton.styleFrom(
+                    minimumSize: const Size(double.infinity, 48),
+                    side: const BorderSide(color: Colors.orange),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
                     ),
-                const SizedBox(width: 16),
-                Transform.rotate(
-                  angle: 80 * 3.14159 / 180,
-                  child: const Icon(PhosphorIconsBold.link, size: 24),
-                ),
-                const SizedBox(width: 16),
-                // Second table - luôn có thể chọn
-                _buildSelectableTable(
-                  isFirstTable: false,
-                  selectedTable: selectedTable2,
+                  ),
+                  child: const Text(
+                    'Huỷ gộp',
+                    style: TextStyle(color: Colors.orange),
+                  ),
                 ),
               ],
             ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _canMergeTables() ? () {} : null,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.orange,
-                minimumSize: const Size(double.infinity, 48),
-              ),
-              child: const Text(
-                'Gộp',
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-            const SizedBox(height: 12),
-            OutlinedButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              style: OutlinedButton.styleFrom(
-                minimumSize: const Size(double.infinity, 48),
-                side: const BorderSide(color: Colors.orange),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              child: const Text(
-                'Huỷ gộp',
-                style: TextStyle(color: Colors.orange),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
@@ -226,7 +232,8 @@ class _MergeModalState extends State<MergeModal> {
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               border: Border.all(
-                color: selectedTable != null ? Colors.orange : Colors.grey[300]!,
+                color:
+                    selectedTable != null ? Colors.orange : Colors.grey[300]!,
                 width: selectedTable != null ? 2 : 1,
               ),
               borderRadius: BorderRadius.circular(8),

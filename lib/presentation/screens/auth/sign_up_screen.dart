@@ -85,7 +85,7 @@ class _SignUpState extends State<SignUp> {
         
       final storageService = await StorageService.getInstance();
 
-        await storageService.setString(StorageKeys.username, user.username ?? '');
+        await storageService.setString(StorageKeys.username, user.username);
         await storageService.setString(StorageKeys.password, user.password);
         await storageService.setBool(StorageKeys.isLogin, true);
 

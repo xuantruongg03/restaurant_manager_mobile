@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-import 'package:restaurant_manager_mobile/presentation/layouts/main_layout.dart';
 import 'package:restaurant_manager_mobile/presentation/widgets/header.dart';
 
 class BillScreen extends StatelessWidget {
@@ -8,9 +7,10 @@ class BillScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const Header(
+    return Scaffold(
+      body: Column(
+        children: [
+          const Header(
             title: 'Thanh toán',
             showBackButton: true,
           ),
@@ -59,8 +59,10 @@ class BillScreen extends StatelessWidget {
                   child: Table(
                     border: TableBorder(
                       borderRadius: BorderRadius.circular(8),
-                      horizontalInside: const BorderSide(color: Colors.grey, width: 0.5),
-                      verticalInside: const BorderSide(color: Colors.grey, width: 0.5),
+                      horizontalInside:
+                          const BorderSide(color: Colors.grey, width: 0.5),
+                      verticalInside:
+                          const BorderSide(color: Colors.grey, width: 0.5),
                       top: const BorderSide(color: Colors.grey, width: 0.5),
                       bottom: const BorderSide(color: Colors.grey, width: 0.5),
                       left: const BorderSide(color: Colors.grey, width: 0.5),
@@ -68,7 +70,7 @@ class BillScreen extends StatelessWidget {
                     ),
                     columnWidths: const {
                       0: FlexColumnWidth(1.3),
-                      1: FlexColumnWidth(2.8), 
+                      1: FlexColumnWidth(2.8),
                       2: FlexColumnWidth(0.8),
                       3: FlexColumnWidth(2),
                       4: FlexColumnWidth(1),
@@ -103,6 +105,7 @@ class BillScreen extends StatelessWidget {
             ),
           ),
         ],
+      ),
     );
   }
 
@@ -186,7 +189,8 @@ class BillScreen extends StatelessWidget {
     );
   }
 
-  TableRow _buildTableRow(String stt, String item, String quantity, String total, bool isServed) {
+  TableRow _buildTableRow(
+      String stt, String item, String quantity, String total, bool isServed) {
     return TableRow(
       children: [
         TableCell(
@@ -241,7 +245,9 @@ class BillScreen extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
             child: Icon(
-              isServed ? PhosphorIconsRegular.checkCircle : PhosphorIconsRegular.hourglassMedium,
+              isServed
+                  ? PhosphorIconsRegular.checkCircle
+                  : PhosphorIconsRegular.hourglassMedium,
               color: isServed ? Colors.green : Colors.orange,
               size: 20,
             ),

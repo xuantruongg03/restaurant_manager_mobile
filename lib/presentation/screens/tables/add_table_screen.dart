@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:restaurant_manager_mobile/presentation/layouts/main_layout.dart';
 import 'package:restaurant_manager_mobile/presentation/widgets/header.dart';
 import 'package:restaurant_manager_mobile/presentation/widgets/textfield_custom.dart';
+
 class AddTableScreen extends StatelessWidget {
   const AddTableScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Scaffold(
+      body: Column(
         children: [
           Header(
             title: 'Thêm bàn',
@@ -33,7 +34,6 @@ class AddTableScreen extends StatelessWidget {
                               fontSize: 14,
                             ),
                           ),
-                          
                           TextSpan(
                             text:
                                 'Đặt tên cho mỗi bàn, điều này sẽ giúp bạn dễ dàng quản lý và phân loại, đồng thời thu hút sự chú ý của khách hàng.',
@@ -80,6 +80,7 @@ class AddTableScreen extends StatelessWidget {
             ),
           ),
         ],
-      );
+      ),
+    );
   }
 }
