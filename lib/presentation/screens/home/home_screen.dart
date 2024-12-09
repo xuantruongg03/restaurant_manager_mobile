@@ -4,6 +4,7 @@ import 'package:restaurant_manager_mobile/config/routes/route_names.dart';
 import 'package:restaurant_manager_mobile/core/theme/color_schemes.dart';
 import 'package:restaurant_manager_mobile/utils/formats.dart';
 import 'package:restaurant_manager_mobile/presentation/layouts/main_layout.dart';
+
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
@@ -18,32 +19,31 @@ class HomeScreen extends StatelessWidget {
       'icon': 'assets/icons/menu.png',
       'route': RouteNames.menu
     },
-        {
+    {
       'title': 'Thống kê',
       'icon': 'assets/icons/menu.png',
       'route': RouteNames.menu
     },
-        {
+    {
       'title': 'Thống kê',
       'icon': 'assets/icons/menu.png',
       'route': RouteNames.menu
     },
-        {
+    {
       'title': 'Thống kê',
       'icon': 'assets/icons/menu.png',
       'route': RouteNames.menu
     },
-        {
+    {
       'title': 'Thống kê',
       'icon': 'assets/icons/menu.png',
       'route': RouteNames.menu
     },
-        {
+    {
       'title': 'Thống kê',
       'icon': 'assets/icons/menu.png',
       'route': RouteNames.feature
     },
-
   ];
 
   @override
@@ -67,15 +67,17 @@ class HomeScreen extends StatelessWidget {
                           PhosphorIconsBold.textAlignLeft,
                           size: 24,
                         ),
-                        const Text(
-                          'Eastery',
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.primary,
-                            fontFamily: 'KaiseiDecol',
-                          ),
-                        ),
+                        const Padding(
+                            padding: EdgeInsets.only(left: 10),
+                            child: Text(
+                              'Eastery',
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.primary,
+                                fontFamily: 'KaiseiDecol',
+                              ),
+                            )),
                         CircleAvatar(
                           radius: 20,
                           backgroundColor: Colors.grey[300],
@@ -149,7 +151,8 @@ class HomeScreen extends StatelessWidget {
                             ),
                             GestureDetector(
                               onTap: () {
-                                MainLayout.mainScreenKey.currentState?.changeScreen(0);
+                                MainLayout.mainScreenKey.currentState
+                                    ?.changeScreen(0);
                               },
                               child: const Icon(PhosphorIconsBold.arrowRight),
                             ),

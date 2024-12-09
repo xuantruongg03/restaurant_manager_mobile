@@ -50,61 +50,82 @@ class Header extends StatelessWidget {
                 icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
                 onPressed: () => Navigator.pop(context),
               ),
-            Expanded(
-              child: Text(
-                title,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500,
-                ),
-                textAlign: showBackButton && showActionButton
-                    ? TextAlign.center
-                    : TextAlign.left,
-              ),
-            ),
+            Padding(
+                padding: EdgeInsets.only(left: showBackButton ? 0 : 10),
+                child: Expanded(
+                  child: Text(
+                    title,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    textAlign: showBackButton && showActionButton
+                        ? TextAlign.center
+                        : TextAlign.left,
+                  ),
+                )),
             Container(
-              width: 70,
+              width: showActionButton 
+                  ? null 
+                  : ((showNotificationButton ?? false) && (showSettingButton ?? false)) 
+                      ? 70 
+                      : 35,
               height: 40,
               margin: EdgeInsets.zero,
               padding: EdgeInsets.zero,
               alignment: Alignment.centerRight,
-              child: GridView.count(
-                padding: EdgeInsets.zero,
-                crossAxisCount: 2,
-                mainAxisSpacing: 0,
-                crossAxisSpacing: 0,
-                childAspectRatio: 1.0,
-                physics: const NeverScrollableScrollPhysics(),
-                children: [
-                  if (showNotificationButton != null && showNotificationButton!)
-                    Center(
-                      child: IconButton(
-                        padding: EdgeInsets.zero,
-                        constraints: const BoxConstraints(),
-                        icon: const Icon(
-                          PhosphorIconsBold.checks,
-                          color: Colors.white,
-                          size: 24,
-                        ),
-                        onPressed: onNotificationPressed,
+              child: showActionButton 
+                  ? TextButton(
+                      onPressed: onActionPressed,
+                      child: Text(
+                        actionButtonText, 
+                        style: const TextStyle(
+                          color: Colors.white, 
+                          fontSize: 16, 
+                          fontWeight: FontWeight.w500
+                        )
                       ),
+                    )
+                  : GridView.count(
+                      padding: EdgeInsets.zero,
+                      crossAxisCount: ((showNotificationButton ?? false) &&
+                              (showSettingButton ?? false))
+                          ? 2
+                          : 1,
+                      mainAxisSpacing: 0,
+                      crossAxisSpacing: 0,
+                      childAspectRatio: 1.0,
+                      physics: const NeverScrollableScrollPhysics(),
+                      children: [
+                        if (showNotificationButton != null && showNotificationButton!)
+                          Center(
+                            child: IconButton(
+                              padding: EdgeInsets.zero,
+                              constraints: const BoxConstraints(),
+                              icon: const Icon(
+                                PhosphorIconsBold.checks,
+                                color: Colors.white,
+                                size: 24,
+                              ),
+                              onPressed: onNotificationPressed,
+                            ),
+                          ),
+                        if (showSettingButton != null && showSettingButton!)
+                          Center(
+                            child: IconButton(
+                              padding: EdgeInsets.zero,
+                              constraints: const BoxConstraints(),
+                              icon: const Icon(
+                                PhosphorIconsBold.gear,
+                                color: Colors.white,
+                                size: 24,
+                              ),
+                              onPressed: onSettingPressed,
+                            ),
+                          ),
+                      ],
                     ),
-                  if (showSettingButton != null && showSettingButton!)
-                    Center(
-                      child: IconButton(
-                        padding: EdgeInsets.zero,
-                        constraints: const BoxConstraints(),
-                        icon: const Icon(
-                          PhosphorIconsBold.gear,
-                          color: Colors.white,
-                          size: 24,
-                        ),
-                        onPressed: onSettingPressed,
-                      ),
-                    ),
-                ],
-              ),
             )
           ],
         ),
