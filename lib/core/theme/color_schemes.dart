@@ -7,6 +7,7 @@ class AppColors {
   // Brand Colors
   static const Color primary = Color(0xFFF29121);  // Orange brand color
   static const Color secondary = Color(0xFF2B2D42);
+  static const Color background = Color(0xFFF2F4F7);
   
   // Semantic Colors
   static const Color error = Color(0xFFDC3545);
