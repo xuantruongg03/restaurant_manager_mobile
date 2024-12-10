@@ -18,7 +18,7 @@ class QRModal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black54,
+      backgroundColor: Colors.white.withOpacity(0.4),
       body: Dialog(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),

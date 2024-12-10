@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:restaurant_manager_mobile/core/theme/color_schemes.dart';
 import 'package:restaurant_manager_mobile/presentation/widgets/header.dart';
 
 class FeatureScreen extends StatelessWidget {
@@ -39,6 +40,7 @@ class FeatureScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.background,
       body: Column(
       children: [
           // Header

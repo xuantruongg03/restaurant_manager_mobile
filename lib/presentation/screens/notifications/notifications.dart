@@ -191,7 +191,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                             noti["date"],
                             index == 0,
                           ))
-                      .toList(),
+                      ,
                 ],
               )
             ],

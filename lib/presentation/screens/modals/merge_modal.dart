@@ -44,9 +44,9 @@ class _MergeModalState extends State<MergeModal> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
+                  const Text(
                     'Chọn bàn thứ hai',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
@@ -95,7 +95,7 @@ class _MergeModalState extends State<MergeModal> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black54,
+      backgroundColor: Colors.white.withOpacity(0.4),
       body: Center(
         child: Dialog(
           backgroundColor: Colors.white,

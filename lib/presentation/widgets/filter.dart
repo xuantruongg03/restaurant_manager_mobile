@@ -25,7 +25,6 @@ class Filter extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            width: 100,
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
               color: Colors.white,

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:restaurant_manager_mobile/core/theme/color_schemes.dart';
 import 'package:restaurant_manager_mobile/presentation/widgets/header.dart';
 import 'package:restaurant_manager_mobile/presentation/widgets/textfield_custom.dart';
 
@@ -73,7 +74,7 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
             ),
           ],
         );
-      }).toList(),
+      }),
       if (_images.length < 5)
         GestureDetector(
           onTap: _pickImage,
@@ -101,6 +102,7 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.background,
       body: Column(
         children: [
           Header(
