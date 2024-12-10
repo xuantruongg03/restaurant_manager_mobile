@@ -1,5 +1,6 @@
 class Constants {
-  static const String appName = 'Nhà hàng';
+  static const String appName = 'Restaurant 4.0';
+  static const int lengthId = 5;
 }
 
 class Regex {

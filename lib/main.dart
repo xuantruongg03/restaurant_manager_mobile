@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Restaurant Manager',
+      title: 'Restaurant 4.0',
       debugShowCheckedModeBanner: false,
       
       // Theme

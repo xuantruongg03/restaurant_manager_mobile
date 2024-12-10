@@ -49,5 +49,7 @@
 	<string>Need to access photo library to select food images</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Need to access camera to take food photos</string>
+	<key>CFBundleDisplayName</key>
+	<string>Restaurant 4.0</string>
 </dict>
 </plist>

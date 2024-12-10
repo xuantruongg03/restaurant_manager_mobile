@@ -52,18 +52,16 @@ class Header extends StatelessWidget {
               ),
             Padding(
                 padding: EdgeInsets.only(left: showBackButton ? 0 : 10),
-                child: Expanded(
-                  child: Text(
-                    title,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    textAlign: showBackButton && showActionButton
-                        ? TextAlign.center
-                        : TextAlign.left,
+                child: Text(
+                  title,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
                   ),
+                  textAlign: showBackButton && showActionButton
+                      ? TextAlign.center
+                      : TextAlign.left,
                 )),
             Container(
               width: showActionButton 

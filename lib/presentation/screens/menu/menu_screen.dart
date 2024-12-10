@@ -181,11 +181,8 @@ class _MenuScreenState extends State<MenuScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(width: 16),
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Filter(
+                // const SizedBox(width: 16),
+                Filter(
                         selectedValue: _selectedFilter,
                         options: MenuScreen.filterOptions,
                         sorted: _sorted,
@@ -200,12 +197,8 @@ class _MenuScreenState extends State<MenuScreen> {
                           });
                         },
                       ),
-                    ]),
               ],
             ),
-          ),
-          const SizedBox(
-            height: 12,
           ),
           // Menu list
           Expanded(

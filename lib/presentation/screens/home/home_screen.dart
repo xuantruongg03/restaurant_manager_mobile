@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:restaurant_manager_mobile/config/routes/route_names.dart';
 import 'package:restaurant_manager_mobile/core/theme/color_schemes.dart';
+import 'package:restaurant_manager_mobile/data/services/restaurant_service.dart';
+import 'package:restaurant_manager_mobile/data/services/storage_service.dart';
 import 'package:restaurant_manager_mobile/presentation/layouts/main_layout.dart';
+import 'package:restaurant_manager_mobile/utils/constant.dart';
 import 'package:restaurant_manager_mobile/utils/formats.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -47,24 +50,31 @@ class HomeScreen extends StatelessWidget {
   ];
 
   void _checkRestaurant(BuildContext context) async {
-    // final storageService = await StorageService.getInstance();
-    // final hasRestaurant = storageService.hasKey(StorageKeys.restaurantId);
-    // if (!hasRestaurant) {
-    //   final randomName = '11111';
-    //   final randomId = 'R11111';
-    //   storageService.setString(StorageKeys.restaurantName, randomName);
+    final storageService = await StorageService.getInstance();
+    final hasRestaurant = storageService.hasKey(StorageKeys.restaurantId);
+    if (!hasRestaurant) {
+      final idAccount = storageService.getString(StorageKeys.userId);
+      if (idAccount == null) {
+        Navigator.pushNamedAndRemoveUntil(
+            context, RouteNames.login, (route) => false);
+        return;
+      }
+      const randomName = 'Nhà hàng 1';
 
-    //   //call api to create restaurant and get restaurant id set to storage
-    //   final response = await RestaurantService.createRestaurant(randomName, randomId);
-    //   if (response['success'] == true) {
-    //     storageService.setString(StorageKeys.restaurantId, response['data']['id']);
-    //   }
-    // }
+      //call api to create restaurant and get restaurant id set to storage
+      final response =
+          await RestaurantService.createRestaurant(randomName, idAccount);
+      if (response['success'] == true) {
+        storageService.setString(
+            StorageKeys.restaurantId, response['data']['idRestaurant']);
+        storageService.setString(StorageKeys.restaurantName, randomName);
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    // _checkRestaurant(context);
+    _checkRestaurant(context);
     return Scaffold(
       backgroundColor: AppColors.background,
       body: Column(
