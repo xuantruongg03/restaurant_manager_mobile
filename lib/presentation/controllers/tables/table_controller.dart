@@ -1,7 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:restaurant_manager_mobile/data/repositories/tables/table_repository.dart';
 import 'package:restaurant_manager_mobile/data/models/tables/table_modal.dart';
+import 'package:restaurant_manager_mobile/data/repositories/tables/table_repository.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/modals/merge_modal.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/modals/qr_modal.dart';
 
