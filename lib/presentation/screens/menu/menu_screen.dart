@@ -1,60 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:restaurant_manager_mobile/config/routes/route_names.dart';
 import 'package:restaurant_manager_mobile/core/theme/color_schemes.dart';
 import 'package:restaurant_manager_mobile/presentation/widgets/filter.dart';
 import 'package:restaurant_manager_mobile/presentation/widgets/header.dart';
+import 'package:restaurant_manager_mobile/presentation/controllers/menus/menu_controller.dart';
 
-class MenuScreen extends StatefulWidget {
+class MenuScreen extends GetView<MenusController> {
   const MenuScreen({super.key});
   static const filterOptions = ['Tất cả', 'Hoạt động', 'Không HĐ'];
-
-  @override
-  State<MenuScreen> createState() => _MenuScreenState();
-}
-
-class _MenuScreenState extends State<MenuScreen> {
-  String _selectedFilter = 'Tất cả';
-  bool _sorted = false;
-
-  final List<Map<String, dynamic>> _menuItems = [
-    {
-      'title': 'Menu 20k',
-      'createdBy': 'Thoangtv',
-      'createdAt': '21/08/2024',
-      'color': Colors.orange,
-      'isActive': true,
-    },
-    {
-      'title': 'Menu 50k',
-      'createdBy': 'Thoangtv',
-      'createdAt': '21/08/2024',
-      'color': Colors.purple,
-      'isActive': false,
-    },
-    {
-      'title': 'Menu 100k',
-      'createdBy': 'Thoangtv',
-      'createdAt': '21/08/2024',
-      'color': Colors.blue,
-      'isActive': false,
-    },
-  ];
-
-  List<Map<String, dynamic>> get filteredMenuItems {
-    if (_selectedFilter == 'Tất cả') return _menuItems;
-    return _menuItems
-        .where((item) => _selectedFilter == 'Hoạt động'
-            ? item['isActive']
-            : !item['isActive'])
-        .toList();
-  }
-
-  List<Map<String, dynamic>> get sortedMenuItems {
-    if (!_sorted) return filteredMenuItems;
-    final items = List<Map<String, dynamic>>.from(filteredMenuItems);
-    items.sort((a, b) => a['title'].compareTo(b['title']));
-    return items;
-  }
 
   Widget _buildMenuItem({
     required BuildContext context,
@@ -63,10 +17,13 @@ class _MenuScreenState extends State<MenuScreen> {
     required String createdAt,
     required Color color,
     required bool isActive,
+    required String idMenu,
   }) {
-    return GestureDetector(
+    return InkWell(
       onTap: () {
-        Navigator.pushNamed(context, RouteNames.food);
+        Get.toNamed(RouteNames.food, arguments: {
+          'idMenu': idMenu,
+        });
       },
       child: Container(
         margin: const EdgeInsets.only(bottom: 12),
@@ -110,7 +67,7 @@ class _MenuScreenState extends State<MenuScreen> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'By: $createdBy',
+                    'Tạo bởi: $createdBy',
                     style: const TextStyle(
                       fontSize: 14,
                       color: Colors.black54,
@@ -118,7 +75,7 @@ class _MenuScreenState extends State<MenuScreen> {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    'Created at: $createdAt',
+                    'Tạo lúc: $createdAt',
                     style: const TextStyle(
                       fontSize: 14,
                       color: Colors.black54,
@@ -154,69 +111,71 @@ class _MenuScreenState extends State<MenuScreen> {
       backgroundColor: AppColors.background,
       body: Column(
         children: [
-          // Header with actions
           Header(
               title: "Menu",
               showActionButton: true,
               showBackButton: true,
               onActionPressed: () {
-                Navigator.pushNamed(context, RouteNames.addMenu);
+                Get.toNamed(RouteNames.addMenu);
               }),
-
-          const SizedBox(
-            height: 12,
-          ),
+          const SizedBox(height: 12),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Row(
               children: [
-                const Expanded(
+                Expanded(
                   flex: 1,
-                  child: Text(
-                    '3 menu',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black87,
-                    ),
-                  ),
+                  child: Obx(() => Text(
+                        '${controller.sortedMenuItems.length} menu',
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black87,
+                        ),
+                      )),
                 ),
-                // const SizedBox(width: 16),
                 Filter(
-                        selectedValue: _selectedFilter,
-                        options: MenuScreen.filterOptions,
-                        sorted: _sorted,
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedFilter = value!;
-                          });
-                        },
-                        onSorted: (value) {
-                          setState(() {
-                            _sorted = value;
-                          });
-                        },
-                      ),
+                  selectedValue: controller.selectedFilter.value,
+                  options: filterOptions,
+                  sorted: controller.sorted.value,
+                  onChanged: (value) => controller.changeFilter(value ?? ''),
+                  onSorted: (value) => controller.toggleSort(),
+                ),
               ],
             ),
           ),
-          // Menu list
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 16, right: 16),
-              child: ListView(
-                children: sortedMenuItems
-                    .map((item) => _buildMenuItem(
-                          context: context,
-                          title: item['title'],
-                          createdBy: item['createdBy'],
-                          createdAt: item['createdAt'],
-                          color: item['color'],
-                          isActive: item['isActive'],
-                        ))
-                    .toList(),
-              ),
-            ),
+            child: Obx(() {
+              if (controller.isLoading.value) {
+                return const Center(child: CircularProgressIndicator());
+              }
+
+              if (controller.error.isNotEmpty) {
+                return Center(child: Text(controller.error.value));
+              }
+
+              return RefreshIndicator(
+                onRefresh: () async {
+                  await controller.fetchMenuItems();
+                },
+                child: ListView.builder(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  itemCount: controller.sortedMenuItems.length,
+                  itemBuilder: (context, index) {
+                    final item = controller.sortedMenuItems[index];
+                    return _buildMenuItem(
+                      context: context,
+                      title: item.name,
+                      createdBy: item.createdBy,
+                      createdAt: item.createdAt,
+                      color: item.color,
+                      isActive: item.isActive,
+                      idMenu: item.idMenu,
+                    );
+                  },
+                ),
+              );
+            }),
           ),
         ],
       ),

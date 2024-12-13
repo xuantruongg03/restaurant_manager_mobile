@@ -7,8 +7,7 @@ import 'package:restaurant_manager_mobile/presentation/screens/profile/profile_s
 import 'package:restaurant_manager_mobile/presentation/widgets/bottom_bar.dart';
 
 class MainLayout extends StatefulWidget {
-  static final GlobalKey<_MainLayoutState> mainScreenKey = GlobalKey();
-  MainLayout() : super(key: mainScreenKey);
+  const MainLayout({super.key});
 
   @override
   State<MainLayout> createState() => _MainLayoutState();
@@ -27,7 +26,6 @@ class _MainLayoutState extends State<MainLayout> {
   ];
 
   void changeScreen(int index) {
-    print('changeScreen: $index');
     setState(() {
       _selectedIndex = index;
     });

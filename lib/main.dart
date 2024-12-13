@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:restaurant_manager_mobile/config/routes/app_router.dart';
+import 'package:get/get.dart';
+import 'package:restaurant_manager_mobile/config/bindings/app_binding.dart';
+import 'package:restaurant_manager_mobile/config/routes/app_pages.dart';
 import 'package:restaurant_manager_mobile/config/routes/route_names.dart';
+import 'package:restaurant_manager_mobile/data/services/state_service.dart';
 import 'package:restaurant_manager_mobile/core/theme/app_theme.dart';
 import 'package:restaurant_manager_mobile/core/theme/color_schemes.dart';
 import 'package:restaurant_manager_mobile/data/services/storage_service.dart';
@@ -9,11 +12,15 @@ import 'package:restaurant_manager_mobile/data/services/storage_service.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await StorageService.getInstance();
-  // Set fullscreen mode
+
+  final stateService = Get.put(StateService());
+  await stateService.checkAuth();
+
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    statusBarColor: AppColors.primary, // Làm trong suốt thanh trạng thái
-    statusBarIconBrightness: Brightness.light, // Thay đổi màu biểu tượng trên thanh trạng thái
+    statusBarColor: AppColors.primary,
+    statusBarIconBrightness: Brightness.light,
   ));
+
   runApp(const MyApp());
 }
 
@@ -22,16 +29,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Restaurant 4.0',
       debugShowCheckedModeBanner: false,
-      
-      // Theme
       theme: AppTheme.lightTheme,
-      
-      // Routing
-      initialRoute: RouteNames.home,
-      onGenerateRoute: AppRouter.onGenerateRoute,
+      // home: const MainLayout(),
+      initialRoute: RouteNames.splash,
+      getPages: AppPages.routes,
+      initialBinding: AppBinding(),
     );
   }
 }

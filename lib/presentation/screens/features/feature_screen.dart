@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:restaurant_manager_mobile/config/routes/route_names.dart';
 import 'package:restaurant_manager_mobile/core/theme/color_schemes.dart';
 import 'package:restaurant_manager_mobile/presentation/widgets/header.dart';
 
@@ -59,43 +61,43 @@ class FeatureScreen extends StatelessWidget {
                   icon: 'assets/icons/menu.png', 
                   label: 'Menu',
                   color: Colors.green,
-                  onTap: () => Navigator.pushNamed(context, '/menu'),
+                  onTap: () => Get.toNamed(RouteNames.menu),
                 ),
                 _buildFeatureItem(
                   icon: 'assets/icons/reservation.png',
                   label: 'Bàn',
                   color: Colors.brown,
-                  onTap: () => Navigator.pushNamed(context, '/tables'),
+                  onTap: () => Get.toNamed(RouteNames.tables),
                 ),
                 _buildFeatureItem(
                   icon: 'assets/icons/billing.png',
                   label: 'Thanh toán',
                   color: Colors.amber,
-                  onTap: () => Navigator.pushNamed(context, '/billing'),
+                  onTap: () => Get.toNamed(RouteNames.bill),
                 ),
                 _buildFeatureItem(
                   icon: 'assets/icons/statistic.png',
                   label: 'Thống kê',
                   color: Colors.blue,
-                  onTap: () => Navigator.pushNamed(context, '/statistics'),
+                  onTap: () => Get.toNamed(RouteNames.splash),
                 ),
                 _buildFeatureItem(
                   icon: 'assets/icons/person-group.png',
                   label: 'Nhân viên',
                   color: Colors.orange,
-                  onTap: () => Navigator.pushNamed(context, '/staff'),
+                  onTap: () => Get.toNamed(RouteNames.staff),
                 ),
                 _buildFeatureItem(
                   icon: 'assets/icons/sale.png',
                   label: 'Chiến lược',
                   color: Colors.red,
-                  onTap: () => Navigator.pushNamed(context, '/strategy'),
+                  onTap: () => Get.toNamed(RouteNames.strategy),
                 ),
                 _buildFeatureItem(
                   icon: 'assets/icons/schedule.png',
                   label: 'Lịch làm việc',
                   color: Colors.indigo,
-                  onTap: () => Navigator.pushNamed(context, '/schedule'),
+                  onTap: () => Get.toNamed(RouteNames.schedule),
                 ),
               ],
             ),

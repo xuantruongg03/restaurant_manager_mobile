@@ -1,10 +1,12 @@
-import 'package:restaurant_manager_mobile/config/api_client.dart';
-import 'package:restaurant_manager_mobile/config/env.dart';
-import 'package:restaurant_manager_mobile/data/models/user_modal.dart';
 import 'dart:convert';
 
+import 'package:restaurant_manager_mobile/config/api_client.dart';
+import 'package:restaurant_manager_mobile/data/models/auth/login_request.dart';
+import 'package:restaurant_manager_mobile/data/models/auth/user_modal.dart';
+import 'package:restaurant_manager_mobile/data/services/storage_service.dart';
+import 'package:restaurant_manager_mobile/utils/constant.dart';
+
 class AuthService {
-  static const String baseUrl = Env.apiUrl;
 
     Future<Map> signUp(UserModel user) async {
     try {
@@ -103,9 +105,9 @@ class AuthService {
     }
   }
 
-  Future<Map> login(UserModel user) async {
+  Future<Map> login(LoginRequest request) async {
     try {
-      final response = await ApiClient.post('/account/login', body: user.toLoginJson());
+      final response = await ApiClient.post('/account/login', body: request.toJson());
       
       if (response['success'] == true) {
         return {
@@ -143,6 +145,21 @@ class AuthService {
         error: 'Lỗi hệ thống!'
       );
     }
+  }
+
+  Future<Map?> getAuth() async {
+    final storageService = await StorageService.getInstance();
+    final username = storageService.getString(StorageKeys.username);
+    final password = storageService.getString(StorageKeys.password);
+
+    if (username == null || password == null) {
+      return null;
+    }
+
+    return {
+      'username': username,
+      'password': password,
+    };
   }
 
   // Helper method để tạo response

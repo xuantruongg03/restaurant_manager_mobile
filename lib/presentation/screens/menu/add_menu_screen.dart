@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:restaurant_manager_mobile/core/theme/color_schemes.dart';
 import 'package:restaurant_manager_mobile/presentation/widgets/header.dart';
 import 'package:restaurant_manager_mobile/presentation/widgets/textfield_custom.dart';
+import 'package:restaurant_manager_mobile/presentation/controllers/menus/add_menu_controller.dart';
 
-class AddMenuScreen extends StatelessWidget {
+class AddMenuScreen extends GetView<AddMenuController> {
   const AddMenuScreen({super.key});
 
   @override
@@ -16,7 +18,7 @@ class AddMenuScreen extends StatelessWidget {
             title: 'Thêm menu',
             showBackButton: true,
             showActionButton: true,
-            onActionPressed: () {},
+            onActionPressed: () => controller.addMenu(context),
           ),
           Expanded(
             child: SingleChildScrollView(
@@ -71,8 +73,15 @@ class AddMenuScreen extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 8),
-                        const TextFieldCustom(
+                        TextFieldCustom(
+                          controller: controller.nameController,
                           hintText: 'Nhập tên menu...',
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Vui lòng nhập tên menu!';
+                            }
+                            return null;
+                          },
                         ),
                       ],
                     ),
