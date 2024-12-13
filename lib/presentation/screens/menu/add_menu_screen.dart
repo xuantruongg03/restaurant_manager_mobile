@@ -18,7 +18,7 @@ class AddMenuScreen extends GetView<AddMenuController> {
             title: 'Thêm menu',
             showBackButton: true,
             showActionButton: true,
-            onActionPressed: () => controller.addMenu(context),
+            onActionPressed: () => controller.addMenu(),
           ),
           Expanded(
             child: SingleChildScrollView(

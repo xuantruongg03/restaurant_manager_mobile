@@ -13,7 +13,8 @@ class ApiClient {
   };
 
   // GET request
-  static Future<Map<String, dynamic>> get(String endpoint, {
+  static Future<Map<String, dynamic>> get(
+    String endpoint, {
     Map<String, String>? headers,
     Map<String, dynamic>? queryParams,
   }) async {
@@ -90,19 +91,28 @@ class ApiClient {
 
   // Xử lý response
   static Map<String, dynamic> _handleResponse(http.Response response) {
-    final body = json.decode(response.body);
-    
-    if (response.statusCode >= 200 && response.statusCode < 300) {
-      return {
-        'success': true,
-        'data': body,
-        'message': body['message'] ?? 'Thành công',
-      };
-    } else {
+    try {
+      final decodedResponse = jsonDecode(utf8.decode(response.bodyBytes));
+
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        return {
+          'success': true,
+          'data': decodedResponse,
+          'message': decodedResponse['message'] ?? 'Thành công',
+        };
+      } else {
+        return {
+          'success': false,
+          'message': decodedResponse['message'] ?? 'Có lỗi xảy ra',
+          'error': decodedResponse['error'] ?? 'Không rõ lỗi',
+          'statusCode': response.statusCode,
+        };
+      }
+    } catch (e) {
       return {
         'success': false,
-        'message': body['message'] ?? 'Có lỗi xảy ra',
-        'error': body['error'],
+        'message': 'Phản hồi không hợp lệ từ server',
+        'error': e.toString(),
         'statusCode': response.statusCode,
       };
     }
@@ -112,7 +122,7 @@ class ApiClient {
   static Map<String, dynamic> _handleError(dynamic error) {
     return {
       'success': false,
-      'message': 'Có lỗi xảy ra: ${error.toString()}', 
+      'message': 'Có lỗi xảy ra: ${error.toString()}',
     };
   }
 

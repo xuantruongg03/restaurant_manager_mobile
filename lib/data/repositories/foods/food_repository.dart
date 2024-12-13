@@ -24,7 +24,6 @@ class FoodRepository {
       }, queryParams: {
         'idMenu': idMenu,
       });
-      print('response: $response');
       if (response['success'] == true) {
         final data = response['data']['data'];
         if (data is List) {

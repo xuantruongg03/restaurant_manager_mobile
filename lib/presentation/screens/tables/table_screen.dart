@@ -46,7 +46,8 @@ class TableScreen extends GetView<TablesController> {
                 ),
                 if (isMerge)
                   GestureDetector(
-                    onTap: () => controller.showMergeModalWithTables("Bàn 1", "Bàn 2"),
+                    onTap: () =>
+                        controller.showMergeModalWithTables("Bàn 1", "Bàn 2"),
                     child: Transform.rotate(
                       angle: 80 * 3.14159 / 180,
                       child: const Icon(
@@ -64,7 +65,7 @@ class TableScreen extends GetView<TablesController> {
               child: LayoutBuilder(
                 builder: (context, constraints) {
                   final textSpan = TextSpan(
-                    text: "Trạng thái: $status",
+                    text: "Trạng thái: ${controller.convertStatus(status)}",
                     style: const TextStyle(fontSize: 14),
                   );
                   final textPainter = TextPainter(
@@ -75,7 +76,7 @@ class TableScreen extends GetView<TablesController> {
 
                   if (textPainter.width > constraints.maxWidth) {
                     return Marquee(
-                      text: "Trạng thái: $status",
+                      text: "Trạng thái: ${controller.convertStatus(status)}",
                       style: const TextStyle(fontSize: 14),
                       scrollAxis: Axis.horizontal,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -89,7 +90,7 @@ class TableScreen extends GetView<TablesController> {
                     );
                   } else {
                     return Text(
-                      "Trạng thái: $status",
+                      "Trạng thái: ${controller.convertStatus(status)}",
                       style: const TextStyle(fontSize: 14),
                     );
                   }
@@ -118,8 +119,9 @@ class TableScreen extends GetView<TablesController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.background,
       floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 80.0, right: 10),
+        padding: const EdgeInsets.only(bottom: 50.0, right: 10),
         child: FloatingActionButton(
           onPressed: () => controller.showMergeModal(),
           backgroundColor: Colors.white,
@@ -140,7 +142,7 @@ class TableScreen extends GetView<TablesController> {
             showBackButton: true,
             showActionButton: true,
             onActionPressed: () {
-              Navigator.pushNamed(context, RouteNames.addTable);
+              Get.toNamed(RouteNames.addTable);
             },
             actionButtonText: "Thêm bàn",
           ),
@@ -151,60 +153,80 @@ class TableScreen extends GetView<TablesController> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: List.generate(
                 controller.categories.length,
-                (index) => GestureDetector(
-                  onTap: () {
-                    controller.changeFilter(controller.categories[index]);
-                  },
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        controller.categories[index],
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: controller.selectedFilter.value == index
-                              ? AppColors.primary
-                              : Colors.black87,
-                        ),
+                (index) => Obx(() => GestureDetector(
+                      onTap: () {
+                        controller.changeFilter(controller.categories[index]);
+                      },
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Obx(() => Text(
+                                controller.categories[index],
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                  color: controller.selectedFilter.value ==
+                                          controller.categories[index]
+                                      ? AppColors.primary
+                                      : Colors.black87,
+                                ),
+                              )),
+                          const SizedBox(height: 4),
+                          Container(
+                            height: 2,
+                            width: 50,
+                            color: controller.selectedFilter.value ==
+                                    controller.categories[index]
+                                ? AppColors.primary
+                                : Colors.transparent,
+                          ),
+                        ],
                       ),
-                      const SizedBox(height: 4),
-                      Container(
-                        height: 2,
-                        width: 50,
-                        color: controller.selectedFilter.value == index
-                            ? AppColors.primary
-                            : Colors.transparent,
-                      ),
-                    ],
-                  ),
-                ),
+                    )),
               ),
             ),
           ),
           Expanded(
-            child: Container(
-              color: Colors.grey[100],
-              child: GridView.builder(
-                padding: const EdgeInsets.all(16),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 16,
-                  mainAxisSpacing: 16,
-                  childAspectRatio: 1.6,
-                ),
-                itemCount: controller.filteredTables.length,
-                itemBuilder: (context, index) {
-                  final table = controller.filteredTables[index];
-                  return _buildTableItem(
-                      name: table['name'],
-                      status: table['status'],
-                      time: table['time'],
-                      isMerge: table['isMerge']);
+            child: Obx(() {
+              if (controller.isLoading.value) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (controller.error.isNotEmpty) {
+                return Center(child: Text(controller.error.value));
+              }
+              return RefreshIndicator(
+                onRefresh: () async {
+                  await controller.fetchTables();
                 },
-              ),
-            ),
-          ),
+                child: Container(
+                  color: Colors.grey[100],
+                  child: GridView.builder(
+                    padding: const EdgeInsets.all(16),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 16,
+                      mainAxisSpacing: 16,
+                      childAspectRatio: 1.6,
+                    ),
+                    shrinkWrap: true, // Add this to constrain GridView height
+                    physics:
+                        const AlwaysScrollableScrollPhysics(), // Ensure compatibility with RefreshIndicator
+                    itemCount: controller.filteredTables.length,
+                    itemBuilder: (context, index) {
+                      final table = controller.filteredTables[index];
+                      return _buildTableItem(
+                        name: table.name,
+                        status: table.status,
+                        time: table.time,
+                        isMerge: table.isMerge,
+                      );
+                    },
+                  ),
+                ),
+              );
+            }),
+          )
         ],
       ),
     );

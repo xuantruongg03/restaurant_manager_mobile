@@ -10,7 +10,7 @@ class TablesController extends GetxController {
 
   TablesController({required this.repository});
   
-  final categories = ['Tất cả', 'Đang hoạt động', 'Trống'];
+  final categories = ['Tất cả', 'Đang hoạt động', 'Trống'].obs;
   final RxList<TableModel> tables = <TableModel>[].obs;
   final RxBool isLoading = false.obs;
   final RxString error = ''.obs;
@@ -27,20 +27,24 @@ class TablesController extends GetxController {
     try {
       isLoading.value = true;
       error.value = '';
+      final data = await repository.getTables();
+      if (data != null) {
+        tables.value = data;
+      }
     } catch (e) {
       error.value = e.toString();
     } finally {
       isLoading.value = false;
     }
   }
-  List<Map<String, dynamic>> get filteredTables {
-    var items = List<Map<String, dynamic>>.from(tables);
+  List<TableModel> get filteredTables {
+    var items = List<TableModel>.from(tables);
 
     if (selectedFilter.value != 'Tất cả') {
-      if (selectedFilter.value == 'Đang hoạt động') {
-        items = items.where((item) => item['status'] != 'Trống').toList();
+      if (selectedFilter.value == 'Trống') {
+        items = items.where((item) => item.status == 'Available').toList();
       } else {
-        items = items.where((item) => item['status'] == selectedFilter.value).toList();
+        items = items.where((item) => item.status != 'Available').toList();
       }
     }
 
@@ -73,5 +77,12 @@ class TablesController extends GetxController {
         initialTable2: table2,
       ),
     );
+  }
+
+  String convertStatus(String status) {
+    if (status == 'Available') {
+      return 'Trống';
+    }
+    return 'Đang hoạt động';
   }
 }

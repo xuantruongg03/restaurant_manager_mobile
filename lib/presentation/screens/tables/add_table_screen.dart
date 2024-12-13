@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:restaurant_manager_mobile/core/theme/color_schemes.dart';
 import 'package:restaurant_manager_mobile/presentation/widgets/header.dart';
 import 'package:restaurant_manager_mobile/presentation/widgets/textfield_custom.dart';
+import '../../controllers/tables/add_table_controller.dart';
 
-class AddTableScreen extends StatelessWidget {
+class AddTableScreen extends GetView<AddTableController> {
   const AddTableScreen({super.key});
 
   @override
@@ -16,7 +18,7 @@ class AddTableScreen extends StatelessWidget {
             title: 'Thêm bàn',
             showBackButton: true,
             showActionButton: true,
-            onActionPressed: () {},
+            onActionPressed: () => controller.addTable(),
           ),
           Expanded(
             child: SingleChildScrollView(
@@ -71,8 +73,18 @@ class AddTableScreen extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 8),
-                        const TextFieldCustom(
-                          hintText: 'Nhập tên bàn...',
+                        Form(
+                          key: controller.formKey,
+                          child: TextFieldCustom(
+                            controller: controller.nameController,
+                            hintText: 'Nhập tên bàn...',
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Vui lòng nhập tên bàn';
+                              }
+                              return null;
+                            },
+                          ),
                         ),
                       ],
                     ),
