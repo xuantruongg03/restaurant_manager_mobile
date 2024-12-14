@@ -77,7 +77,7 @@ class FoodRepository {
       });
       print('response: $response');
       if (response['success'] == true) {
-        final data = response['data'];
+        final data = response['data']['data'];
         if (data is Map) {
           return FoodModel.fromJson(data as Map<String, dynamic>);
         } else {

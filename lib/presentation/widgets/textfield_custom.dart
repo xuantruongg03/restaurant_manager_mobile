@@ -9,6 +9,13 @@ class TextFieldCustom extends StatelessWidget {
   final String? Function(String?)? validator;
   final String? errorText;
   final Function(String)? onChanged;
+  final Color? backgroundColor;
+  final OutlineInputBorder? border;
+  final OutlineInputBorder? focusedBorder;
+  final OutlineInputBorder? enabledBorder;
+  final OutlineInputBorder? errorBorder;
+  final OutlineInputBorder? focusedErrorBorder;
+  final Color? hintTextColor;
 
   const TextFieldCustom({
     super.key,
@@ -20,6 +27,13 @@ class TextFieldCustom extends StatelessWidget {
     this.validator,
     this.errorText,
     this.onChanged,
+    this.backgroundColor,
+    this.border,
+    this.focusedBorder,
+    this.enabledBorder,
+    this.errorBorder,
+    this.focusedErrorBorder,
+    this.hintTextColor,
   });
 
   @override
@@ -31,16 +45,16 @@ class TextFieldCustom extends StatelessWidget {
       decoration: InputDecoration(
         prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
         hintText: hintText,
-        fillColor: Colors.white,
-        border: OutlineInputBorder(
+        fillColor: backgroundColor ?? Colors.white,
+        border: border ?? OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: const BorderSide(color: Colors.white),
+          ),
+        enabledBorder: enabledBorder ?? OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: const BorderSide(color: Colors.white),
         ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(color: Colors.white),
-        ),
-        focusedBorder: OutlineInputBorder(
+        focusedBorder: focusedBorder ?? OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: const BorderSide(color: Colors.blue),
         ),
@@ -48,19 +62,19 @@ class TextFieldCustom extends StatelessWidget {
           horizontal: 16,
           vertical: 12,
         ),
-        hintStyle: const TextStyle(
-          color: Colors.grey,
+        hintStyle: TextStyle(
+          color: hintTextColor ?? Colors.grey,
         ),
         suffixIcon: suffixIcon,
         errorStyle: const TextStyle(
           color: Colors.red,
           fontSize: 12,
         ),
-        errorBorder: OutlineInputBorder(
+        errorBorder: errorBorder ?? OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: const BorderSide(color: Colors.red),
-        ),
-        focusedErrorBorder: OutlineInputBorder(
+          ),
+        focusedErrorBorder: focusedErrorBorder ?? OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: const BorderSide(color: Colors.red),
         ),

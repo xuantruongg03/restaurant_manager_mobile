@@ -8,11 +8,11 @@ class AddMenuController extends GetxController {
 
   AddMenuController({required this.repository});
 
-  final formKey = GlobalKey<FormState>();
+  final key = GlobalKey<FormState>();
   final TextEditingController nameController = TextEditingController();
 
   void addMenu() async {
-    if (formKey.currentState!.validate()) {
+    if (key.currentState!.validate()) {
       final response = await repository.createMenu(nameController.text);
       if (response != null) {
         Get.find<MenusController>().fetchMenuItems();

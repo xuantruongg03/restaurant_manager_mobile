@@ -82,4 +82,31 @@ class MenuRepository {
       throw Exception('Error fetching menu items: $e');
     }
   }
+
+  Future<Map<String, dynamic>?> updateMenu(String idMenu, String nameMenu) async {
+    try {
+      final auth = await AuthService().getAuth();
+      if (auth == null) {
+        Get.toNamed(RouteNames.login);
+        return null;
+      }
+      final storageService = await StorageService.getInstance();
+      final response = await ApiClient.post('/menu/update-name', headers: {
+        'Authorization':
+            'Basic ${base64Encode(utf8.encode('${auth['username']}:${auth['password']}'))}'
+      }, body: {
+        'idMenu': idMenu,
+        'name': nameMenu,
+        'idRestaurant': storageService.getString(StorageKeys.restaurantId)
+      });
+      print('response: $response');
+      if (response["success"] == true) {
+        return response;
+      }
+      return null;
+    } catch (e) {
+      print('error: $e');
+      throw Exception('Error updating menu: $e');
+    }
+  }
 }

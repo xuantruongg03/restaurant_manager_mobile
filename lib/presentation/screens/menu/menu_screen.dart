@@ -5,10 +5,16 @@ import 'package:restaurant_manager_mobile/core/theme/color_schemes.dart';
 import 'package:restaurant_manager_mobile/presentation/widgets/filter.dart';
 import 'package:restaurant_manager_mobile/presentation/widgets/header.dart';
 import 'package:restaurant_manager_mobile/presentation/controllers/menus/menu_controller.dart';
+import 'package:restaurant_manager_mobile/presentation/screens/modals/edit_name_menu_modal.dart';
 
 class MenuScreen extends GetView<MenusController> {
   const MenuScreen({super.key});
-  static const filterOptions = ['Tất cả', 'Hoạt động', 'Không HĐ'];
+
+  void _showEditNameMenuModal(String idMenu, String nameMenu) {
+    Get.dialog(EditNameMenuModal(idMenu: idMenu, nameMenu: nameMenu, onUpdateNameMenu: (value) {
+      controller.updateNameMenu(idMenu, value);
+    }));
+  }
 
   Widget _buildMenuItem({
     required BuildContext context,
@@ -25,6 +31,7 @@ class MenuScreen extends GetView<MenusController> {
           'idMenu': idMenu,
         });
       },
+      onLongPress: () => _showEditNameMenuModal(idMenu, title),
       child: Container(
         margin: const EdgeInsets.only(bottom: 12),
         decoration: BoxDecoration(
@@ -136,7 +143,7 @@ class MenuScreen extends GetView<MenusController> {
                 ),
                 Filter(
                   selectedValue: controller.selectedFilter.value,
-                  options: filterOptions,
+                  options: controller.filterOptions,
                   sorted: controller.sorted.value,
                   onChanged: (value) => controller.changeFilter(value ?? ''),
                   onSorted: (value) => controller.toggleSort(),

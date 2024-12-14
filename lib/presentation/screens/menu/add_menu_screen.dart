@@ -73,16 +73,18 @@ class AddMenuScreen extends GetView<AddMenuController> {
                           ),
                         ),
                         const SizedBox(height: 8),
-                        TextFieldCustom(
-                          controller: controller.nameController,
-                          hintText: 'Nhập tên menu...',
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Vui lòng nhập tên menu!';
-                            }
-                            return null;
-                          },
-                        ),
+                        Form(
+                            key: controller.key,
+                            child: TextFieldCustom(
+                              controller: controller.nameController,
+                              hintText: 'Nhập tên menu...',
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Vui lòng nhập tên menu!';
+                                }
+                                return null;
+                              },
+                            )),
                       ],
                     ),
                   ),
