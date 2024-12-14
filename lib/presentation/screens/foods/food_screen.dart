@@ -42,7 +42,7 @@ class FoodScreen extends GetView<FoodController> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
               image: DecorationImage(
-                image: AssetImage(image),
+                image: NetworkImage(image),
                 fit: BoxFit.cover,
               ),
             ),
@@ -95,18 +95,28 @@ class FoodScreen extends GetView<FoodController> {
                 ),
               ),
               const SizedBox(height: 10),
-              const Row(
+              Row(
                 children: [
-                  Icon(
-                    PhosphorIconsBold.pencilSimpleLine,
-                    color: AppColors.outline,
-                    size: 20,
+                  GestureDetector(
+                    onTap: () {
+                      controller.editFood(id);
+                    },
+                    child: const Icon(
+                      PhosphorIconsBold.pencilSimpleLine,
+                      color: AppColors.outline,
+                      size: 20,
+                    ),
                   ),
-                  SizedBox(width: 4),
-                  Icon(
-                    PhosphorIconsBold.trash,
-                    color: AppColors.outline,
-                    size: 20,
+                  const SizedBox(width: 4),
+                  GestureDetector(
+                    onTap: () {
+                      controller.deleteFood(id);
+                    },
+                    child: const Icon(
+                      PhosphorIconsBold.trash,
+                      color: AppColors.outline,
+                      size: 20,
+                    ),
                   ),
                 ],
               )
@@ -153,7 +163,7 @@ class FoodScreen extends GetView<FoodController> {
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
-                              color: controller.selectedIndex == index
+                              color: controller.selectedIndex.value == index
                                   ? AppColors.primary
                                   : Colors.black87,
                             ),
@@ -164,7 +174,7 @@ class FoodScreen extends GetView<FoodController> {
                             curve: Curves.easeInOut,
                             height: 2,
                             width: 50,
-                            color: controller.selectedIndex == index
+                            color: controller.selectedIndex.value == index
                                 ? AppColors.primary
                                 : Colors.transparent,
                           )),
@@ -175,11 +185,14 @@ class FoodScreen extends GetView<FoodController> {
             ),
           ),
           const SizedBox(height: 10),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: TextFieldCustom(
               hintText: 'Tìm kiếm món ăn',
               prefixIcon: PhosphorIconsBold.magnifyingGlass,
+              onChanged: (value) {
+                controller.search.value = value;
+              },
             ),
           ),
           Padding(
@@ -187,14 +200,14 @@ class FoodScreen extends GetView<FoodController> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  '${controller.sortedFoodItems.length} món',
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black87,
-                  ),
-                ),
+                Obx(() => Text(
+                      '${controller.sortedFoodItems.length} món',
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black87,
+                      ),
+                    )),
                 Obx(() => Filter(
                       selectedValue: controller.selectedFilter.value,
                       options: controller.filterOptions,
@@ -229,10 +242,10 @@ class FoodScreen extends GetView<FoodController> {
                   final food = controller.sortedFoodItems[index];
                   return _buildFoodItem(
                     context: context,
-                    title: food['name'],
-                    price: food['price'],
-                    image: food['image'],
-                    id: food['id'] ?? '',
+                    title: food.name,
+                    price: food.price,
+                    image: food.image,
+                    id: food.idFood,
                   );
                 },
               );

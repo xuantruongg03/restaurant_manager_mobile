@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:restaurant_manager_mobile/config/env.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ApiClient {
-  static String baseUrl = Env.apiUrl;
+  static String baseUrl = dotenv.env['API_URL'] ?? 'http://localhost:8082';
   static final http.Client _client = http.Client();
 
   // Headers mặc định cho mọi request

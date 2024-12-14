@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -8,6 +10,7 @@ import 'package:restaurant_manager_mobile/data/services/state_service.dart';
 import 'package:restaurant_manager_mobile/core/theme/app_theme.dart';
 import 'package:restaurant_manager_mobile/core/theme/color_schemes.dart';
 import 'package:restaurant_manager_mobile/data/services/storage_service.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,6 +23,8 @@ void main() async {
     statusBarColor: AppColors.primary,
     statusBarIconBrightness: Brightness.light,
   ));
+  
+  await dotenv.load(fileName: '.env');
 
   runApp(const MyApp());
 }

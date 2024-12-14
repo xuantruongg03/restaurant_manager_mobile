@@ -8,6 +8,7 @@ class TextFieldCustom extends StatelessWidget {
   final TextEditingController? controller;
   final String? Function(String?)? validator;
   final String? errorText;
+  final Function(String)? onChanged;
 
   const TextFieldCustom({
     super.key,
@@ -18,6 +19,7 @@ class TextFieldCustom extends StatelessWidget {
     this.controller,
     this.validator,
     this.errorText,
+    this.onChanged,
   });
 
   @override
@@ -64,6 +66,7 @@ class TextFieldCustom extends StatelessWidget {
         ),
         errorText: errorText,
       ),
+      onChanged: onChanged,
     );
   }
 }

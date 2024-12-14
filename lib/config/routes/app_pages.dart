@@ -9,6 +9,7 @@ import 'package:restaurant_manager_mobile/presentation/bindings/menus/add_menu_b
 import 'package:restaurant_manager_mobile/presentation/bindings/menus/menu_binding.dart';
 import 'package:restaurant_manager_mobile/presentation/bindings/table/add_table_binding.dart';
 import 'package:restaurant_manager_mobile/presentation/bindings/table/table_binding.dart';
+import 'package:restaurant_manager_mobile/presentation/bindings/bills/bill_binding.dart';
 import 'package:restaurant_manager_mobile/presentation/layouts/main_layout.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/auth/login_screen.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/foods/add_food_screen.dart';
@@ -18,6 +19,7 @@ import 'package:restaurant_manager_mobile/presentation/screens/menu/add_menu_scr
 import 'package:restaurant_manager_mobile/presentation/screens/menu/menu_screen.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/tables/add_table_screen.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/tables/table_screen.dart';
+import 'package:restaurant_manager_mobile/presentation/screens/bills/bill_screen.dart';
 
 class AppPages {
   static final routes = [
@@ -80,6 +82,13 @@ class AppPages {
       name: RouteNames.addTable,
       page: () => const AddTableScreen(),
       binding: AddTableBinding(),
+      middlewares: [AuthMiddleware()],
+    ),
+
+    GetPage(
+      name: RouteNames.bill,
+      page: () => const BillScreen(),
+      binding: BillBinding(),
       middlewares: [AuthMiddleware()],
     ),
   ];

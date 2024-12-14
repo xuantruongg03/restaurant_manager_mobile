@@ -4,6 +4,6 @@ import 'package:restaurant_manager_mobile/presentation/controllers/foods/add_foo
 class AddFoodBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut(() => AddFoodController(addFoodRepository: Get.find()));
+    Get.lazyPut(() => AddFoodController());
   }
 }

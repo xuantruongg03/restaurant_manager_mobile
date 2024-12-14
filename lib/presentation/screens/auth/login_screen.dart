@@ -160,7 +160,7 @@ class LoginScreen extends GetView<LoginController> {
               const SizedBox(height: 16),
               GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context, RouteNames.forgotPassword);
+                  Get.toNamed(RouteNames.forgotPassword);
                 },
                 child: const Text(
                   "Bạn quên mật khẩu ư?",
@@ -258,8 +258,7 @@ class LoginScreen extends GetView<LoginController> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Navigator.pushReplacementNamed(
-                          context, RouteNames.signUp);
+                      Get.toNamed(RouteNames.signUp);
                     },
                     child: const Padding(
                       padding: EdgeInsets.only(left: 5.0),

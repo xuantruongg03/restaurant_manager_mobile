@@ -1,23 +1,26 @@
-class AddFoodRequest {
+class FoodRequest {
   final String idMenu;
   final String name;
   final String category;
   final double price;
-  final List<String> images;
+  // final List<String> images;
+  final String image;
 
-  AddFoodRequest({
+  FoodRequest({
     required this.idMenu,
     required this.name,
     required this.category,
     required this.price,
-    required this.images,
+    required this.image,
   });
 
   Map<String, dynamic> toJson() {
     return {
       'name': name,
-      'category': category,
-      'images': images,
+      // 'category': category,
+      'image': image,
+      'price': price,
+      'idMenu': idMenu,
     };
   }
 }

@@ -46,6 +46,7 @@ dependencies:
   encrypt: ^5.0.3
   stylish_bottom_bar: ^1.0.3
   get: ^4.6.6
+  flutter_dotenv: ^5.0.2
 
 dev_dependencies:
   flutter_test:
@@ -77,6 +78,7 @@ flutter:
     - assets/icons/
     - assets/images/
     - assets/images/promotes/
+    - .env
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 
