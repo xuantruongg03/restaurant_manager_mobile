@@ -2,24 +2,22 @@ import 'package:get/get.dart';
 import 'package:restaurant_manager_mobile/config/routes/route_names.dart';
 import 'package:restaurant_manager_mobile/middleware/auth_middleware.dart';
 import 'package:restaurant_manager_mobile/presentation/bindings/auth/login_binding.dart';
+import 'package:restaurant_manager_mobile/presentation/bindings/bills/bill_binding.dart';
 import 'package:restaurant_manager_mobile/presentation/bindings/foods/add_food_binding.dart';
 import 'package:restaurant_manager_mobile/presentation/bindings/foods/food_binding.dart';
-import 'package:restaurant_manager_mobile/presentation/bindings/home/home_binding.dart';
 import 'package:restaurant_manager_mobile/presentation/bindings/menus/add_menu_binding.dart';
 import 'package:restaurant_manager_mobile/presentation/bindings/menus/menu_binding.dart';
 import 'package:restaurant_manager_mobile/presentation/bindings/table/add_table_binding.dart';
 import 'package:restaurant_manager_mobile/presentation/bindings/table/table_binding.dart';
-import 'package:restaurant_manager_mobile/presentation/bindings/bills/bill_binding.dart';
 import 'package:restaurant_manager_mobile/presentation/layouts/main_layout.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/auth/login_screen.dart';
+import 'package:restaurant_manager_mobile/presentation/screens/bills/bill_screen.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/foods/add_food_screen.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/foods/food_screen.dart';
-import 'package:restaurant_manager_mobile/presentation/screens/home/home_screen.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/menu/add_menu_screen.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/menu/menu_screen.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/tables/add_table_screen.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/tables/table_screen.dart';
-import 'package:restaurant_manager_mobile/presentation/screens/bills/bill_screen.dart';
 
 class AppPages {
   static final routes = [
@@ -47,13 +45,6 @@ class AppPages {
       name: RouteNames.tables,
       page: () => const TableScreen(),
       binding: TablesBinding(),
-      middlewares: [AuthMiddleware()],
-    ),
-
-    GetPage(
-      name: RouteNames.home,
-      page: () => const HomeScreen(),
-      binding: HomeBinding(),
       middlewares: [AuthMiddleware()],
     ),
 
@@ -91,5 +82,6 @@ class AppPages {
       binding: BillBinding(),
       middlewares: [AuthMiddleware()],
     ),
+
   ];
 }

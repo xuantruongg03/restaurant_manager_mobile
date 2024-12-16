@@ -13,7 +13,6 @@ class AuthMiddleware extends GetMiddleware {
       return null;
     }
 
-    print('stateService.isAuthenticated: ${stateService.isAuthenticated}');
     if (!stateService.isAuthenticated) {
       return const RouteSettings(name: RouteNames.login);
     }

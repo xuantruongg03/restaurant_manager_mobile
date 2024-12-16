@@ -49,6 +49,7 @@ class HomeScreen extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
+    Get.lazyPut(()=>HomeController());
     return Scaffold(
       backgroundColor: AppColors.background,
       body: Column(

@@ -1,105 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:restaurant_manager_mobile/core/theme/color_schemes.dart';
-import 'package:restaurant_manager_mobile/presentation/widgets/header.dart';
+import 'package:restaurant_manager_mobile/data/models/orders/order_modal.dart';
+import 'package:restaurant_manager_mobile/presentation/controllers/orders/order_controller.dart';
 import 'package:restaurant_manager_mobile/presentation/widgets/filter.dart';
+import 'package:restaurant_manager_mobile/presentation/widgets/header.dart';
 import 'package:restaurant_manager_mobile/presentation/widgets/textfield_custom.dart';
-import 'package:restaurant_manager_mobile/presentation/screens/modals/accept_order.dart';
-import 'package:restaurant_manager_mobile/presentation/screens/modals/cancel_order.dart';
-import 'package:restaurant_manager_mobile/presentation/screens/modals/success_order.dart';
 
-class OrderScreen extends StatefulWidget {
+class OrderScreen extends GetView<OrderController> {
   const OrderScreen({super.key});
 
-  @override
-  State<OrderScreen> createState() => _OrderScreenState();
-}
-
-class _OrderScreenState extends State<OrderScreen> {
-  List<Map<String, dynamic>> orders = [
-    {
-      'id': '1',
-      'nameFood': 'Bánh mì',
-      'quantity': 2,
-      'nameTable': 'Bàn 1',
-      'status': 'Đang chờ',
-      'createdAt': '12/10/2024',
-      'image': 'assets/images/image-food-demo.png',
-    },
-    {
-      'id': '2',
-      'nameFood': 'Bánh mì',
-      'quantity': 2,
-      'nameTable': 'Bàn 1',
-      'status': 'Xác nhận',
-      'createdAt': '12/10/2024',
-      'image': 'assets/images/image-food-demo.png',
-    },
-  ];
-  bool _sorted = false;
-  String _selectedFilter = 'Tất cả';
-  static const filterOptions = [
-    'Tất cả',
-    'Đang chờ',
-    'Xác nhận',
-  ];
-
-  List<Map<String, dynamic>> get filteredOrders {
-    var items = List<Map<String, dynamic>>.from(orders);
-    if (_selectedFilter != 'Tất cả') {
-      items = items.where((item) => item['status'] == _selectedFilter).toList();
-    }
-    return items;
-  }
-
-  List<Map<String, dynamic>> get sortedOrders {
-    if (!_sorted) return filteredOrders;
-    final items = List<Map<String, dynamic>>.from(filteredOrders);
-    items.sort((a, b) => a['createdAt'].compareTo(b['createdAt']));
-    return items;
-  }
-
-  void _showAcceptOrderModal(String orderId, String nameFood, num quantity,
-      String nameTable) {
-    showDialog(
-      context: context,
-      builder: (context) => AcceptOrderModal(
-        orderId: orderId,
-        nameFood: nameFood,
-        quantity: quantity,
-        nameTable: nameTable,
-      ),
-    );
-  }
-
-  void _showCancelOrderModal(String orderId, String nameFood, num quantity,
-      String nameTable) {
-    showDialog(
-      context: context,
-      builder: (context) => CancelOrderModal(
-        orderId: orderId,
-        nameFood: nameFood,
-        quantity: quantity,
-        nameTable: nameTable,
-      ),
-    );
-  }
-
-  void _showSuccessOrderModal(String orderId, String nameFood, num quantity,
-      String nameTable) {
-    showDialog(
-      context: context,
-      builder: (context) => SuccessOrderModal(
-        orderId: orderId,
-        nameFood: nameFood,
-        quantity: quantity,
-        nameTable: nameTable,
-      ),
-    );
-  }
-
-  Widget _buildOrderItem(String orderId, String nameFood, num quantity,
-      String nameTable, String status, String createdAt, String image) {
+  Widget _buildOrderItem(OrderModal order) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -118,7 +30,7 @@ class _OrderScreenState extends State<OrderScreen> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
                   image: DecorationImage(
-                    image: AssetImage(image),
+                    image: NetworkImage(order.image),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -130,7 +42,7 @@ class _OrderScreenState extends State<OrderScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      nameFood,
+                      order.nameFood,
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
@@ -138,14 +50,14 @@ class _OrderScreenState extends State<OrderScreen> {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'Số lượng: $quantity',
+                      'Số lượng: ${order.quantity}',
                       style: const TextStyle(
                         fontSize: 14,
                         color: Colors.grey,
                       ),
                     ),
                     Text(
-                      'Bàn: $nameTable',
+                      'Bàn: ${order.nameTable}',
                       style: const TextStyle(
                         fontSize: 14,
                         color: Colors.grey,
@@ -164,10 +76,12 @@ class _OrderScreenState extends State<OrderScreen> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    if (status == 'Đang chờ') {
-                      _showAcceptOrderModal(orderId, nameFood, quantity, nameTable);
-                    } else if (status == 'Xác nhận') {
-                      _showSuccessOrderModal(orderId, nameFood, quantity, nameTable);
+                    if (order.status == 'Đang chờ') {
+                      controller.showAcceptOrderModal(order.idOrder,
+                          order.nameFood, order.quantity, order.nameTable);
+                    } else if (order.status == 'Xác nhận') {
+                      controller.showSuccessOrderModal(order.idOrder,
+                          order.nameFood, order.quantity, order.nameTable);
                     }
                   },
                   child: Icon(Icons.edit_outlined,
@@ -176,12 +90,19 @@ class _OrderScreenState extends State<OrderScreen> {
                 const SizedBox(width: 4),
                 GestureDetector(
                   onTap: () {
-                    if (status == 'Đang chờ') {
-                      _showCancelOrderModal(orderId, nameFood, quantity, nameTable);
+                    if (order.status == 'Đang chờ') {
+                      controller.showCancelOrderModal(order.idOrder,
+                          order.nameFood, order.quantity, order.nameTable);
                     }
                   },
-                  child: Icon(status == 'Đang chờ' ? Icons.delete_outline : PhosphorIconsBold.bowlSteam,
-                      size: 26, color: status == 'Đang chờ' ? Colors.grey[600] : AppColors.primary),
+                  child: Icon(
+                      order.status == 'Đang chờ'
+                          ? Icons.delete_outline
+                          : PhosphorIconsBold.bowlSteam,
+                      size: 26,
+                      color: order.status == 'Đang chờ'
+                          ? Colors.grey[600]
+                          : AppColors.primary),
                 ),
               ],
             ),
@@ -193,17 +114,21 @@ class _OrderScreenState extends State<OrderScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(OrderController());
     return Scaffold(
       backgroundColor: AppColors.background,
       body: Column(
         children: [
           const Header(title: "Đơn hàng"),
           const SizedBox(height: 16),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: TextFieldCustom(
               hintText: 'Tìm kiếm đơn hàng',
               prefixIcon: PhosphorIconsBold.magnifyingGlass,
+              onChanged: (value) {
+                controller.searchText.value = value;
+              },
             ),
           ),
           Padding(
@@ -211,51 +136,53 @@ class _OrderScreenState extends State<OrderScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  '${sortedOrders.length} đơn hàng',
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black87,
-                  ),
-                ),
-                Filter(
-                  selectedValue: _selectedFilter,
-                  options: filterOptions,
-                  sorted: _sorted,
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedFilter = value!;
-                    });
-                  },
-                  onSorted: (value) {
-                    setState(() {
-                      _sorted = value;
-                    });
-                  },
-                ),
+                Obx(() => Text(
+                      '${controller.orders.length} đơn hàng',
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black87,
+                      ),
+                    )),
+                Obx(() => Filter(
+                      selectedValue: controller.selectedFilter.value,
+                      options: controller.filterOptions,
+                      sorted: controller.sorted.value,
+                      onChanged: (value) {
+                        controller.selectedFilter.value = value!;
+                      },
+                      onSorted: (value) {
+                        controller.sorted.value = value;
+                      },
+                    )),
               ],
             ),
           ),
           const SizedBox(height: 12),
           Expanded(
-            child: ListView.separated(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              itemCount: sortedOrders.length,
-              separatorBuilder: (context, index) => const SizedBox(height: 12),
-              itemBuilder: (context, index) {
-                final order = sortedOrders[index];
-                return _buildOrderItem(
-                  order['id'],
-                  order['nameFood'],
-                  order['quantity'],
-                  order['nameTable'],
-                  order['status'],
-                  order['createdAt'],
-                  order['image'],
-                );
-              },
-            ),
+            child: Obx(() {
+              if (controller.isLoading.value) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (controller.orders.isEmpty) {
+                return const Center(child: Text('Không tìm thấy đơn hàng'));
+              }
+              return RefreshIndicator(
+                onRefresh: () async {
+                  await controller.fetchOrders();
+                },
+                child: ListView.separated(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  itemCount: controller.sortedOrders.length,
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(height: 12),
+                  itemBuilder: (context, index) {
+                    final order = controller.sortedOrders[index];
+                    return _buildOrderItem(order);
+                  },
+                ),
+              );
+            }),
           ),
         ],
       ),

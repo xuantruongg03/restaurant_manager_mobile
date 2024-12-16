@@ -9,4 +9,9 @@ class Functions {
             length, (index) => characters[random.nextInt(characters.length)])
         .join();
   }
+
+  static bool isToday(DateTime date) {
+    final now = DateTime.now();
+    return date.year == now.year && date.month == now.month && date.day == now.day;
+  }
 }

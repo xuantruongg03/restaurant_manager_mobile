@@ -12,3 +12,11 @@ String formatMoney(num amount) {
 String formatMoneyWithCurrency(num amount) {
   return '${formatMoney(amount)} VNĐ';
 }
+
+String formatDate(DateTime date) {
+  return DateFormat('dd/MM/yyyy').format(date);
+}
+
+String formatTime(DateTime time) {
+  return DateFormat('HH:mm').format(time);
+}

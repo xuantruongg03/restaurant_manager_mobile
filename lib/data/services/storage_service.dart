@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StorageService {
@@ -43,5 +45,27 @@ class StorageService {
   // Remove specific key
   Future<bool> remove(String key) async {
     return await _prefs.remove(key);
+  }
+
+  //Set object
+  Future<bool> setObject(String key, Object value) async {
+    return await _prefs.setString(key, jsonEncode(value));
+  }
+
+  //Get object
+  Object? getObject(String key) {
+    final String? value = _prefs.getString(key);
+    return value != null ? jsonDecode(value) : null;
+  }
+
+  //Set list
+  Future<bool> setList(String key, List<dynamic> value) async {
+    return await _prefs.setString(key, jsonEncode(value));
+  }
+
+  //Get list
+  List<Object>? getList(String key) {
+    final String? value = _prefs.getString(key);
+    return value != null ? List<Object>.from(jsonDecode(value)) : null; 
   }
 }

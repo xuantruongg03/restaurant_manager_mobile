@@ -9,6 +9,10 @@ import 'package:restaurant_manager_mobile/core/theme/app_theme.dart';
 import 'package:restaurant_manager_mobile/core/theme/color_schemes.dart';
 import 'package:restaurant_manager_mobile/data/services/storage_service.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:pushy_flutter/pushy_flutter.dart';
+import 'package:restaurant_manager_mobile/presentation/controllers/main_layout_controller.dart';
+import 'package:restaurant_manager_mobile/presentation/controllers/noti/noti_controller.dart';
+import 'package:restaurant_manager_mobile/utils/constant.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,14 +21,37 @@ void main() async {
   final stateService = Get.put(StateService());
   await stateService.checkAuth();
 
+  Pushy.listen();
+  Pushy.toggleInAppBanner(true);
+  Pushy.setNotificationListener(backgroundNotificationListener);
+  Pushy.setNotificationClickListener((Map<String, dynamic> data) {
+    if (data.isNotEmpty) {
+      final MainLayoutController controller = Get.put(MainLayoutController());
+      controller.changeScreen(3);
+      Pushy.clearBadge();
+    } else {
+      print('No data received on notification click.');
+    }
+  });
+
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: AppColors.primary,
     statusBarIconBrightness: Brightness.light,
   ));
-  
+
   await dotenv.load(fileName: '.env');
 
   runApp(const MyApp());
+}
+
+@pragma('vm:entry-point')
+void backgroundNotificationListener(Map<String, dynamic> data) {
+  String notificationTitle = Constants.appName;
+  String notificationText = data['message'] ?? 'Hello World!';
+  final notiController = Get.put(NotiController());
+  notiController.handleNotification(data['message']);
+  Pushy.notify(notificationTitle, notificationText, data);
+  Pushy.clearBadge();
 }
 
 class MyApp extends StatelessWidget {

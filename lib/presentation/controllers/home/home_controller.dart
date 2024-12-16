@@ -5,14 +5,13 @@ import 'package:restaurant_manager_mobile/data/services/storage_service.dart';
 import 'package:restaurant_manager_mobile/utils/constant.dart';
 
 class HomeController extends GetxController {
-  final HomeRepository repository;
-
-  HomeController({required this.repository});
+  final HomeRepository repository = HomeRepository();
 
   void checkRestaurant() async {
     final storageService = await StorageService.getInstance();
     final hasRestaurant = storageService.hasKey(StorageKeys.restaurantId);
-    if (!hasRestaurant) {
+    final nameRestaurant = storageService.getString(StorageKeys.restaurantName);
+    if (!hasRestaurant || nameRestaurant == null) {
       final idAccount = storageService.getString(StorageKeys.userId);
       if (idAccount == null) {
         Get.offNamedUntil(RouteNames.login, (route) => false);
@@ -22,11 +21,20 @@ class HomeController extends GetxController {
 
       //call api to create restaurant and get restaurant id set to storage
       final response = await repository.createRestaurant(randomName, idAccount);
-      if (response['success'] == true) {
+      if (response != null) {
         storageService.setString(
-            StorageKeys.restaurantId, response['data']['idRestaurant']);
+            StorageKeys.restaurantId, response['data']['data']['idRestaurant']);
         storageService.setString(StorageKeys.restaurantName, randomName);
       }
+    }
+  }
+
+  void registerDevicePushy() async {
+    final storageService = await StorageService.getInstance();
+    final deviceToken = storageService.getString(StorageKeys.deviceToken);
+    final hasKey = storageService.hasKey(StorageKeys.deviceToken);
+    if (deviceToken == null || !hasKey) {
+      await repository.registerDevicePushy();
     }
   }
 
@@ -34,5 +42,6 @@ class HomeController extends GetxController {
   void onInit() {
     super.onInit();
     checkRestaurant();
+    registerDevicePushy();
   }
 }

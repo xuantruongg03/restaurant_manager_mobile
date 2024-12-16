@@ -67,7 +67,7 @@ class Header extends StatelessWidget {
               width: showActionButton 
                   ? null 
                   : ((showNotificationButton ?? false) && (showSettingButton ?? false)) 
-                      ? 70 
+                      ? 60 
                       : 35,
               height: 40,
               margin: EdgeInsets.zero,

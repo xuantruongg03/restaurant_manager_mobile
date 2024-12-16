@@ -19,5 +19,6 @@ class StorageKeys {
   static const String statusUser = 'statusUser';
   static const String restaurantId = 'restaurantId';
   static const String restaurantName = 'restaurantName';
+  static const String deviceToken = 'deviceToken';
 }
 

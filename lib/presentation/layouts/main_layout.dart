@@ -1,56 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:restaurant_manager_mobile/presentation/screens/features/feature_screen.dart';
-import 'package:restaurant_manager_mobile/presentation/screens/home/home_screen.dart';
-import 'package:restaurant_manager_mobile/presentation/screens/orders/order_screen.dart';
-import 'package:restaurant_manager_mobile/presentation/screens/notifications/notifications.dart';
-import 'package:restaurant_manager_mobile/presentation/screens/profile/profile_screen.dart';
+import 'package:get/get.dart';
+import 'package:restaurant_manager_mobile/presentation/controllers/main_layout_controller.dart';
 import 'package:restaurant_manager_mobile/presentation/widgets/bottom_bar.dart';
 
-class MainLayout extends StatefulWidget {
+class MainLayout extends GetView<MainLayoutController> {
   const MainLayout({super.key});
 
   @override
-  State<MainLayout> createState() => _MainLayoutState();
-}
-
-class _MainLayoutState extends State<MainLayout> {
-  int _selectedIndex = 2;
-  
-  // Danh sách các màn hình
-  final List<Widget> _screens = [
-    const FeatureScreen(),
-    const OrderScreen(),
-    const HomeScreen(),
-    const NotificationsScreen(),
-    const ProfileScreen(),
-  ];
-
-  void changeScreen(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
+    Get.put(MainLayoutController());
     return Scaffold(
       body: SafeArea(
-        child: Container(
-          color: const Color(0xFFF2F4F7),
-          child: _screens[_selectedIndex],
-        ),
+        child: Obx(() => Container(
+              color: const Color(0xFFF2F4F7),
+              child: controller.screens[controller.selectedIndex.value],
+            )),
       ),
-      extendBody: true, 
-      bottomNavigationBar: CustomBottomBar(
-        selectedIndex: _selectedIndex,
-        onItemTapped: _onItemTapped,
-      ),
+      extendBody: true,
+      bottomNavigationBar: Obx(() => CustomBottomBar(
+            selectedIndex: controller.selectedIndex.value,
+            onItemTapped: (index) {
+              controller.changeScreen(index);
+              if (index == 1) {
+                controller.orderController.fetchOrders();
+              }
+            },
+          )),
     );
   }
 }

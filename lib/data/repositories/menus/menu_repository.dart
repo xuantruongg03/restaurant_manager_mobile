@@ -99,7 +99,6 @@ class MenuRepository {
         'name': nameMenu,
         'idRestaurant': storageService.getString(StorageKeys.restaurantId)
       });
-      print('response: $response');
       if (response["success"] == true) {
         return response;
       }
