@@ -137,7 +137,7 @@ class OrderScreen extends GetView<OrderController> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Obx(() => Text(
-                      '${controller.orders.length} đơn hàng',
+                      '${controller.sortedOrders.length} đơn hàng',
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
@@ -164,8 +164,8 @@ class OrderScreen extends GetView<OrderController> {
               if (controller.isLoading.value) {
                 return const Center(child: CircularProgressIndicator());
               }
-              if (controller.orders.isEmpty) {
-                return const Center(child: Text('Không tìm thấy đơn hàng'));
+              if (controller.error.isNotEmpty) {
+                return Center(child: Text(controller.error.value));
               }
               return RefreshIndicator(
                 onRefresh: () async {

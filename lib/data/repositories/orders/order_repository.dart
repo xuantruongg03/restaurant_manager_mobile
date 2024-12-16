@@ -25,13 +25,13 @@ class OrderRepository extends GetConnect {
       });
       if (response['success'] == true) {
         final data = response['data']['data'];
-        if (data is List) {
+        if (data is List && data.isNotEmpty) {
           final res = data[0];
           final foodDetails = res['foodDetails'];
           if (foodDetails is List) {
             final orders = foodDetails
                 .map((food) => OrderModal.fromJson(food, res['nameTable']))
-                .toList();
+                  .toList();
             return orders;
           } else {
             throw Exception(
@@ -48,5 +48,26 @@ class OrderRepository extends GetConnect {
       print("error get orders: $e");
       throw Exception(e);
     }
+  }
+
+  Future<Map<String, dynamic>?> updateOrderStatus(String idOrder) async {
+    final storageService = await StorageService.getInstance();
+    final auth = await AuthService().getAuth();
+    if (auth == null) {
+      Get.toNamed(RouteNames.login);
+      return null;
+    }
+    final response = await ApiClient.get('/bills/order-update', headers: {
+      'Authorization':
+          'Basic ${base64Encode(utf8.encode('${auth['username']}:${auth['password']}'))}'
+    }, queryParams: {
+      'idOrder': idOrder,
+      'idRestaurant': storageService.getString(StorageKeys.restaurantId),
+    });
+    print("response: ${response}");
+    if (response['success'] == true) {
+      return response;
+    }
+    return null;
   }
 }

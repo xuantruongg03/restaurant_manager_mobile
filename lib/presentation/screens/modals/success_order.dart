@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class SuccessOrderModal extends StatefulWidget {
   final String orderId;
   final String nameFood;
   final num quantity;
   final String nameTable;
+  final Function(String) onSuccess;
+
   const SuccessOrderModal(
       {super.key,
       required this.orderId,
       required this.nameFood,
       required this.quantity,
-      required this.nameTable});
+      required this.nameTable,
+      required this.onSuccess});
 
   @override
   State<SuccessOrderModal> createState() => _SuccessOrderModalState();
@@ -62,7 +66,10 @@ class _SuccessOrderModalState extends State<SuccessOrderModal> {
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    widget.onSuccess(widget.orderId);
+                    Get.back();
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.orange,
                     minimumSize: const Size(double.infinity, 48),

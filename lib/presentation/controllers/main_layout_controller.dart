@@ -10,7 +10,7 @@ import 'package:restaurant_manager_mobile/presentation/screens/orders/order_scre
 import 'package:restaurant_manager_mobile/presentation/screens/profile/profile_screen.dart';
 
 class MainLayoutController extends GetxController {
-  OrderController orderController = OrderController();
+  OrderController orderController = Get.put(OrderController());
   HomeController homeController = Get.put(HomeController());
   NotiController notiController = Get.put(NotiController());
 
@@ -26,5 +26,10 @@ class MainLayoutController extends GetxController {
 
   void changeScreen(int index) {
     selectedIndex.value = index;
+    if (index != 1) {
+      orderController.disconnectWebSocket();
+    } else {
+      orderController.connectWebSocket();
+    }
   }
 }
