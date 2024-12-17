@@ -6,11 +6,48 @@ import 'package:restaurant_manager_mobile/utils/constant.dart';
 
 class HomeController extends GetxController {
   final HomeRepository repository = HomeRepository();
+  final List<Map<String, dynamic>> quickAccessItems = [
+    {
+      'title': 'Báo cáo',
+      'icon': 'assets/icons/menu.png',
+      'route': RouteNames.menu
+    },
+    {
+      'title': 'Thống kê',
+      'icon': 'assets/icons/menu.png',
+      'route': RouteNames.menu
+    },
+    {
+      'title': 'Thống kê',
+      'icon': 'assets/icons/menu.png',
+      'route': RouteNames.menu
+    },
+    {
+      'title': 'Thống kê',
+      'icon': 'assets/icons/menu.png',
+      'route': RouteNames.menu
+    },
+    {
+      'title': 'Thống kê',
+      'icon': 'assets/icons/menu.png',
+      'route': RouteNames.menu
+    },
+    {
+      'title': 'Thống kê',
+      'icon': 'assets/icons/menu.png',
+      'route': RouteNames.menu
+    },
+    {
+      'title': 'Thống kê',
+      'icon': 'assets/icons/menu.png',
+      'route': RouteNames.feature
+    },
+  ];
 
   void checkRestaurant() async {
     final storageService = await StorageService.getInstance();
-    final idRestaurant = storageService.getString(StorageKeys.restaurantId);
-    if (idRestaurant == null) {
+    final nameRestaurant = storageService.getString(StorageKeys.restaurantName);
+    if (nameRestaurant == '') {
       final idAccount = storageService.getString(StorageKeys.userId);
       if (idAccount == null) {
         Get.offNamedUntil(RouteNames.login, (route) => false);
@@ -31,8 +68,7 @@ class HomeController extends GetxController {
   void registerDevicePushy() async {
     final storageService = await StorageService.getInstance();
     final deviceToken = storageService.getString(StorageKeys.deviceToken);
-    final hasKey = storageService.hasKey(StorageKeys.deviceToken);
-    if (deviceToken == null || !hasKey) {
+    if (deviceToken == '' || deviceToken == null) {
       await repository.registerDevicePushy();
     }
   }

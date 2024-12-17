@@ -13,7 +13,9 @@ class NotificationsScreen extends GetView<NotiController> {
   Widget _itemNoti(NotiModal noti) {
     return GestureDetector(
       onTap: () {
-        controller.markAsRead(noti.id);
+        if (!noti.isRead.value) {
+          controller.markAsRead(noti.id);
+        }
       },
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 8),
@@ -25,20 +27,19 @@ class NotificationsScreen extends GetView<NotiController> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (!noti.isRead)
-              Padding(
-                padding: const EdgeInsets.only(top: 6, right: 8),
-                child: Container(
-                  width: 8,
-                  height: 8,
-                  decoration: const BoxDecoration(
-                    color: Colors.orange,
-                    shape: BoxShape.circle,
-                  ),
-                ),
-              )
-            else
-              const SizedBox(width: 16),
+            Obx(() => noti.isRead.value
+                ? const SizedBox(width: 16)
+                : Padding(
+                    padding: const EdgeInsets.only(top: 6, right: 8),
+                    child: Container(
+                      width: 8,
+                      height: 8,
+                      decoration: const BoxDecoration(
+                        color: Colors.orange,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                  )),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

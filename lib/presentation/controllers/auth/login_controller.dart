@@ -55,7 +55,9 @@ class LoginController extends GetxController {
         await storageService.setString(
             StorageKeys.statusUser, response['data']['status']);
         await storageService.setString(
-            StorageKeys.restaurantId, response['data']['idRestaurant']);
+            StorageKeys.restaurantId, response['data']['idRestaurant'] ?? '');
+        await storageService.setString(
+            StorageKeys.restaurantName, response['data']['nameRestaurant'] ?? '');
         await storageService.setString(
             StorageKeys.avt, response['data']['avt'] ?? '');
         await storageService.setString(

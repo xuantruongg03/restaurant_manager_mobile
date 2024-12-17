@@ -1,51 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-import 'package:restaurant_manager_mobile/config/routes/route_names.dart';
 import 'package:restaurant_manager_mobile/core/theme/color_schemes.dart';
 import 'package:restaurant_manager_mobile/presentation/controllers/home/home_controller.dart';
+import 'package:restaurant_manager_mobile/presentation/controllers/main_layout_controller.dart';
 import 'package:restaurant_manager_mobile/utils/formats.dart';
 
 class HomeScreen extends GetView<HomeController> {
   const HomeScreen({super.key});
-
-  static const List<Map<String, dynamic>> quickAccessItems = [
-    {
-      'title': 'Báo cáo',
-      'icon': 'assets/icons/menu.png',
-      'route': RouteNames.menu
-    },
-    {
-      'title': 'Thống kê',
-      'icon': 'assets/icons/menu.png',
-      'route': RouteNames.menu
-    },
-    {
-      'title': 'Thống kê',
-      'icon': 'assets/icons/menu.png',
-      'route': RouteNames.menu
-    },
-    {
-      'title': 'Thống kê',
-      'icon': 'assets/icons/menu.png',
-      'route': RouteNames.menu
-    },
-    {
-      'title': 'Thống kê',
-      'icon': 'assets/icons/menu.png',
-      'route': RouteNames.menu
-    },
-    {
-      'title': 'Thống kê',
-      'icon': 'assets/icons/menu.png',
-      'route': RouteNames.menu
-    },
-    {
-      'title': 'Thống kê',
-      'icon': 'assets/icons/menu.png',
-      'route': RouteNames.feature
-    },
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -154,8 +116,7 @@ class HomeScreen extends GetView<HomeController> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                // MainLayout.mainScreenKey.currentState
-                                //     ?.changeScreen(0);
+                                Get.find<MainLayoutController>().changeScreen(0);
                               },
                               child: const Icon(PhosphorIconsBold.arrowRight),
                             ),
@@ -166,9 +127,9 @@ class HomeScreen extends GetView<HomeController> {
                           height: 100,
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
-                            itemCount: quickAccessItems.length,
+                            itemCount: controller.quickAccessItems.length,
                             itemBuilder: (context, index) {
-                              final item = quickAccessItems[index];
+                              final item = controller.quickAccessItems[index];
                               return Padding(
                                 padding: const EdgeInsets.only(right: 24.0),
                                 child: _buildQuickAccessCard(

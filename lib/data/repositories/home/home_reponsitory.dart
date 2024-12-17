@@ -42,7 +42,7 @@ class HomeRepository {
       final response = await ApiClient.post('/account/update-device-token', headers: {
         'Authorization': 'Basic ${base64Encode(utf8.encode('${auth['username']}:${auth['password']}'))}'
       }, body: {
-        'token': deviceToken,
+        'deviceToken': deviceToken,
       });
       if (response['success'] == true) {
         print('Register device pushy success');
