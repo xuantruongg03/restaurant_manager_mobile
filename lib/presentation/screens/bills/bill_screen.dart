@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:restaurant_manager_mobile/presentation/controllers/bills/bill_controller.dart';
 import 'package:restaurant_manager_mobile/presentation/widgets/header.dart';
+import 'package:restaurant_manager_mobile/utils/formats.dart';
 
-class BillScreen extends StatelessWidget {
+class BillScreen extends GetView<BillController> {
   const BillScreen({super.key});
 
   @override
@@ -14,95 +17,119 @@ class BillScreen extends StatelessWidget {
             title: 'Thanh toán',
             showBackButton: true,
           ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                // Bill header info
-                Row(
+          Expanded(
+            child: Obx(() {
+              if (controller.loading.value) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (controller.error.isNotEmpty) {
+                return Center(child: Text(controller.error.value));
+              }
+              return Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
                   children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                    // Bill header info
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              _buildInfoRow('Ngày vào:', '24/08/2024'),
+                              _buildInfoRow('Thu ngân:', 'TruongNe'),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              _buildInfoRow('Giờ vào:', '18:00'),
+                              _buildInfoRow('Tên bàn:', controller.nameTable),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    // Bill table
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(8),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.2),
+                            spreadRadius: 1,
+                            blurRadius: 3,
+                            offset: const Offset(0, 1),
+                          ),
+                        ],
+                      ),
+                      child: Table(
+                        border: TableBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          horizontalInside:
+                              const BorderSide(color: Colors.grey, width: 0.5),
+                          verticalInside:
+                              const BorderSide(color: Colors.grey, width: 0.5),
+                          top: const BorderSide(color: Colors.grey, width: 0.5),
+                          bottom:
+                              const BorderSide(color: Colors.grey, width: 0.5),
+                          left:
+                              const BorderSide(color: Colors.grey, width: 0.5),
+                          right:
+                              const BorderSide(color: Colors.grey, width: 0.5),
+                        ),
+                        columnWidths: const {
+                          0: FlexColumnWidth(1.3),
+                          1: FlexColumnWidth(2.8),
+                          2: FlexColumnWidth(0.8),
+                          3: FlexColumnWidth(2),
+                          4: FlexColumnWidth(1),
+                        },
                         children: [
-                          _buildInfoRow('Ngày vào:', '24/08/2024'),
-                          _buildInfoRow('Thu ngân:', 'TruongNe'),
+                          _buildTableHeader(),
+                          ...controller.billList.asMap().entries.map((entry) {
+                            final index = entry.key;
+                            final bill = entry.value;
+                            return _buildTableRow(
+                              (index + 1).toString(),
+                              bill.nameFood,
+                              bill.quantity.toString(),
+                              bill.total,
+                              bill.statusOrder,
+                            );
+                          }),
                         ],
                       ),
                     ),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _buildInfoRow('Giờ vào:', '18:00'),
-                          _buildInfoRow('Tên bàn:', 'Bàn 1 + Bàn 2'),
-                        ],
+                    const SizedBox(height: 20),
+                    // Payment button
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          controller.showConfirmDialog();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.orange,
+                          padding: const EdgeInsets.symmetric(vertical: 15),
+                        ),
+                        child: const Text(
+                          'Thanh toán',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                          ),
+                        ),
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 20),
-                // Bill table
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(8),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.2),
-                        spreadRadius: 1,
-                        blurRadius: 3,
-                        offset: const Offset(0, 1),
-                      ),
-                    ],
-                  ),
-                  child: Table(
-                    border: TableBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      horizontalInside:
-                          const BorderSide(color: Colors.grey, width: 0.5),
-                      verticalInside:
-                          const BorderSide(color: Colors.grey, width: 0.5),
-                      top: const BorderSide(color: Colors.grey, width: 0.5),
-                      bottom: const BorderSide(color: Colors.grey, width: 0.5),
-                      left: const BorderSide(color: Colors.grey, width: 0.5),
-                      right: const BorderSide(color: Colors.grey, width: 0.5),
-                    ),
-                    columnWidths: const {
-                      0: FlexColumnWidth(1.3),
-                      1: FlexColumnWidth(2.8),
-                      2: FlexColumnWidth(0.8),
-                      3: FlexColumnWidth(2),
-                      4: FlexColumnWidth(1),
-                    },
-                    children: [
-                      _buildTableHeader(),
-                      _buildTableRow('1', 'Gà chiên', '1', '180,000', true),
-                      _buildTableRow('2', 'Tôm nướng', '1', '180,000', false),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 20),
-                // Payment button
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.orange,
-                      padding: const EdgeInsets.symmetric(vertical: 15),
-                    ),
-                    child: const Text(
-                      'Thanh toán',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+              );
+            }),
           ),
         ],
       ),
@@ -190,13 +217,13 @@ class BillScreen extends StatelessWidget {
   }
 
   TableRow _buildTableRow(
-      String stt, String item, String quantity, String total, bool isServed) {
+      String stt, String item, String quantity, double total, String status) {
     return TableRow(
       children: [
         TableCell(
           verticalAlignment: TableCellVerticalAlignment.middle,
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 6),
             child: Text(
               stt,
               textAlign: TextAlign.center,
@@ -232,11 +259,13 @@ class BillScreen extends StatelessWidget {
           verticalAlignment: TableCellVerticalAlignment.middle,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-            child: Text(
-              total,
-              textAlign: TextAlign.right,
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
+            child: Center(
+              child: Text(
+                formatMoneyWithCurrencyNotVND(total),
+                textAlign: TextAlign.right,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+              ),
             ),
           ),
         ),
@@ -245,10 +274,10 @@ class BillScreen extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
             child: Icon(
-              isServed
+              status == 'Done'
                   ? PhosphorIconsRegular.checkCircle
                   : PhosphorIconsRegular.hourglassMedium,
-              color: isServed ? Colors.green : Colors.orange,
+              color: status == 'Done' ? Colors.green : Colors.orange,
               size: 20,
             ),
           ),

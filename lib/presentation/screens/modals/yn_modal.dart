@@ -79,38 +79,48 @@ class _YNModalState extends State<YNModal> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Obx(() {
-                      if (isLoading.value) {
-                        return const CircularProgressIndicator(
-                          color: AppColors.primary,
-                        );
-                      } else {
-                        return Row(
-                          children: [
-                            TextButton(
-                              style: TextButton.styleFrom(
-                                padding: EdgeInsets.zero,
-                                minimumSize: const Size(40, 30),
-                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                alignment: Alignment.centerLeft,
+                    Flexible(
+                      child: Column(
+                        children: [
+                          Obx(() => ElevatedButton(
+                                onPressed: _handleYes,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColors.primary,
+                                  minimumSize: const Size(double.infinity, 48),
+                                ),
+                                child: isLoading.value
+                                    ? const SizedBox(
+                                        height: 20,
+                                        width: 20,
+                                        child: CircularProgressIndicator(
+                                          color: Colors.white,
+                                          strokeWidth: 2,
+                                        ),
+                                      )
+                                    : Text(
+                                        widget.yesText,
+                                        style: const TextStyle(
+                                            color: Colors.white),
+                                      ),
+                              )),
+                          const SizedBox(height: 12),
+                          OutlinedButton(
+                            onPressed: _handleNo,
+                            style: OutlinedButton.styleFrom(
+                              minimumSize: const Size(double.infinity, 48),
+                              side: const BorderSide(color: Colors.orange),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
                               ),
-                              onPressed: isLoading.value ? null : _handleYes,
-                              child: Text(widget.yesText),
                             ),
-                            TextButton(
-                              style: TextButton.styleFrom(
-                                padding: EdgeInsets.zero,
-                                minimumSize: const Size(40, 30),
-                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                alignment: Alignment.centerLeft,
-                              ),
-                              onPressed: isLoading.value ? null : _handleNo,
-                              child: Text(widget.noText),
+                            child: Text(
+                              widget.noText,
+                              style: const TextStyle(color: Colors.orange),
                             ),
-                          ],
-                        );
-                      }
-                    }),
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ],

@@ -11,13 +11,21 @@ class TableScreen extends GetView<TablesController> {
   const TableScreen({super.key});
 
   Widget _buildTableItem(
-      {required String name,
+      {required String idTable,
+      required String name,
       required String status,
       required String time,
       required bool isMerge}) {
     return GestureDetector(
       onLongPress: () => controller.showQRModal(name, ""),
-      onTap: () => Get.toNamed(RouteNames.bill),
+      onTap: () => {
+        if (status != "Available") {
+          Get.toNamed(RouteNames.bill, arguments: {
+            "idTable": idTable,
+            "nameTable": name,
+          }),
+        }
+      },
       child: Container(
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
@@ -216,6 +224,7 @@ class TableScreen extends GetView<TablesController> {
                     itemBuilder: (context, index) {
                       final table = controller.filteredTables[index];
                       return _buildTableItem(
+                        idTable: table.idTable,
                         name: table.name,
                         status: table.status,
                         time: table.time,

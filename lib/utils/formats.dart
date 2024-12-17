@@ -13,6 +13,10 @@ String formatMoneyWithCurrency(num amount) {
   return '${formatMoney(amount)} VNĐ';
 }
 
+String formatMoneyWithCurrencyNotVND(num amount) {
+  return formatMoney(amount);
+}
+
 String formatDate(DateTime date) {
   return DateFormat('dd/MM/yyyy').format(date);
 }

@@ -1,73 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:restaurant_manager_mobile/config/routes/route_names.dart';
+import 'package:get/get.dart';
 import 'package:restaurant_manager_mobile/core/theme/color_schemes.dart';
-import 'package:restaurant_manager_mobile/data/services/auth_service.dart';
-import 'package:restaurant_manager_mobile/data/services/storage_service.dart';
+import 'package:restaurant_manager_mobile/presentation/controllers/auth/confirm_phone_controller.dart';
 
-class ConfirmPhoneScreen extends StatefulWidget {
+class ConfirmPhoneScreen extends GetView<ConfirmPhoneController> {
   const ConfirmPhoneScreen({super.key});
-
-  @override
-  State<ConfirmPhoneScreen> createState() => _ConfirmPhoneScreenState();
-}
-
-class _ConfirmPhoneScreenState extends State<ConfirmPhoneScreen> {
-  final _phoneController = TextEditingController();
-  final _authService = AuthService();
-  late StorageService storage;
-  bool _isLoading = false;
-  String? username;
-  String? password;
-
-  @override
-  void initState() {
-    super.initState();
-    _initializeStorage();
-  }
-
-  Future<void> _initializeStorage() async {
-    _phoneController.text = "0981793201";
-    // storage = await StorageService.getInstance();
-    // setState(() {
-    //   username = storage.getString('username');
-    //   password = storage.getString('password'); 
-    // });
-    
-    // if (username != null && password != null) {
-    //   // Có thể gọi API để lấy số điện thoại từ server
-    //   try {
-    //     final response = await _authService.getPhone(username!, password!);
-    //     if (response['success']) {
-    //       setState(() {
-    //         _phoneController.text = response['data']['phone'] ?? '';
-    //       });
-    //     }
-    //   } catch (e) {
-    //     debugPrint('Error getting phone: $e');
-    //   }
-    // }
-  }
-
-  Future<void> _handleConfirmPhone() async {
-    setState(() {
-      _isLoading = true;
-    });
-    final response = await _authService.sendOTP(_phoneController.text);
-    if (response['success']) {
-      Navigator.pushNamed(context, RouteNames.verify, arguments: {
-        'phone': _phoneController.text
-      });
-    }
-    setState(() {
-      _isLoading = false;
-    });
-  }
-
-  @override
-  void dispose() {
-    _phoneController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +41,7 @@ class _ConfirmPhoneScreenState extends State<ConfirmPhoneScreen> {
                 child: Image.asset('assets/images/confirm-phone.png'),
               ),
               TextFormField(
-                controller: _phoneController,
+                controller: controller.phoneController,
                 keyboardType: TextInputType.phone,
                 decoration: InputDecoration(
                   labelText: 'Nhập số điện thoại',
@@ -132,7 +69,7 @@ class _ConfirmPhoneScreenState extends State<ConfirmPhoneScreen> {
               SizedBox(
                   height: 50,
                   child: ElevatedButton(
-                    onPressed: _isLoading ? null : _handleConfirmPhone,
+                      onPressed: controller.isLoading.value ? null : controller.handleConfirmPhone,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
                       padding: const EdgeInsets.symmetric(vertical: 16),
@@ -140,7 +77,7 @@ class _ConfirmPhoneScreenState extends State<ConfirmPhoneScreen> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                    child: _isLoading
+                    child: controller.isLoading.value
                       ? const SizedBox(
                           height: 20,
                           width: 20,

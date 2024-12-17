@@ -1,7 +1,11 @@
 import 'package:get/get.dart';
 import 'package:restaurant_manager_mobile/config/routes/route_names.dart';
 import 'package:restaurant_manager_mobile/middleware/auth_middleware.dart';
+import 'package:restaurant_manager_mobile/presentation/bindings/auth/confirm_phone_binding.dart';
+import 'package:restaurant_manager_mobile/presentation/bindings/auth/forgot_pass_binding.dart';
 import 'package:restaurant_manager_mobile/presentation/bindings/auth/login_binding.dart';
+import 'package:restaurant_manager_mobile/presentation/bindings/auth/sign_up_binding.dart';
+import 'package:restaurant_manager_mobile/presentation/bindings/auth/verify_binding.dart';
 import 'package:restaurant_manager_mobile/presentation/bindings/bills/bill_binding.dart';
 import 'package:restaurant_manager_mobile/presentation/bindings/foods/add_food_binding.dart';
 import 'package:restaurant_manager_mobile/presentation/bindings/foods/food_binding.dart';
@@ -10,7 +14,11 @@ import 'package:restaurant_manager_mobile/presentation/bindings/menus/menu_bindi
 import 'package:restaurant_manager_mobile/presentation/bindings/table/add_table_binding.dart';
 import 'package:restaurant_manager_mobile/presentation/bindings/table/table_binding.dart';
 import 'package:restaurant_manager_mobile/presentation/layouts/main_layout.dart';
+import 'package:restaurant_manager_mobile/presentation/screens/auth/confirm_phone_screen.dart';
+import 'package:restaurant_manager_mobile/presentation/screens/auth/forgot_password.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/auth/login_screen.dart';
+import 'package:restaurant_manager_mobile/presentation/screens/auth/sign_up_screen.dart';
+import 'package:restaurant_manager_mobile/presentation/screens/auth/verify_screen.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/bills/bill_screen.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/foods/add_food_screen.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/foods/food_screen.dart';
@@ -25,6 +33,30 @@ class AppPages {
       name: RouteNames.login,
       page: () => const LoginScreen(),
       binding: LoginBinding(),
+    ),
+
+    GetPage(
+      name: RouteNames.signUp,
+      page: () => const SignUpScreen(),
+      binding: SignUpBinding(),
+    ),
+
+    GetPage(
+      name: RouteNames.verify,
+      page: () => const VerifyScreen(),
+      binding: VerifyBinding(),
+    ),
+
+    GetPage(
+      name: RouteNames.confirmPhone,
+      page: () => const ConfirmPhoneScreen(),
+      binding: ConfirmPhoneBinding(),
+    ),
+
+    GetPage(
+      name: RouteNames.forgotPassword,
+      page: () => const ForgotPasswordScreen(),
+      binding: ForgotPasswordBinding(),
     ),
 
 //Protect route

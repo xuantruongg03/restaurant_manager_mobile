@@ -37,13 +37,10 @@ class OrderRepository extends GetConnect {
             throw Exception(
                 'Invalid format for foodDetails: Expected List but got ${foodDetails.runtimeType}');
           }
-        } else {
-          throw Exception(
-              'Invalid data format: Expected List but got ${data.runtimeType}');
-        }
+        } 
+        return null;
       }
-
-      throw Exception(response['message']);
+      return null;
     } catch (e) {
       print("error get orders: $e");
       throw Exception(e);
