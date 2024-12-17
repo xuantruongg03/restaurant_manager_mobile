@@ -56,10 +56,15 @@ class LoginController extends GetxController {
             StorageKeys.statusUser, response['data']['status']);
         await storageService.setString(
             StorageKeys.restaurantId, response['data']['idRestaurant']);
+        await storageService.setString(
+            StorageKeys.avt, response['data']['avt'] ?? '');
+        await storageService.setString(
+            StorageKeys.phone, response['data']['phone'] ?? '');
+        await storageService.setString(
+            StorageKeys.birthDay, response['data']['birthDay'] ?? '');
         await storageService.setBool(StorageKeys.isLogin, true);
         stateService.setAuthenticated(true);
         Get.offNamed(RouteNames.splash);
-
       }
     } finally {
       isLoading.value = false;

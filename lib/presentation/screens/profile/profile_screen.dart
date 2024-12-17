@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:restaurant_manager_mobile/core/theme/color_schemes.dart';
 import 'package:restaurant_manager_mobile/presentation/widgets/header.dart';
+import 'package:restaurant_manager_mobile/presentation/controllers/profile/profile_controller.dart';
 
-class ProfileScreen extends StatefulWidget {
+class ProfileScreen extends GetView<ProfileController> {
   const ProfileScreen({super.key});
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
-}
-
-class _ProfileScreenState extends State<ProfileScreen> {
-  @override
   Widget build(BuildContext context) {
+    Get.put(ProfileController());
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
@@ -30,18 +28,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: Column(
                     children: [
                       // Avatar and name section
-                      const CircleAvatar(
+                      CircleAvatar(
                         radius: 40,
                         backgroundImage:
-                            AssetImage('assets/images/avatar_demo.png'),
+                            AssetImage(controller.avt.value == '' ? 'assets/images/avatar_demo.png' : controller.avt.value),
                       ),
                       const SizedBox(height: 12),
-                      const Text(
-                        'TruongNe',
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      Text(
+                        controller.name.value,
+                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                       const Text(
-                        'lexuantruong09@gmail.com',
+                        'lexuantruong098@gmail.com',
                         style: TextStyle(fontSize: 14, color: Colors.grey),
                       ),
                       const SizedBox(height: 8),
@@ -75,7 +73,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                             const SizedBox(height: 16),
                             _buildInfoItem('Email:', 'lexuantruong09@gmail.com', PhosphorIconsRegular.envelopeSimple),
-                            _buildInfoItem('Số điện thoại:', '0981793202', PhosphorIconsRegular.phone),
+                            _buildInfoItem('Số điện thoại:', controller.phone.value, PhosphorIconsRegular.phone),
+                            _buildInfoItem('Ngày sinh:', controller.birthDay.value, PhosphorIconsRegular.calendar),
                           ],
                         ),
                       ),
@@ -97,8 +96,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                             ),
                             const SizedBox(height: 16),
-                            _buildInfoItem('ID:', 'tGHHGDFVND', null, showCopy: true),
-                            _buildInfoItem('Trạng thái:', 'Hoạt động', null),
+                            _buildInfoItem('ID:', controller.userId.value, null, showCopy: true),
+                            _buildInfoItem('Trạng thái:', controller.status.value == 'active' ? 'Hoạt động' : 'Không hoạt động', null),
+                            _buildInfoItem('Vai trò:', controller.role.value == 'admin' ? 'Chủ nhà hàng' : 'Nhân viên', null),
+                            _buildInfoItem('Tên nhà hàng:', controller.restaurantName.value, null),
                             _buildInfoItem('Ngày hết hạn:', '24/08/2025', null)
                           ],
                         ),
