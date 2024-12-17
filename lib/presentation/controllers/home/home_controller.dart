@@ -9,15 +9,14 @@ class HomeController extends GetxController {
 
   void checkRestaurant() async {
     final storageService = await StorageService.getInstance();
-    final hasRestaurant = storageService.hasKey(StorageKeys.restaurantId);
-    final nameRestaurant = storageService.getString(StorageKeys.restaurantName);
-    if (!hasRestaurant || nameRestaurant == null) {
+    final idRestaurant = storageService.getString(StorageKeys.restaurantId);
+    if (idRestaurant == null) {
       final idAccount = storageService.getString(StorageKeys.userId);
       if (idAccount == null) {
         Get.offNamedUntil(RouteNames.login, (route) => false);
         return;
       }
-      const randomName = 'Nhà hàng 1';
+      const randomName = 'Nhà hàng 2';
 
       //call api to create restaurant and get restaurant id set to storage
       final response = await repository.createRestaurant(randomName, idAccount);
