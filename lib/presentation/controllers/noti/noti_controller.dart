@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:restaurant_manager_mobile/data/models/noti/noti_modal.dart';
 import 'package:restaurant_manager_mobile/data/services/storage_service.dart';
 import 'package:restaurant_manager_mobile/utils/constant.dart';
+import 'package:restaurant_manager_mobile/utils/functions.dart';
 
 class NotiController extends GetxController {
   final RxList<NotiModal> notis = RxList.empty();
@@ -24,6 +25,7 @@ class NotiController extends GetxController {
   Future<void> handleNotification(String data) async {
     final StorageService storageService = await StorageService.getInstance();
     final noti = NotiModal(
+      id: Functions.generateRandomString(10),
       title: "Thông báo từ nhà hàng ${storageService.getString(StorageKeys.restaurantName)}",
       content: data,
       time: DateTime.now().toString(),
@@ -56,5 +58,26 @@ class NotiController extends GetxController {
     }
 
     return grouped;
+  }
+
+  void markReadAll() async {
+    final StorageService storageService = await StorageService.getInstance();
+    final notisList = notis.map((n) => n.toJson()).toList();
+    for (var i = 0; i < notisList.length; i++) {
+      notisList[i]['isRead'] = true;
+    }
+    storageService.setList("notis", notisList);
+  }
+
+  void markAsRead(String id) async {
+    final StorageService storageService = await StorageService.getInstance();
+    final notisList = notis.map((n) => n.toJson()).toList();
+    for (var i = 0; i < notisList.length; i++) {
+      if (notisList[i]['id'] == id) {
+        notisList[i]['isRead'] = true;
+        break;
+      }
+    }
+    storageService.setList("notis", notisList);
   }
 }

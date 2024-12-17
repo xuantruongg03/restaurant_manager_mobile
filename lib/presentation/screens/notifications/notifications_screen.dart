@@ -11,82 +11,87 @@ class NotificationsScreen extends GetView<NotiController> {
   const NotificationsScreen({super.key});
 
   Widget _itemNoti(NotiModal noti) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (!noti.isRead)
-            Padding(
-              padding: const EdgeInsets.only(top: 6, right: 8),
-              child: Container(
-                width: 8,
-                height: 8,
-                decoration: const BoxDecoration(
-                  color: Colors.orange,
-                  shape: BoxShape.circle,
+    return GestureDetector(
+      onTap: () {
+        controller.markAsRead(noti.id);
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 8),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (!noti.isRead)
+              Padding(
+                padding: const EdgeInsets.only(top: 6, right: 8),
+                child: Container(
+                  width: 8,
+                  height: 8,
+                  decoration: const BoxDecoration(
+                    color: Colors.orange,
+                    shape: BoxShape.circle,
+                  ),
                 ),
-              ),
-            )
-          else
-            const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      noti.title,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    if (!Functions.isToday(DateTime.parse(noti.date)))
+              )
+            else
+              const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
                       Text(
-                        formatDate(DateTime.parse(noti.date)),
+                        noti.title,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      if (!Functions.isToday(DateTime.parse(noti.date)))
+                        Text(
+                          formatDate(DateTime.parse(noti.date)),
+                          style: TextStyle(
+                            color: Colors.grey[600],
+                          ),
+                        ),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    noti.content,
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.access_time,
+                        size: 14,
+                        color: Colors.grey[600],
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        formatTime(DateTime.parse(noti.time)),
                         style: TextStyle(
+                          fontSize: 12,
                           color: Colors.grey[600],
                         ),
                       ),
-                  ],
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  noti.content,
-                  style: TextStyle(
-                    color: Colors.grey[600],
+                    ],
                   ),
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    Icon(
-                      Icons.access_time,
-                      size: 14,
-                      color: Colors.grey[600],
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      formatTime(DateTime.parse(noti.time)),
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey[600],
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -161,7 +166,9 @@ class NotificationsScreen extends GetView<NotiController> {
           Header(
             title: "Thông báo",
             showNotificationButton: true,
-            onNotificationPressed: () {},
+            onNotificationPressed: () {
+              controller.markReadAll();
+            },
             showSettingButton: true,
             onSettingPressed: () {},
           ),
