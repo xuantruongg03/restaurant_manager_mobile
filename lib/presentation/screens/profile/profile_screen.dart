@@ -18,8 +18,14 @@ class ProfileScreen extends GetView<ProfileController> {
           children: [
             Header(
               title: "Thông tin cá nhân",
-              showSettingButton: true,
-              onSettingPressed: () {}
+              // showSettingButton: true,
+              // onSettingPressed: () {
+              //   controller.logout();
+              // },
+              onPressedIcon: () {
+                controller.logout();
+              },
+              icon: PhosphorIconsBold.signOut,
             ),
             Expanded(
               child: SingleChildScrollView(

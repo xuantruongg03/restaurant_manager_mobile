@@ -66,10 +66,16 @@ class HomeController extends GetxController {
   }
 
   void registerDevicePushy() async {
-    final storageService = await StorageService.getInstance();
-    final deviceToken = storageService.getString(StorageKeys.deviceToken);
-    if (deviceToken == '' || deviceToken == null) {
-      await repository.registerDevicePushy();
+    try {
+      final storageService = await StorageService.getInstance();
+      final deviceToken = storageService.getString(StorageKeys.deviceToken);
+
+      if (deviceToken == null || deviceToken.isEmpty) {
+        await repository.registerDevicePushy();
+        storageService.getString(StorageKeys.deviceToken);
+      }
+    } catch (e) {
+      print('Error in registerDevicePushy: $e');
     }
   }
 

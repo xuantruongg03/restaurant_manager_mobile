@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:restaurant_manager_mobile/config/routes/route_names.dart';
 import 'package:restaurant_manager_mobile/data/services/storage_service.dart';
 import 'package:restaurant_manager_mobile/utils/constant.dart';
 
@@ -23,6 +24,12 @@ class ProfileController extends GetxController {
     role.value = storageService.getString(StorageKeys.role) ?? '';
     userId.value = storageService.getString(StorageKeys.userId) ?? '';
     restaurantName.value = storageService.getString(StorageKeys.restaurantName) ?? '';
+  }
+
+  Future<void> logout() async {
+    final storageService = await StorageService.getInstance();
+    storageService.clear();
+    Get.offAllNamed(RouteNames.login);
   }
 
   @override

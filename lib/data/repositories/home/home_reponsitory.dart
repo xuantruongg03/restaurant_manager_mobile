@@ -31,19 +31,23 @@ class HomeRepository {
         Get.offAllNamed(RouteNames.login);
         return;
       }
-      // register device token to pushy
+
       String deviceToken = await Pushy.register();
       if (deviceToken.isEmpty) {
         return;
       }
+
       final storageService = await StorageService.getInstance();
-      storageService.setString(StorageKeys.deviceToken, deviceToken);
+      await storageService.setString(StorageKeys.deviceToken, deviceToken);
+      
+      storageService.getString(StorageKeys.deviceToken);
+
       // register device token to server
       final response = await ApiClient.post('/account/update-device-token', headers: {
         'Authorization': 'Basic ${base64Encode(utf8.encode('${auth['username']}:${auth['password']}'))}'
       }, body: {
         'deviceToken': deviceToken,
-      });
+        });
       if (response['success'] == true) {
         print('Register device pushy success');
       } else {

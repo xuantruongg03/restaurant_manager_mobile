@@ -12,6 +12,8 @@ class Header extends StatelessWidget {
   final VoidCallback? onNotificationPressed;
   final bool? showSettingButton;
   final VoidCallback? onSettingPressed;
+  final IconData? icon;
+  final VoidCallback? onPressedIcon;
 
   const Header({
     super.key,
@@ -24,6 +26,8 @@ class Header extends StatelessWidget {
     this.onNotificationPressed,
     this.showSettingButton,
     this.onSettingPressed,
+    this.icon,
+    this.onPressedIcon,
   });
 
   @override
@@ -96,7 +100,20 @@ class Header extends StatelessWidget {
                       childAspectRatio: 1.0,
                       physics: const NeverScrollableScrollPhysics(),
                       children: [
-                        if (showNotificationButton != null && showNotificationButton!)
+                        if (icon != null)
+                          Center(
+                            child: IconButton(
+                              padding: EdgeInsets.zero,
+                              constraints: const BoxConstraints(),
+                              icon: Icon(
+                                icon,
+                                color: Colors.white,
+                                size: 24,
+                              ),
+                              onPressed: onPressedIcon,
+                            ),
+                          )
+                        else if (showNotificationButton != null && showNotificationButton!)
                           Center(
                             child: IconButton(
                               padding: EdgeInsets.zero,
