@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:restaurant_manager_mobile/core/theme/color_schemes.dart';
+import 'package:restaurant_manager_mobile/presentation/screens/auth/update_user_screen.dart';
 import 'package:restaurant_manager_mobile/presentation/widgets/header.dart';
 import 'package:restaurant_manager_mobile/presentation/controllers/profile/profile_controller.dart';
 
@@ -49,8 +50,13 @@ class ProfileScreen extends GetView<ProfileController> {
                         style: TextStyle(fontSize: 14, color: Colors.grey),
                       ),
                       const SizedBox(height: 8),
-                      ElevatedButton(
-                        onPressed: () {},
+                        ElevatedButton(
+                        onPressed: () {
+                          // Điều hướng sang màn hình cập nhật
+                          Get.to(() => UpdateUserScreen(
+                                idAccount: controller.userId.value,
+                              ));
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.white,
                           foregroundColor: Colors.black,
