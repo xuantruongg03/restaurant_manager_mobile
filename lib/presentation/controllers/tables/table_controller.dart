@@ -60,6 +60,8 @@ class TablesController extends GetxController {
       QRModal(
         name: tableName,
         tableId: tableId,
+        idMenu: '',
+        idRestaurant: '',
         onDownload: () => Get.back(),
         onPrint: () => Get.back(),
       ),

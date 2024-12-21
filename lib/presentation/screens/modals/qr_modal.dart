@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class QRModal extends StatelessWidget {
@@ -6,6 +7,8 @@ class QRModal extends StatelessWidget {
   final VoidCallback onDownload;
   final VoidCallback onPrint;
   final String tableId;
+  final String idMenu;
+  final String idRestaurant;
 
   const QRModal({
     super.key,
@@ -13,6 +16,8 @@ class QRModal extends StatelessWidget {
     required this.onDownload,
     required this.onPrint,
     required this.tableId,
+    required this.idMenu,
+    required this.idRestaurant,
   });
 
   @override
@@ -46,7 +51,7 @@ class QRModal extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               QrImageView(
-                data: tableId,
+                data: '${dotenv.env['WEB_URL']}/menu?a=$idMenu&b=$idRestaurant&c=$tableId',
                 size: 200,
               ),
               const SizedBox(height: 20),
