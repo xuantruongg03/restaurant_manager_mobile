@@ -54,7 +54,7 @@ class _AcceptOrderModalState extends State<AcceptOrderModal> {
                     ),
                   ],
                 ),
-                 const Text(
+                const Text(
                   'Không thể huỷ sau khi xác nhận',
                   style: TextStyle(fontSize: 16),
                 ),
@@ -89,7 +89,7 @@ class _AcceptOrderModalState extends State<AcceptOrderModal> {
                   },
                   style: OutlinedButton.styleFrom(
                     minimumSize: const Size(double.infinity, 48),
-                    side: const BorderSide(color: Colors.orange),
+                    side: const BorderSide(color: Colors.orange, width: 1.5),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),

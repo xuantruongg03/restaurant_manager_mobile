@@ -3,7 +3,9 @@ import 'package:get/get.dart';
 import 'package:restaurant_manager_mobile/config/routes/route_names.dart';
 import 'package:restaurant_manager_mobile/data/models/foods/food_modal.dart';
 import 'package:restaurant_manager_mobile/data/repositories/foods/food_repository.dart';
+import 'package:restaurant_manager_mobile/presentation/screens/modals/order_staff_modal.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/modals/yn_modal.dart';
+import 'package:restaurant_manager_mobile/utils/functions.dart';
 
 class FoodController extends GetxController {
   final FoodRepository repository;
@@ -114,5 +116,26 @@ class FoodController extends GetxController {
     final items = List<FoodModel>.from(filteredFoodItems);
     items.sort((a, b) => a.name.compareTo(b.name));
     return items;
+  }
+
+  void showOrderModal(String idFood, String nameFood) {
+    Get.dialog(
+      OrderStaffModal(idFood: idFood, nameFood: nameFood, onOrder: onOrder),
+    );
+  }
+
+  Future<void> onOrder(String idFood, String nameFood, String idTable, num quantity) async {
+    try {
+      final rs = await repository.orderFood(idFood, idTable, quantity);
+      if (rs == null) {
+        Functions.showSnackbar('Đặt món thất bại');
+        return;
+      }
+      Functions.showSnackbar('Đặt món thành công');
+    } catch (e) {
+      Functions.showSnackbar('Đặt món thất bại. ${e.toString()}');
+    } finally {
+      Get.back();
+    }
   }
 }

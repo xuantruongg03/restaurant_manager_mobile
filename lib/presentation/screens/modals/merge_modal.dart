@@ -66,7 +66,7 @@ class _MergeModalState extends State<MergeModal> {
                   itemBuilder: (context, index) {
                     final tableNumber = 'Bàn ${index + 1}';
                     return ListTile(
-                      leading: const Icon(Icons.table_bar),
+                      leading: const Icon(Icons.table_restaurant),
                       title: Text(tableNumber),
                       onTap: () {
                         Navigator.pop(context, tableNumber);
@@ -166,7 +166,9 @@ class _MergeModalState extends State<MergeModal> {
                   },
                   style: OutlinedButton.styleFrom(
                     minimumSize: const Size(double.infinity, 48),
-                    side: const BorderSide(color: Colors.orange),
+                    side: const BorderSide(
+                      color: Colors.orange,
+                      width: 1.5),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -238,7 +240,7 @@ class _MergeModalState extends State<MergeModal> {
               ),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: const Icon(Icons.table_bar, size: 32),
+            child: const Icon(Icons.table_restaurant, size: 32),
           ),
           const SizedBox(height: 8),
           Text(selectedTable ?? 'Chọn bàn'),

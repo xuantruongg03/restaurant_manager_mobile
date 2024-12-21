@@ -108,7 +108,8 @@ class _YNModalState extends State<YNModal> {
                             onPressed: _handleNo,
                             style: OutlinedButton.styleFrom(
                               minimumSize: const Size(double.infinity, 48),
-                              side: const BorderSide(color: Colors.orange),
+                              side: const BorderSide(
+                                  color: Colors.orange, width: 1.5),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8),
                               ),

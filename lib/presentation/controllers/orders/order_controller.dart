@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
@@ -7,9 +9,9 @@ import 'package:restaurant_manager_mobile/presentation/screens/modals/accept_ord
 import 'package:restaurant_manager_mobile/presentation/screens/modals/cancel_order.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/modals/success_order.dart';
 import 'package:restaurant_manager_mobile/utils/constant.dart';
-import '../../../data/repositories/orders/order_repository.dart';
-import 'dart:async';
 import 'package:web_socket_channel/web_socket_channel.dart';
+
+import '../../../data/repositories/orders/order_repository.dart';
 
 class OrderController extends GetxController {
   final OrderRepository orderRepository = OrderRepository();

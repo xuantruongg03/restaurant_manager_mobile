@@ -9,9 +9,6 @@ import 'package:restaurant_manager_mobile/data/services/storage_service.dart';
 import 'package:restaurant_manager_mobile/utils/constant.dart';
 
 class TablesRepository {
-  final ApiClient apiClient;
-
-  TablesRepository({required this.apiClient});
 
   Future<List<TableModel>?> getTables() async {
     try {

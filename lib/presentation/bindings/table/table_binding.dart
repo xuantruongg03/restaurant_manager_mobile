@@ -8,6 +8,6 @@ class TablesBinding extends Bindings {
   void dependencies() {
     Get.lazyPut(() => ApiClient());
     Get.lazyPut(() => TablesController(repository: Get.find()));
-    Get.lazyPut(() => TablesRepository(apiClient: Get.find()));
+    Get.lazyPut(() => TablesRepository());
   }
 }

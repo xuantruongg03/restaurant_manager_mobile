@@ -86,7 +86,7 @@ class _SuccessOrderModalState extends State<SuccessOrderModal> {
                   },
                   style: OutlinedButton.styleFrom(
                     minimumSize: const Size(double.infinity, 48),
-                    side: const BorderSide(color: Colors.orange),
+                    side: const BorderSide(color: Colors.orange, width: 1.5),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),

@@ -91,7 +91,9 @@ class FoodScreen extends GetView<FoodController> {
                     color: Colors.white,
                     size: 18,
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    controller.showOrderModal(id, title);
+                  },
                 ),
               ),
               const SizedBox(height: 10),
