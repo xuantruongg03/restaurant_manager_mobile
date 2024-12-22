@@ -39,7 +39,7 @@ class ProfileScreen extends GetView<ProfileController> {
                         backgroundImage:
                             AssetImage(controller.avt.value == '' ? 'assets/images/avatar_demo.png' : controller.avt.value),
                       ),
-                      const SizedBox(height: 12),
+                      // const SizedBox(height: 12),
                       Text(
                         controller.name.value,
                         style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),

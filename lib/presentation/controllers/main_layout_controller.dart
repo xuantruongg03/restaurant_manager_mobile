@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:restaurant_manager_mobile/presentation/controllers/home/home_controller.dart';
 import 'package:restaurant_manager_mobile/presentation/controllers/noti/noti_controller.dart';
 import 'package:restaurant_manager_mobile/presentation/controllers/orders/order_controller.dart';
+import 'package:restaurant_manager_mobile/presentation/controllers/profile/profile_controller.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/features/feature_screen.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/home/home_screen.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/notifications/notifications_screen.dart';
@@ -13,6 +14,7 @@ class MainLayoutController extends GetxController {
   OrderController orderController = Get.put(OrderController());
   HomeController homeController = Get.put(HomeController());
   NotiController notiController = Get.put(NotiController());
+  ProfileController profileController = Get.put(ProfileController());
 
   final List<Widget> screens = [
     const FeatureScreen(),
