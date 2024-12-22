@@ -46,19 +46,25 @@ class NotificationsScreen extends GetView<NotiController> {
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        noti.title,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
+                      Flexible(
+                        child: Text(
+                          noti.title,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ),
                       if (!Functions.isToday(DateTime.parse(noti.date)))
-                        Text(
-                          formatDate(DateTime.parse(noti.date)),
-                          style: TextStyle(
-                            color: Colors.grey[600],
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8),
+                          child: Text(
+                            formatDate(DateTime.parse(noti.date)),
+                            style: TextStyle(
+                              color: Colors.grey[600],
+                            ),
                           ),
                         ),
                     ],
