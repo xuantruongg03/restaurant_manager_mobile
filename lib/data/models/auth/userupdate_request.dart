@@ -1,7 +1,7 @@
   class UserupdateRequest {
     final String? idAccount;
     final String? name;
-    final String? avt;
+     String? avt;
     final DateTime? birthdate;
   UserupdateRequest({
     this.idAccount,

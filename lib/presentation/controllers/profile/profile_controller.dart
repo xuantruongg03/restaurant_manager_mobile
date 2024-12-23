@@ -5,7 +5,7 @@ import 'package:restaurant_manager_mobile/utils/constant.dart';
 
 class ProfileController extends GetxController {
 
-  final name = ''.obs;
+  final  name = ''.obs;
   final phone = ''.obs;
   final birthDay = ''.obs;
   final avt = ''.obs;

@@ -18,6 +18,7 @@ class UpdateUserRepository {
         return null;
       }
       final storageService = await StorageService.getInstance();
+      
       final response = await ApiClient.post('/account/update', headers: {
         'Authorization':
             'Basic ${base64Encode(utf8.encode('${auth['username']}:${auth['password']}'))}'
