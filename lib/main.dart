@@ -13,6 +13,7 @@ import 'package:pushy_flutter/pushy_flutter.dart';
 import 'package:restaurant_manager_mobile/presentation/controllers/main_layout_controller.dart';
 import 'package:restaurant_manager_mobile/presentation/controllers/noti/noti_controller.dart';
 import 'package:restaurant_manager_mobile/utils/constant.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';  
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -67,6 +68,15 @@ class MyApp extends StatelessWidget {
       initialRoute: RouteNames.splash,
       getPages: AppPages.routes,
       initialBinding: AppBinding(),
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('vi', 'VN'),
+        Locale('en', 'US'),
+      ],
     );
   }
 }

@@ -54,7 +54,8 @@ class Header extends StatelessWidget {
                 icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
                 onPressed: () => Navigator.pop(context),
               ),
-            Padding(
+            Expanded(
+              child: Padding(
                 padding: EdgeInsets.only(left: showBackButton ? 0 : 10),
                 child: Text(
                   title,
@@ -63,10 +64,10 @@ class Header extends StatelessWidget {
                     fontSize: 20,
                     fontWeight: FontWeight.w500,
                   ),
-                  textAlign: showBackButton && showActionButton
-                      ? TextAlign.center
-                      : TextAlign.left,
-                )),
+                  textAlign: showBackButton ? TextAlign.center : TextAlign.left,
+                ),
+              ),
+            ),
             Container(
               width: showActionButton 
                   ? null 

@@ -1,18 +1,31 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:restaurant_manager_mobile/data/models/auth/userupdate_request.dart';
 import 'package:restaurant_manager_mobile/data/repositories/auth/update_user_repository.dart';
 import 'package:restaurant_manager_mobile/utils/functions.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter/material.dart';
 
 class UpdateUserController extends GetxController {
   final UpdateUserRepository repository;
   Rx<XFile?> selectedFile = Rx<XFile?>(null);
   UpdateUserController({required this.repository});
   var isLoading = false.obs;
+  final imageUrl = "".obs;
+  final birthdayController = TextEditingController();
+
   void pickImage() async {
     final ImagePicker picker = ImagePicker();
     final file = await picker.pickImage(source: ImageSource.gallery);
     if (file != null) {
+      final imageUrl = await uploadImageToCloudinary(File(file.path));
+      if (imageUrl != null) {
+        this.imageUrl.value = imageUrl;
+      }
       selectedFile.value = file;
     }
   }
@@ -48,5 +61,42 @@ class UpdateUserController extends GetxController {
     } finally {
       isLoading.value = false; // Ẩn trạng thái đang tải
     }
+  }
+
+  Future<String?> uploadImageToCloudinary(File imageFile) async {
+    try {
+      final String cloudName = dotenv.env['CLOUD_NAME'] ?? '';
+      final String apiKey = dotenv.env['API_KEY'] ?? '';
+      final String apiSecret = dotenv.env['API_SECRET'] ?? '';
+
+      final uri =
+          Uri.parse('https://api.cloudinary.com/v1_1/$cloudName/image/upload');
+      final request = http.MultipartRequest('POST', uri);
+
+      request.fields['upload_preset'] = dotenv.env['UPLOAD_PRESET'] ?? '';
+      request.fields['api_key'] = apiKey;
+      request.fields['api_secret'] = apiSecret;
+      request.files
+          .add(await http.MultipartFile.fromPath('file', imageFile.path));
+
+      final response = await request.send();
+      if (response.statusCode == 200) {
+        final responseData = await http.Response.fromStream(response);
+        final data = jsonDecode(responseData.body);
+        return data['secure_url'];
+      } else {
+        print('Failed to upload image: ${response.reasonPhrase}');
+        return null;
+      }
+    } catch (e) {
+      print('Error uploading image: $e');
+      return null;
+    }
+  }
+
+  @override
+  void onClose() {
+    birthdayController.dispose();
+    super.onClose();
   }
 }
