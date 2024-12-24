@@ -4,6 +4,7 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:restaurant_manager_mobile/core/theme/color_schemes.dart';
 import 'package:restaurant_manager_mobile/presentation/widgets/header.dart';
 import 'package:restaurant_manager_mobile/presentation/controllers/profile/profile_controller.dart';
+import 'package:restaurant_manager_mobile/presentation/controllers/auth/login_controller.dart';
 
 class ProfileScreen extends GetView<ProfileController> {
   const ProfileScreen({super.key});
@@ -44,13 +45,14 @@ class ProfileScreen extends GetView<ProfileController> {
                       ),
                       const SizedBox(height: 8),
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Get.find<LoginController>().logout();
+                        },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          foregroundColor: Colors.black,
+                          backgroundColor: Colors.red,
                           minimumSize: const Size(100, 36),
                         ),
-                        child: const Text('Chỉnh sửa'),
+                        child: const Text('Đăng xuất'),
                       ),
 
                       // Profile information section

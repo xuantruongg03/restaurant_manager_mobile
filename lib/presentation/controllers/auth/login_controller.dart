@@ -82,4 +82,10 @@ class LoginController extends GetxController {
     }
     return null;
   }
+
+  Future<void> logout() async {
+    final storageService = await StorageService.getInstance();
+    await storageService.clear();
+    Get.offNamed(RouteNames.login);
+  }
 }

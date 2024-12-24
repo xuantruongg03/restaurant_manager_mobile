@@ -33,5 +33,8 @@ class RouteNames {
   static const String addTable = '/add-table';
   static const String bill = '/bill';
   static const String confirmPhone = '/confirm-phone';
+  static const String addStaff = '/add-staff';
+  static const String payment = '/payment';
+  static const String statistic = '/statistic';
 
 }

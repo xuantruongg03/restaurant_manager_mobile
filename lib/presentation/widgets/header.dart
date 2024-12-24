@@ -8,6 +8,7 @@ class Header extends StatelessWidget {
   final bool showActionButton;
   final VoidCallback? onActionPressed;
   final String actionButtonText;
+
   final bool? showNotificationButton;
   final VoidCallback? onNotificationPressed;
   final bool? showSettingButton;
