@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:restaurant_manager_mobile/core/theme/color_schemes.dart';
+import 'package:restaurant_manager_mobile/presentation/screens/auth/update_user_screen.dart';
 import 'package:restaurant_manager_mobile/presentation/widgets/header.dart';
 import 'package:restaurant_manager_mobile/presentation/controllers/profile/profile_controller.dart';
 
@@ -36,13 +37,15 @@ class ProfileScreen extends GetView<ProfileController> {
                       // Avatar and name section
                       CircleAvatar(
                         radius: 40,
-                        backgroundImage:
-                            AssetImage(controller.avt.value == '' ? 'assets/images/avatar_demo.png' : controller.avt.value),
+                        backgroundImage: AssetImage(controller.avt.value == ''
+                            ? 'assets/images/avatar_demo.png'
+                            : controller.avt.value),
                       ),
                       // const SizedBox(height: 12),
                       Text(
                         controller.name.value,
-                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                       const Text(
                         'lexuantruong098@gmail.com',
@@ -50,7 +53,15 @@ class ProfileScreen extends GetView<ProfileController> {
                       ),
                       const SizedBox(height: 8),
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          // Điều hướng sang màn hình cập nhật, truyền thông tin người dùng
+                          Get.to(() => UpdateUserScreen(
+                                idAccount: controller.userId.value,
+                                name: controller.name.value,
+                                birthDate: controller.birthDay.value,
+                                avatar: controller.avt.value,
+                              ));
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.white,
                           foregroundColor: Colors.black,
@@ -78,9 +89,16 @@ class ProfileScreen extends GetView<ProfileController> {
                               ),
                             ),
                             const SizedBox(height: 16),
-                            _buildInfoItem('Email:', 'lexuantruong09@gmail.com', PhosphorIconsRegular.envelopeSimple),
-                            _buildInfoItem('Số điện thoại:', controller.phone.value, PhosphorIconsRegular.phone),
-                            _buildInfoItem('Ngày sinh:', controller.birthDay.value, PhosphorIconsRegular.calendar),
+                            _buildInfoItem('Email:', 'lexuantruong09@gmail.com',
+                                PhosphorIconsRegular.envelopeSimple),
+                            _buildInfoItem(
+                                'Số điện thoại:',
+                                controller.phone.value,
+                                PhosphorIconsRegular.phone),
+                            _buildInfoItem(
+                                'Ngày sinh:',
+                                controller.birthDay.value,
+                                PhosphorIconsRegular.calendar),
                           ],
                         ),
                       ),
@@ -102,10 +120,22 @@ class ProfileScreen extends GetView<ProfileController> {
                               ),
                             ),
                             const SizedBox(height: 16),
-                            _buildInfoItem('ID:', controller.userId.value, null, showCopy: true),
-                            _buildInfoItem('Trạng thái:', controller.status.value == 'active' ? 'Hoạt động' : 'Không hoạt động', null),
-                            _buildInfoItem('Vai trò:', controller.role.value == 'admin' ? 'Chủ nhà hàng' : 'Nhân viên', null),
-                            _buildInfoItem('Tên nhà hàng:', controller.restaurantName.value, null),
+                            _buildInfoItem('ID:', controller.userId.value, null,
+                                showCopy: true),
+                            _buildInfoItem(
+                                'Trạng thái:',
+                                controller.status.value == 'active'
+                                    ? 'Hoạt động'
+                                    : 'Không hoạt động',
+                                null),
+                            _buildInfoItem(
+                                'Vai trò:',
+                                controller.role.value == 'admin'
+                                    ? 'Chủ nhà hàng'
+                                    : 'Nhân viên',
+                                null),
+                            _buildInfoItem('Tên nhà hàng:',
+                                controller.restaurantName.value, null),
                             _buildInfoItem('Ngày hết hạn:', '24/08/2025', null)
                           ],
                         ),
@@ -121,7 +151,8 @@ class ProfileScreen extends GetView<ProfileController> {
     );
   }
 
-  Widget _buildInfoItem(String label, String value, IconData? icon, {bool showCopy = false}) {
+  Widget _buildInfoItem(String label, String value, IconData? icon,
+      {bool showCopy = false}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
@@ -134,7 +165,7 @@ class ProfileScreen extends GetView<ProfileController> {
           ),
           const Spacer(),
           Text(value),
-          if (showCopy) 
+          if (showCopy)
             Padding(
               padding: const EdgeInsets.only(left: 4),
               child: GestureDetector(
