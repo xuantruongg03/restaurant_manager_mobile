@@ -18,6 +18,7 @@ class AddTableScreen extends GetView<AddTableController> {
             title: 'Thêm bàn',
             showBackButton: true,
             showActionButton: true,
+            
             onActionPressed: () => controller.addTable(),
           ),
           Expanded(

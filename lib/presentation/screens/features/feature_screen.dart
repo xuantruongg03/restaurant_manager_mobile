@@ -73,13 +73,13 @@ class FeatureScreen extends StatelessWidget {
                   icon: 'assets/icons/billing.png',
                   label: 'Thanh toán',
                   color: Colors.amber,
-                  onTap: () => Get.toNamed(RouteNames.bill),
+                  onTap: () => Get.toNamed(RouteNames.payment),
                 ),
                 _buildFeatureItem(
                   icon: 'assets/icons/statistic.png',
                   label: 'Thống kê',
                   color: Colors.blue,
-                  onTap: () => Get.toNamed(RouteNames.splash),
+                  onTap: () => Get.toNamed(RouteNames.statistic),
                 ),
                 _buildFeatureItem(
                   icon: 'assets/icons/person-group.png',
