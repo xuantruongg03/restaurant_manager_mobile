@@ -54,7 +54,6 @@ void backgroundNotificationListener(Map<String, dynamic> data) {
   Pushy.notify(notificationTitle, notificationText, data);
   Pushy.clearBadge();
 }
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -80,3 +79,4 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
