@@ -94,7 +94,7 @@ class ForgotPasswordScreen extends GetView<ForgotPasswordController> {
                       ),
                       TextSpan(
                         text:
-                            "Chúng tôi sẽ gửi cho bạn một tin nhắn để đặt lại mật khẩu mới của bạn. Vui lòng kiểm tra email.",
+                            "Chúng tôi sẽ gửi cho bạn một tin nhắn để đặt lại mật khẩu mới của bạn. Vui lòng kiểm tra tin nhắn.",
                         style: TextStyle(color: Colors.grey),
                       ),
                     ],
