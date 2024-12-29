@@ -33,16 +33,19 @@ class UpdateUserController extends GetxController {
   Future<void> updateUser({
     required String idAccount,
     String? name,
-    String? avt,
     DateTime? birthDate,
   }) async {
+    if (name == null || name == "") {
+      Functions.showSnackbar("Vui lòng nhập tên");
+      return;
+    }
     isLoading.value = true;
 
     try {
       final request = UserupdateRequest(
         idAccount: idAccount,
         name: name,
-        avt: avt,
+        avt: imageUrl.value,
         birthdate: birthDate,
       );
 
@@ -50,12 +53,12 @@ class UpdateUserController extends GetxController {
 
       if (response != null && response['success'] == true) {
         Functions.showSnackbar("Cập nhật thông tin thành công!");
-      print("Result to return: {name: $name, avt: $avt, birthDate: ${birthDate?.toIso8601String()}}");
+      print("Result to return: {name: $name, avt: $imageUrl.value, birthDate: ${birthDate?.toIso8601String()}}");
 
         // Truyền dữ liệu đã cập nhật về màn hình trước đó
         Get.back(result: {
           'name': name,
-          'avt': avt,
+          'avt': imageUrl.value,
           'birthDate': birthDate?.toIso8601String(),
         });
       } else {

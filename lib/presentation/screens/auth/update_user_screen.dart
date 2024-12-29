@@ -79,7 +79,6 @@ class UpdateUserScreen extends StatelessWidget {
                 controller.updateUser(
                   idAccount: idAccount,
                   name: nameController.text,
-                  avt: selectedFile?.name ?? avatar,
                   birthDate: controller.birthdayController.text.isEmpty
                       ? null
                       : DateTime.tryParse(controller.birthdayController.text),
