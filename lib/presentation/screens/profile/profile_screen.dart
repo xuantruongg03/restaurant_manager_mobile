@@ -35,18 +35,25 @@ class ProfileScreen extends GetView<ProfileController> {
                   child: Column(
                     children: [
                       // Avatar and name section
-                      CircleAvatar(
-                        radius: 40,
-                        backgroundImage: AssetImage(controller.avt.value == ''
-                            ? 'assets/images/avatar_demo.png'
-                            : controller.avt.value),
-                      ),
+                      Obx(() {
+                        return CircleAvatar(
+                          radius: 40,
+                          backgroundImage: controller.avt.value.isEmpty
+                              ? const AssetImage(
+                                  'assets/images/avatar_demo.png')
+                              : NetworkImage(controller.avt.value)
+                                  as ImageProvider,
+                        );
+                      }),
+
                       // const SizedBox(height: 12),
-                      Text(
-                        controller.name.value,
-                        style: const TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
+                      Obx(() {
+                        return Text(
+                          controller.name.value,
+                          style: const TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        );
+                      }),
                       const Text(
                         'lexuantruong098@gmail.com',
                         style: TextStyle(fontSize: 14, color: Colors.grey),
@@ -55,12 +62,8 @@ class ProfileScreen extends GetView<ProfileController> {
                       ElevatedButton(
                         onPressed: () {
                           // Điều hướng sang màn hình cập nhật, truyền thông tin người dùng
-                          Get.to(() => UpdateUserScreen(
-                                idAccount: controller.userId.value,
-                                name: controller.name.value,
-                                birthDate: controller.birthDay.value,
-                                avatar: controller.avt.value,
-                              ));
+
+                          controller.navigateToUpdateUser();
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.white,
@@ -95,13 +98,21 @@ class ProfileScreen extends GetView<ProfileController> {
                                 'Số điện thoại:',
                                 controller.phone.value,
                                 PhosphorIconsRegular.phone),
-                            _buildInfoItem(
+                            Obx(() {
+                              return _buildInfoItem(
                                 'Ngày sinh:',
-                                controller.birthDay.value,
-                                PhosphorIconsRegular.calendar),
+                                controller.birthDate.value.isEmpty
+                                    ? 'Chưa cập nhật'
+                                    : controller
+                                        .birthDate.value, // Hiển thị ngày sinh
+                                PhosphorIconsRegular.calendar,
+                              );
+                            }),
                           ],
                         ),
                       ),
+                    
+
                       const SizedBox(height: 16),
                       Container(
                         padding: const EdgeInsets.all(16),
