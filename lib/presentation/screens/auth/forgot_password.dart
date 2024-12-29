@@ -62,22 +62,22 @@ class ForgotPasswordScreen extends GetView<ForgotPasswordController> {
               Form(
                   key: controller.formKey,
                   child: TextFormField(
-                    controller: controller.emailController,
+                    controller: controller.phoneController,
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: Colors.grey[100],
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      prefixIcon: const Icon(Icons.email),
-                      hintText: 'Email',
+                      prefixIcon: const Icon(Icons.phone),
+                      hintText: 'Số điện thoại',
                       hintStyle: const TextStyle(
                         color: Colors.grey,
                       ),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Vui lòng nhập email';
+                        return 'Vui lòng nhập số điện thoại';
                       }
                       return null;
                     },
