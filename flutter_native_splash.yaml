@@ -1,11 +1,11 @@
 flutter_native_splash:
-  color: "#FFFFFF"
+  color: "#F29121"
   image: assets/images/splash.png
   android_gravity: center
   ios_content_mode: center
   android_12:
     image: assets/images/splash.png
-    icon_background_color: "#FFFFFF"
+    icon_background_color: "#F29121"
     
   # Các cấu hình tùy chọn khác
   fullscreen: true
