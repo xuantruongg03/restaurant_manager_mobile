@@ -17,7 +17,7 @@ class TableScreen extends GetView<TablesController> {
       required String time,
       required bool isMerge}) {
     return GestureDetector(
-      onLongPress: () => controller.showQRModal(name, ""),
+      onLongPress: () => controller.showQRModal(name, idTable),
       onTap: () => {
         if (status != "Available") {
           Get.toNamed(RouteNames.bill, arguments: {

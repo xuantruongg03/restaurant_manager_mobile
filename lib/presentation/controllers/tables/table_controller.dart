@@ -1,8 +1,11 @@
 import 'package:get/get.dart';
 import 'package:restaurant_manager_mobile/data/models/tables/table_modal.dart';
 import 'package:restaurant_manager_mobile/data/repositories/tables/table_repository.dart';
+import 'package:restaurant_manager_mobile/data/services/storage_service.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/modals/merge_modal.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/modals/qr_modal.dart';
+import 'package:restaurant_manager_mobile/utils/constant.dart';
+import 'package:restaurant_manager_mobile/utils/functions.dart';
 
 
 class TablesController extends GetxController {
@@ -55,14 +58,24 @@ class TablesController extends GetxController {
     selectedFilter.value = filter;
   }
 
-  void showQRModal(String tableName, String tableId) {
+  void showQRModal(String tableName, String tableId) async {
+    final storage = await StorageService.getInstance();
+    final idMenu = storage.getString(StorageKeys.idMenu);
+    if (idMenu == null) {
+      Functions.showSnackbar("Vui lòng chọn menu trước khi tạo QR");
+      return;
+    }
+    final idRestaurant = storage.getString(StorageKeys.restaurantId);
+    if (idRestaurant == null) {
+      Functions.showSnackbar("Vui lòng chọn nhà hàng trước khi tạo QR");
+      return;
+    }
     Get.dialog(
       QRModal(
         name: tableName,
         tableId: tableId,
-        idMenu: '',
-        idRestaurant: '',
-        onDownload: () => Get.back(),
+        idMenu: idMenu,
+        idRestaurant: idRestaurant,
         onPrint: () => Get.back(),
       ),
     );

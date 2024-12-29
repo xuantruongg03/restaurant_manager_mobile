@@ -55,5 +55,7 @@
 		<true/>
 		<key>UIViewControllerBasedStatusBarAppearance</key>
 		<false/>
+		<key>NSPhotoLibraryAddUsageDescription</key>
+		<string>Application needs access to photo library for saving QR codes</string>
 	</dict>
 </plist>
