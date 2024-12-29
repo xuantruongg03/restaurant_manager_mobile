@@ -50,16 +50,17 @@ class UpdateUserScreen extends StatelessWidget {
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: controller.birthdayController.text.isEmpty 
-        ? DateTime.now()
-        : DateTime.parse(controller.birthdayController.text),
+      initialDate: controller.birthdayController.text.isEmpty
+          ? DateTime.now()
+          : DateTime.parse(controller.birthdayController.text),
       firstDate: DateTime(1900),
       lastDate: DateTime.now(),
       locale: const Locale('vi', 'VN'),
     );
 
     if (picked != null) {
-      controller.birthdayController.text = picked.toIso8601String().split('T')[0];
+      controller.birthdayController.text =
+          picked.toIso8601String().split('T')[0];
     }
   }
 
@@ -79,7 +80,9 @@ class UpdateUserScreen extends StatelessWidget {
                   idAccount: idAccount,
                   name: nameController.text,
                   avt: selectedFile?.name ?? avatar,
-                  birthDate: DateTime.tryParse(birthDateController.text),
+                  birthDate: controller.birthdayController.text.isEmpty
+                      ? null
+                      : DateTime.tryParse(controller.birthdayController.text),
                 );
               },
               actionButtonText: "Lưu",

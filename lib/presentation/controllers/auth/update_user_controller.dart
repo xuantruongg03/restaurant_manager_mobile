@@ -29,16 +29,16 @@ class UpdateUserController extends GetxController {
       selectedFile.value = file;
     }
   }
+
   Future<void> updateUser({
     required String idAccount,
     String? name,
     String? avt,
     DateTime? birthDate,
   }) async {
-    isLoading.value = true; // Hiển thị trạng thái đang tải
+    isLoading.value = true;
 
     try {
-      // Chuẩn bị request
       final request = UserupdateRequest(
         idAccount: idAccount,
         name: name,
@@ -46,20 +46,25 @@ class UpdateUserController extends GetxController {
         birthdate: birthDate,
       );
 
-      // Gửi yêu cầu cập nhật
       final response = await repository.UpdateUser(request);
 
-      // Xử lý phản hồi
       if (response != null && response['success'] == true) {
         Functions.showSnackbar("Cập nhật thông tin thành công!");
-        Get.back(); // Quay lại màn hình trước đó
+      print("Result to return: {name: $name, avt: $avt, birthDate: ${birthDate?.toIso8601String()}}");
+
+        // Truyền dữ liệu đã cập nhật về màn hình trước đó
+        Get.back(result: {
+          'name': name,
+          'avt': avt,
+          'birthDate': birthDate?.toIso8601String(),
+        });
       } else {
         Functions.showSnackbar("Cập nhật thất bại: ${response?['message']}");
       }
     } catch (e) {
       Functions.showSnackbar("Đã xảy ra lỗi: $e");
     } finally {
-      isLoading.value = false; // Ẩn trạng thái đang tải
+      isLoading.value = false;
     }
   }
 
