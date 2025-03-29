@@ -41,29 +41,34 @@ class LoginController extends GetxController {
 
     try {
       final response = await repository.login(user);
+      print('Response: ${response}');
+
       if (response != null) {
         final storageService = await StorageService.getInstance();
 
         await storageService.setString(StorageKeys.username, user.username);
         await storageService.setString(StorageKeys.password, user.password);
         await storageService.setString(
-            StorageKeys.userId, response['data']['id']);
-        await storageService.setString(
-            StorageKeys.role, response['data']['role']);
-        await storageService.setString(
-            StorageKeys.name, response['data']['name']);
-        await storageService.setString(
-            StorageKeys.statusUser, response['data']['status']);
-        await storageService.setString(
-            StorageKeys.restaurantId, response['data']['idRestaurant'] ?? '');
-        await storageService.setString(
-            StorageKeys.restaurantName, response['data']['nameRestaurant'] ?? '');
-        await storageService.setString(
-            StorageKeys.avt, response['data']['avt'] ?? '');
-        await storageService.setString(
-            StorageKeys.phone, response['data']['phone'] ?? '');
-        await storageService.setString(
-            StorageKeys.birthDay, response['data']['birthDay'] ?? '');
+            StorageKeys.token, response['data']['result']['token']);
+        await storageService.setString(StorageKeys.restaurantId, '1');
+        // await storageService.setString(
+        //     StorageKeys.userId, response['data']['id']);
+        // await storageService.setString(
+        //     StorageKeys.role, response['data']['role']);
+        // await storageService.setString(
+        //     StorageKeys.name, response['data']['name']);
+        // await storageService.setString(
+        //     StorageKeys.statusUser, response['data']['status']);
+        // await storageService.setString(
+        //     StorageKeys.restaurantId, response['data']['idRestaurant'] ?? '');
+        // await storageService.setString(
+        //     StorageKeys.restaurantName, response['data']['nameRestaurant'] ?? '');
+        // await storageService.setString(
+        //     StorageKeys.avt, response['data']['avt'] ?? '');
+        // await storageService.setString(
+        //     StorageKeys.phone, response['data']['phone'] ?? '');
+        // await storageService.setString(
+        //     StorageKeys.birthDay, response['data']['birthDay'] ?? '');
         await storageService.setBool(StorageKeys.isLogin, true);
         stateService.setAuthenticated(true);
         Get.offNamed(RouteNames.splash);

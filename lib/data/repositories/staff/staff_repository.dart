@@ -1,23 +1,20 @@
 import 'package:get/get.dart';
 import 'package:restaurant_manager_mobile/config/api_client.dart';
 import 'package:restaurant_manager_mobile/data/models/staff/staff_modal.dart';
+import 'package:restaurant_manager_mobile/data/services/storage_service.dart';
 
 class StaffRepository extends GetConnect {
-  Future<List<StaffModal>> getStaff() async {
-    final response = await ApiClient.get('/staff/get-all-staff');
-    return response['data'].map<StaffModal>((staff) => StaffModal.fromJson(staff)).toList();
-  }
+  // final ApiClient apiClient;
 
-  Future<StaffModal?> addStaff(StaffModal staff) async {
-    final response = await ApiClient.post('/staff/add', body: staff.toJson());
-    if (response['success'] == true) {
-      return StaffModal.fromJson(response['data']);
-    }
-    return null;
-  }
+  // StaffRepository({required this.apiClient});
 
-  Future<bool> deleteStaff(String staffId) async {
-    final response = await ApiClient.delete('/staff/delete/$staffId');
-    return response['success'] == true;
-  }
+  // Future<List<StaffModel>> getEmployees() async {
+  //   try {
+  //     final storageService = await StorageService.getInstance();
+  //     final response = await ApiClient.get('');
+  //     return List.empty();
+  //   } catch (e) {
+  //     print('error: $e');
+  //   }
+  // }
 }

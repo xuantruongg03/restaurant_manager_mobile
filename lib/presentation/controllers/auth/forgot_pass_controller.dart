@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:restaurant_manager_mobile/config/routes/route_names.dart';
 
 class ForgotPasswordController extends GetxController {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -14,7 +15,7 @@ class ForgotPasswordController extends GetxController {
 
   Future<void> handleForgotPassword() async {
     if (formKey.currentState!.validate()) {
-      isLoading.value = true;
+       Get.offNamed(RouteNames.confirmPhone);
     }
   }
 }

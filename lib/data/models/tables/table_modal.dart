@@ -1,3 +1,5 @@
+import 'package:restaurant_manager_mobile/utils/formats.dart';
+
 class TableModel {
   final String idTable;
   final String name;
@@ -14,12 +16,13 @@ class TableModel {
   });
 
   factory TableModel.fromJson(Map<String, dynamic> json) {
+    DateTime now = DateTime.now();
     return TableModel(
       idTable: json['idTable'],
-      name: json['tableName'],
+      name: json['nameTable'],
       status: json['status'],
-      time: "9h40",
-      isMerge: false,
+      time: json['status'] == 'Available' ? 'Chưa có' : formatTime(now), 
+      isMerge: json['mergedTo'] != null,
     );
   }
 }

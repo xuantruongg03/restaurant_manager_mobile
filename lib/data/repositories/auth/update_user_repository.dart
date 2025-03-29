@@ -7,6 +7,7 @@ import 'package:restaurant_manager_mobile/config/routes/route_names.dart';
 import 'package:restaurant_manager_mobile/data/models/auth/userupdate_request.dart';
 import 'package:restaurant_manager_mobile/data/services/auth_service.dart';
 import 'package:restaurant_manager_mobile/data/services/storage_service.dart';
+import 'package:restaurant_manager_mobile/utils/constant.dart';
 import 'package:restaurant_manager_mobile/utils/functions.dart';
 
 class UpdateUserRepository {
@@ -21,7 +22,7 @@ class UpdateUserRepository {
       
       final response = await ApiClient.post('/account/update', headers: {
         'Authorization':
-            'Basic ${base64Encode(utf8.encode('${auth['username']}:${auth['password']}'))}'
+            'Bearer ${storageService.getString(StorageKeys.token)}'
       }, body: request.toJson());
 
       // Kiểm tra phản hồi

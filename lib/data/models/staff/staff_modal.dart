@@ -1,41 +1,59 @@
-class StaffModal {
+class StaffModel {
+  final String userId;
   final String name;
-  final int phone;
-  final String position;
-  final String wage;
-  final String salarytypel;
-  final String Bank;
-  
-  StaffModal({
+  final String role;
+  final int shifts;
+  final int baseSalary;
+  final String username;
+  final int payment;
+  final String type;
+  final String bankAccountNumber;
+  final String bank;
+  final String workStartDate;
+
+  StaffModel({
+    required this.userId,
     required this.name,
-    required this.phone,
-    required this.position,
-    required this.wage,
-    required this.salarytypel,
-    required this.Bank,
+    required this.role,
+    required this.shifts,
+    required this.baseSalary,
+    required this.username,
+    required this.payment,
+    required this.type,
+    required this.bankAccountNumber,
+    required this.bank,
+    required this.workStartDate,
   });
 
-  factory StaffModal.fromJson(Map<String, dynamic> json) {
-    return StaffModal(
+  factory StaffModel.fromJson(Map<String, dynamic> json) {
+    return StaffModel(
+      userId: json['userId'],
       name: json['name'],
-      phone: json['phone'],
-      position: json['position'],
-      wage: json['wage'],
-      salarytypel: json['salarytypel'],
-      Bank: json['Bank'],
+      role: json['role'],
+      shifts: json['shifts'],
+      baseSalary: json['baseSalary'],
+      username: json['username'],
+      payment: json['payment'],
+      type: json['type'],
+      bankAccountNumber: json['bankAccountNumber'],
+      bank: json['bank'],
+      workStartDate: json['workStartDate'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
+      'userId': userId,
       'name': name,
-      'phone': phone,
-      'position': position,
-      'wage': wage,
-      'salarytypel': salarytypel,
-      'Bank': Bank,
+      'role': role,
+      'shifts': shifts,
+      'baseSalary': baseSalary,
+      'username': username,
+      'payment': payment,
+      'type': type,
+      'bankAccountNumber': bankAccountNumber,
+      'bank': bank,
+      'workStartDate': workStartDate,
     };
   }
 }
-
-

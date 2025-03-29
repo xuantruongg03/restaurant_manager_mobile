@@ -21,6 +21,17 @@ String formatDate(DateTime date) {
   return DateFormat('dd/MM/yyyy').format(date);
 }
 
+String convertFullNameToUsername(String fullName) {
+  return fullName
+      .toLowerCase()
+      .replaceAll(RegExp(r'\s+'), ''); 
+}
+
+String extractDate(String dateTimeString) {
+  DateTime dateTime = DateTime.parse(dateTimeString); 
+  return DateFormat('dd/MM/yyyy').format(dateTime); 
+}
+
 String formatTime(DateTime time) {
   return DateFormat('HH:mm').format(time);
 }

@@ -6,6 +6,8 @@ import 'package:restaurant_manager_mobile/config/api_client.dart';
 import 'package:restaurant_manager_mobile/config/routes/route_names.dart';
 import 'package:restaurant_manager_mobile/data/models/staff/add_staff_request.dart';
 import 'package:restaurant_manager_mobile/data/services/auth_service.dart';
+import 'package:restaurant_manager_mobile/data/services/storage_service.dart';
+import 'package:restaurant_manager_mobile/utils/constant.dart';
 
 class AddStaffRepository {
   Future<Map<String, dynamic>?> createStaff(AddStaffRequest request) async {
@@ -15,19 +17,14 @@ class AddStaffRepository {
         Get.toNamed(RouteNames.login);
         return null;
       }
+
+      final storageService = await StorageService.getInstance();
       final response = await ApiClient.post("/account/create-employee",
           headers: {
             'Authorization':
-                'Basic ${base64Encode(utf8.encode('${auth['username']}:${auth['password']}'))}'
+                'Bearer ${storageService.getString(StorageKeys.token)}'
           },
-          body: {
-            'idRestaurant': request.idRestaurant,
-            'name': request.name,
-            'phone': request.phone,
-            'position': request.position,
-            'salaryType': request.salaryType,
-            'salary': request.salary,
-          });
+          body: request.toJson());
       if (response['success'] == true) {
         ScaffoldMessenger.of(Get.context!).showSnackBar(
           const SnackBar(content: Text('Thêm mới thành công')),

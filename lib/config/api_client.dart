@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ApiClient {
-  static String baseUrl = dotenv.env['API_URL'] ?? 'http://localhost:8082';
+  static String baseUrl = dotenv.env['API_URL'] ?? '';
   static final http.Client _client = http.Client();
 
   // Headers mặc định cho mọi request

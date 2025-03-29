@@ -6,6 +6,7 @@ import 'package:restaurant_manager_mobile/presentation/widgets/filter.dart';
 import 'package:restaurant_manager_mobile/presentation/widgets/header.dart';
 import 'package:restaurant_manager_mobile/presentation/controllers/menus/menu_controller.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/modals/edit_name_menu_modal.dart';
+import 'package:restaurant_manager_mobile/utils/formats.dart';
 
 class MenuScreen extends GetView<MenusController> {
   const MenuScreen({super.key});
@@ -74,7 +75,7 @@ class MenuScreen extends GetView<MenusController> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'Tạo bởi: $createdBy',
+                    isActive ? 'Hoạt động' : 'Không hoạt động',
                     style: const TextStyle(
                       fontSize: 14,
                       color: Colors.black54,
@@ -82,7 +83,7 @@ class MenuScreen extends GetView<MenusController> {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    'Tạo lúc: $createdAt',
+                    'Tạo lúc: ${extractDate(createdAt)}',
                     style: const TextStyle(
                       fontSize: 14,
                       color: Colors.black54,

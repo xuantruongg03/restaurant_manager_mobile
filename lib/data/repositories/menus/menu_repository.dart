@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:restaurant_manager_mobile/config/api_client.dart';
 import 'package:restaurant_manager_mobile/config/routes/route_names.dart';
+import 'package:restaurant_manager_mobile/data/models/menus/add_menu_request.dart';
 import 'package:restaurant_manager_mobile/data/models/menus/menu_modal.dart';
 import 'package:restaurant_manager_mobile/data/services/auth_service.dart';
 import 'package:restaurant_manager_mobile/data/services/storage_service.dart';
@@ -22,13 +23,16 @@ class MenuRepository {
         return null;
       }
       final storageService = await StorageService.getInstance();
-      final response = await ApiClient.post('/menu/create', headers: {
-        'Authorization':
-            'Basic ${base64Encode(utf8.encode('${auth['username']}:${auth['password']}'))}'
-      }, body: {
-        'idRestaurant': storageService.getString(StorageKeys.restaurantId),
-        'name': name
-      });
+      String resId = storageService.getString(StorageKeys.restaurantId) ?? "";
+      AddMenuRequest request =
+          new AddMenuRequest(name: name, idRestaurant: resId);
+
+      final response = await ApiClient.post('/menu/create',
+          headers: {
+            'Authorization':
+                'Bearer ${storageService.getString(StorageKeys.token)}'
+          },
+          body: request.toJson());
       if (response['success'] == true) {
         ScaffoldMessenger.of(Get.context!).showSnackBar(
           const SnackBar(content: Text('Thêm mới thành công')),
@@ -55,19 +59,18 @@ class MenuRepository {
       }
       final storageService = await StorageService.getInstance();
 
+      // String id = storageService.getString(StorageKeys.restaurantId) ?? "";
+      // print('Id: ' + id);
       final response = await ApiClient.get(
-        '/menu/get',
-        queryParams: {
-          'idRestaurant': storageService.getString(StorageKeys.restaurantId)
-        },
+        '/menu/get/${storageService.getString(StorageKeys.restaurantId)}',
         headers: {
           'Authorization':
-              'Basic ${base64Encode(utf8.encode('${auth['username']}:${auth['password']}'))}'
+              'Bearer ${storageService.getString(StorageKeys.token)}'
         },
       );
 
       if (response['success'] == true) {
-        final data = response['data']['data']; 
+        final data = response['data']['result'];
         if (data is List) {
           return data.map((json) => MenuModel.fromJson(json)).toList();
         } else {
@@ -83,7 +86,8 @@ class MenuRepository {
     }
   }
 
-  Future<Map<String, dynamic>?> updateMenu(String idMenu, String nameMenu) async {
+  Future<Map<String, dynamic>?> updateMenu(
+      String idMenu, String nameMenu) async {
     try {
       final auth = await AuthService().getAuth();
       if (auth == null) {
@@ -92,12 +96,12 @@ class MenuRepository {
       }
       final storageService = await StorageService.getInstance();
       final response = await ApiClient.post('/menu/update-name', headers: {
-        'Authorization':
-            'Basic ${base64Encode(utf8.encode('${auth['username']}:${auth['password']}'))}'
+        'Authorization': 'Bearer ${storageService.getString(StorageKeys.token)}'
       }, body: {
         'idMenu': idMenu,
         'name': nameMenu,
-        'idRestaurant': storageService.getString(StorageKeys.restaurantId)
+        'idRestaurant': storageService.getString(StorageKeys.restaurantId),
+        'status': 'Inactive'
       });
       if (response["success"] == true) {
         return response;

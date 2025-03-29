@@ -47,7 +47,7 @@ class AddStaffScreen extends StatelessWidget {
                           return null;
                         },
                       )),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 20),
                       Obx(() => TextFormField(
                         controller: controller.phoneController..text = controller.selectedPhone.value,
                         decoration: InputDecoration(
@@ -72,7 +72,7 @@ class AddStaffScreen extends StatelessWidget {
                           return null;
                         },
                       )),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 20),
                       Obx(() => DropdownButtonFormField<String>(
                         value: controller.selectedPosition.value,
                         decoration: InputDecoration(
@@ -97,7 +97,7 @@ class AddStaffScreen extends StatelessWidget {
                           return null;
                         },
                       )),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 20),
                       TextFormField(
                         controller: controller.salaryController,
                         decoration: InputDecoration(
@@ -119,7 +119,7 @@ class AddStaffScreen extends StatelessWidget {
                           return null;
                         },
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 20),
                       Obx(() => DropdownButtonFormField<String>(
                         value: controller.selectedSalaryType.value,
                         decoration: InputDecoration(
@@ -143,7 +143,7 @@ class AddStaffScreen extends StatelessWidget {
                           return null;
                         },
                       )),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 20),
                       TextFormField(
                         controller: controller.bankAccountController,
                         decoration: InputDecoration(

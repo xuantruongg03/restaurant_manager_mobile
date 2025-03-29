@@ -14,6 +14,7 @@ import 'package:restaurant_manager_mobile/presentation/bindings/menus/menu_bindi
 import 'package:restaurant_manager_mobile/presentation/bindings/payment/payment_binding.dart';
 import 'package:restaurant_manager_mobile/presentation/bindings/staff/add_staff_binding.dart';
 import 'package:restaurant_manager_mobile/presentation/bindings/staff/staff_binding.dart';
+import 'package:restaurant_manager_mobile/presentation/bindings/staff/work_schedule_binding.dart';
 import 'package:restaurant_manager_mobile/presentation/bindings/statistic/statistic_binding.dart';
 import 'package:restaurant_manager_mobile/presentation/bindings/table/add_table_binding.dart';
 import 'package:restaurant_manager_mobile/presentation/bindings/table/table_binding.dart';
@@ -31,6 +32,7 @@ import 'package:restaurant_manager_mobile/presentation/screens/menu/menu_screen.
 import 'package:restaurant_manager_mobile/presentation/screens/payment/payment_screen.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/staff/add_staff_screen.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/staff/staff_screen.dart';
+import 'package:restaurant_manager_mobile/presentation/screens/staff/work_schedule_screen.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/statistic/statistic_screen.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/tables/add_table_screen.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/tables/table_screen.dart';
@@ -148,6 +150,13 @@ class AppPages {
       name: RouteNames.statistic,
       page: () => const StatisticScreen(),
       binding: StatisticBinding(),
+      middlewares: [AuthMiddleware()],
+    ),
+
+    GetPage(
+      name: RouteNames.workSchedule,
+      page: () => const WorkScheduleScreen(),
+      binding: WorkSheduleBinding(),
       middlewares: [AuthMiddleware()],
     ),
   ];
