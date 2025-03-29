@@ -26,8 +26,8 @@ class MenuModel {
       name: json['name'],
       status: json['status'],
       createdBy: "TruongLee",
-      createdAt: "2024-12-10",
-      isActive: json['status'] == "active",
+      createdAt: json['createAt'],
+      isActive: json['status'] == "Active",
       color: Color((Random().nextDouble() * 0xFFFFFF).toInt()).withOpacity(1.0),
     );
   }

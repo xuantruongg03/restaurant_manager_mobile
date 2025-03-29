@@ -12,57 +12,58 @@ class ForgotPasswordScreen extends GetView<ForgotPasswordController> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 40),
-              // Logo and tagline
-              const Center(
-                child: Column(
-                  children: [
-                    Text(
-                      'EASTERY',
-                      style: TextStyle(
-                        color: AppColors.primary,
-                        fontSize: 35,
-                        // fontWeight: FontWeight.bold,
-                        fontFamily: 'KaiseiDecol',
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 40),
+                // Logo and tagline
+                const Center(
+                  child: Column(
+                    children: [
+                      Text(
+                        'EASTERY',
+                        style: TextStyle(
+                          color: AppColors.primary,
+                          fontSize: 35,
+                          fontFamily: 'KaiseiDecol',
+                        ),
                       ),
-                    ),
-                    Text(
-                      'The best your choise',
-                      style: TextStyle(
-                        color: AppColors.primary,
-                        fontSize: 16,
-                        fontFamily: 'KaiseiDecol',
+                      Text(
+                        'The best your choise',
+                        style: TextStyle(
+                          color: AppColors.primary,
+                          fontSize: 16,
+                          fontFamily: 'KaiseiDecol',
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(height: 40),
-              // Title
-              const Text(
-                'Quên mật khẩu?',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
+                const SizedBox(height: 40),
+                // Title
+                const Text(
+                  'Quên mật khẩu?',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              const Text(
-                'Hãy để chúng tôi giúp bạn!',
-                style: TextStyle(
-                  color: Colors.grey,
+                const Text(
+                  'Hãy để chúng tôi giúp bạn!',
+                  style: TextStyle(
+                    color: Colors.grey,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              // Form fields
-              Form(
+                const SizedBox(height: 20),
+                // Form fields
+                Form(
                   key: controller.formKey,
                   child: TextFormField(
                     controller: controller.phoneController,
+                    keyboardType: TextInputType.phone,
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: Colors.grey[100],
@@ -71,9 +72,7 @@ class ForgotPasswordScreen extends GetView<ForgotPasswordController> {
                       ),
                       prefixIcon: const Icon(Icons.phone),
                       hintText: 'Số điện thoại',
-                      hintStyle: const TextStyle(
-                        color: Colors.grey,
-                      ),
+                      hintStyle: const TextStyle(color: Colors.grey),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -81,31 +80,36 @@ class ForgotPasswordScreen extends GetView<ForgotPasswordController> {
                       }
                       return null;
                     },
-                  )),
-              const SizedBox(height: 15),
-              Row(children: [
-                Expanded(
-                    child: RichText(
-                  text: const TextSpan(
-                    children: [
-                      TextSpan(
-                        text: "* ",
-                        style: TextStyle(color: Colors.red),
-                      ),
-                      TextSpan(
-                        text:
-                            "Chúng tôi sẽ gửi cho bạn một tin nhắn để đặt lại mật khẩu mới của bạn. Vui lòng kiểm tra tin nhắn.",
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                    ],
                   ),
-                )),
-              ]),
-              const SizedBox(height: 30),
-              // Confirm button
-              SizedBox(
-                width: double.infinity,
-                child: Obx(() => ElevatedButton(
+                ),
+                const SizedBox(height: 15),
+                Row(
+                  children: [
+                    Expanded(
+                      child: RichText(
+                        text: const TextSpan(
+                          children: [
+                            TextSpan(
+                              text: "* ",
+                              style: TextStyle(color: Colors.red),
+                            ),
+                            TextSpan(
+                              text:
+                                  "Chúng tôi sẽ gửi cho bạn một tin nhắn để đặt lại mật khẩu mới của bạn. Vui lòng kiểm tra tin nhắn.",
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 30),
+                // Confirm button
+                SizedBox(
+                  width: double.infinity,
+                  child: Obx(
+                    () => ElevatedButton(
                       onPressed: controller.isLoading.value
                           ? null
                           : controller.handleForgotPassword,
@@ -133,33 +137,34 @@ class ForgotPasswordScreen extends GetView<ForgotPasswordController> {
                                 fontSize: 16,
                               ),
                             ),
-                    )),
-              ),
-              // Login link
-              const Spacer(),
-              Center(
-                child: RichText(
-                  text: TextSpan(
-                    style: const TextStyle(color: AppColors.disableButton),
-                    children: [
-                      const TextSpan(text: 'Tạo tài khoản mới? '),
-                      TextSpan(
-                        text: 'Đăng ký',
-                        style: const TextStyle(
-                            color: AppColors.primary,
-                            fontWeight: FontWeight.bold),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            Navigator.pushReplacementNamed(
-                                context, RouteNames.signUp);
-                          },
-                      ),
-                    ],
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 20),
-            ],
+                const SizedBox(height: 20),
+                Center(
+                  child: RichText(
+                    text: TextSpan(
+                      style: const TextStyle(color: AppColors.disableButton),
+                      children: [
+                        const TextSpan(text: 'Tạo tài khoản mới? '),
+                        TextSpan(
+                          text: 'Đăng ký',
+                          style: const TextStyle(
+                              color: AppColors.primary,
+                              fontWeight: FontWeight.bold),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              Navigator.pushReplacementNamed(
+                                  context, RouteNames.signUp);
+                            },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+              ],
+            ),
           ),
         ),
       ),

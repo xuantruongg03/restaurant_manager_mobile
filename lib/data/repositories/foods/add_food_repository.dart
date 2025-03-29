@@ -5,6 +5,8 @@ import 'package:restaurant_manager_mobile/config/api_client.dart';
 import 'package:restaurant_manager_mobile/config/routes/route_names.dart';
 import 'package:restaurant_manager_mobile/data/models/foods/food_request.dart';
 import 'package:restaurant_manager_mobile/data/services/auth_service.dart';
+import 'package:restaurant_manager_mobile/data/services/storage_service.dart';
+import 'package:restaurant_manager_mobile/utils/constant.dart';
 
 class AddFoodRepository {
   Future<Map<String, dynamic>?> addFood(FoodRequest request) async {
@@ -14,11 +16,13 @@ class AddFoodRepository {
         Get.offAllNamed(RouteNames.login);
         return null;
       }
+
+      final storageService = await StorageService.getInstance();
       final response = await ApiClient.post(
         '/food/create',
         headers: {
           'Authorization':
-              'Basic ${base64Encode(utf8.encode('${auth['username']}:${auth['password']}'))}'
+              'Bearer ${storageService.getString(StorageKeys.token)}'
         },
         body: request.toJson(),
       );

@@ -18,9 +18,10 @@ class FoodRepository {
         Get.toNamed(RouteNames.login);
         return null;
       }
+
+      final storageService = await StorageService.getInstance();
       final response = await ApiClient.get('/food/get', headers: {
-        'Authorization':
-            'Basic ${base64Encode(utf8.encode('${auth['username']}:${auth['password']}'))}'
+        'Authorization': 'Bearer ${storageService.getString(StorageKeys.token)}'
       }, queryParams: {
         'idMenu': idMenu,
       });
@@ -47,9 +48,10 @@ class FoodRepository {
         Get.toNamed(RouteNames.login);
         return null;
       }
+
+      final storageService = await StorageService.getInstance();
       final response = await ApiClient.get('/food/delete', headers: {
-        'Authorization':
-            'Basic ${base64Encode(utf8.encode('${auth['username']}:${auth['password']}'))}'
+        'Authorization': 'Bearer ${storageService.getString(StorageKeys.token)}'
       }, queryParams: {
         'idFood': idFood,
       });
@@ -70,9 +72,10 @@ class FoodRepository {
         Get.toNamed(RouteNames.login);
         return null;
       }
+
+      final storageService = await StorageService.getInstance();
       final response = await ApiClient.get('/food/get-by-id', headers: {
-        'Authorization':
-            'Basic ${base64Encode(utf8.encode('${auth['username']}:${auth['password']}'))}'
+        'Authorization': 'Bearer ${storageService.getString(StorageKeys.token)}'
       }, queryParams: {
         'idFood': idFood,
       });
@@ -99,9 +102,10 @@ class FoodRepository {
       Get.toNamed(RouteNames.login);
       return null;
     }
+
+    final storageService = await StorageService.getInstance();
     final response = await ApiClient.post('/food/update', headers: {
-      'Authorization':
-          'Basic ${base64Encode(utf8.encode('${auth['username']}:${auth['password']}'))}'
+      'Authorization': 'Bearer ${storageService.getString(StorageKeys.token)}'
     }, body: {
       'idFood': idFood,
       'idMenu': request.idMenu,
@@ -132,8 +136,7 @@ class FoodRepository {
         return null;
       }
       final response = await ApiClient.post('/bills/order', headers: {
-        'Authorization':
-            'Basic ${base64Encode(utf8.encode('${auth['username']}:${auth['password']}'))}'
+        'Authorization': 'Bearer ${storageService.getString(StorageKeys.token)}'
       }, body: {
         'idFood': idFood,
         'idRestaurant': storageService.getString(StorageKeys.restaurantId),

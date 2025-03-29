@@ -5,8 +5,12 @@ import 'package:restaurant_manager_mobile/config/api_client.dart';
 import 'package:restaurant_manager_mobile/config/routes/route_names.dart';
 import 'package:restaurant_manager_mobile/data/models/bills/bill_modal.dart';
 import 'package:restaurant_manager_mobile/data/services/auth_service.dart';
+import 'package:restaurant_manager_mobile/data/services/storage_service.dart';
+import 'package:restaurant_manager_mobile/utils/constant.dart';
 
 class BillRepository {
+  get storageService => null;
+
   Future<List<BillModel>?> getBill(String idTable) async {
     try {
       final auth = await AuthService().getAuth();
@@ -14,16 +18,12 @@ class BillRepository {
         Get.offAllNamed(RouteNames.login);
         return null;
       }
-      final response = await ApiClient.get(
-        '/food/get-by-id-table',
-        headers: {
-          'Authorization':
-              'Basic ${base64Encode(utf8.encode('${auth['username']}:${auth['password']}'))}'
-        },
-        queryParams: {
-          'idTable': idTable,
-        }
-      );
+      final storageService = await StorageService.getInstance();
+      final response = await ApiClient.get('/food/get-by-id-table', headers: {
+        'Authorization': 'Bearer ${storageService.getString(StorageKeys.token)}'
+      }, queryParams: {
+        'idTable': idTable,
+      });
       print("response: ${response}");
       if (response['success'] == true) {
         final data = response['data']['data'];
@@ -49,8 +49,7 @@ class BillRepository {
     final response = await ApiClient.get(
       '/bills/close-bill',
       headers: {
-        'Authorization':
-            'Basic ${base64Encode(utf8.encode('${auth['username']}:${auth['password']}'))}'
+        'Authorization': 'Bearer ${storageService.getString(StorageKeys.token)}'
       },
       queryParams: {
         'idBill': idBill,

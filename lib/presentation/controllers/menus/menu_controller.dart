@@ -11,7 +11,7 @@ class MenusController extends GetxController {
   MenusController({required this.repository});
 
   final RxList<MenuModel> menuItems = <MenuModel>[].obs;
-  final filterOptions = ['Tất cả', 'Hoạt động', 'Không HĐ'].obs;
+  final filterOptions = ['Tất cả', 'Hoạt động', 'Không hoạt động'].obs;
   final RxBool isLoading = false.obs;
   final RxBool isUpdating = false.obs;
   final RxString error = ''.obs;
@@ -69,8 +69,8 @@ class MenusController extends GetxController {
     if (selectedFilter.value == 'Tất cả') return menuItems;
     return menuItems
         .where((item) => selectedFilter.value == 'Hoạt động'
-            ? item.status == 'active'
-            : item.status == 'inactive')
+            ? item.status == 'Active'
+            : item.status == 'Inactive')
         .toList();
   }
 

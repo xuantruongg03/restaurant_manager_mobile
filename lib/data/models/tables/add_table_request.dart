@@ -9,7 +9,7 @@ class AddTableRequest {
 
   Map<String, Object> toJson() {
     return {
-      'tableName': tableName,
+      'nameTable': tableName,
       'idRestaurant': idRestaurant,
     };
   }

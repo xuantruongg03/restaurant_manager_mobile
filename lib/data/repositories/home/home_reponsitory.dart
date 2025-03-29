@@ -15,8 +15,10 @@ class HomeRepository {
       Get.offAllNamed(RouteNames.login);
       return null;
     }
+
+          final storageService = await StorageService.getInstance();
     final response = await ApiClient.post('/restaurant/create', headers: {
-      'Authorization': 'Basic ${base64Encode(utf8.encode('${auth['username']}:${auth['password']}'))}'
+      'Authorization': 'Bearer ${storageService.getString(StorageKeys.token)}'
     }, body: {
       'name': name,
       'idAccount': idAccount,
@@ -44,7 +46,7 @@ class HomeRepository {
 
       // register device token to server
       final response = await ApiClient.post('/account/update-device-token', headers: {
-        'Authorization': 'Basic ${base64Encode(utf8.encode('${auth['username']}:${auth['password']}'))}'
+        'Authorization': 'Bearer ${storageService.getString(StorageKeys.token)}'
       }, body: {
         'deviceToken': deviceToken,
         });

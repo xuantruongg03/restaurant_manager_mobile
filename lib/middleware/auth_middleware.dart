@@ -6,16 +6,16 @@ import 'package:restaurant_manager_mobile/data/services/state_service.dart';
 class AuthMiddleware extends GetMiddleware {
   @override
   RouteSettings? redirect(String? route) {
-    final stateService = Get.find<StateService>();
-    final publicRoutes = [RouteNames.login];
+    // final stateService = Get.find<StateService>();
+    // final publicRoutes = [RouteNames.login];
     
-    if (publicRoutes.contains(route)) {
-      return null;
-    }
+    // if (publicRoutes.contains(route)) {
+    //   return null;
+    // }
 
-    if (!stateService.isAuthenticated) {
-      return const RouteSettings(name: RouteNames.login);
-    }
+    // if (!stateService.isAuthenticated) {
+    //   return const RouteSettings(name: RouteNames.login);
+    // }
     return null;
   }
 }

@@ -9,7 +9,6 @@ import 'package:restaurant_manager_mobile/data/services/storage_service.dart';
 import 'package:restaurant_manager_mobile/utils/constant.dart';
 
 class TablesRepository {
-
   Future<List<TableModel>?> getTables() async {
     try {
       final auth = await AuthService().getAuth();
@@ -18,14 +17,16 @@ class TablesRepository {
         return null;
       }
       final storageService = await StorageService.getInstance();
-      final response = await ApiClient.get('/table/get', headers: {
-        'Authorization':
-            'Basic ${base64Encode(utf8.encode('${auth['username']}:${auth['password']}'))}'
-      }, queryParams: {
-        'idRestaurant': storageService.getString(StorageKeys.restaurantId),
-      });
+      final response = await ApiClient.get(
+        '/table/get/${storageService.getString(StorageKeys.restaurantId)}',
+        headers: {
+          'Authorization':
+              'Bearer ${storageService.getString(StorageKeys.token)}'
+        },
+      );
+      print(response);
       if (response['success'] == true) {
-        final data = response['data']['data'];
+        final data = response['data']['result'];
         if (data is List) {
           return data.map((json) => TableModel.fromJson(json)).toList();
         } else {
