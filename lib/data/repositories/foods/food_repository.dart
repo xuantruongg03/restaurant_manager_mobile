@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -20,20 +19,22 @@ class FoodRepository {
       }
 
       final storageService = await StorageService.getInstance();
-      final response = await ApiClient.get('/food/get', headers: {
+      final idMenu = storageService.getString(StorageKeys.idMenu);
+      final response = await ApiClient.get('/food/get/$idMenu', headers: {
         'Authorization': 'Bearer ${storageService.getString(StorageKeys.token)}'
       }, queryParams: {
         'idMenu': idMenu,
       });
       if (response['success'] == true) {
-        final data = response['data']['data'];
-        if (data is List) {
-          return data.map((json) => FoodModel.fromJson(json)).toList();
+        final result = response['data']['result'];
+        if (result is List) {
+          return result.map((json) => FoodModel.fromJson(json)).toList();
         } else {
           throw Exception(
-              'Invalid data format: Expected List but got ${data.runtimeType}');
+              'Invalid data format: Expected List but got ${result.runtimeType}');
         }
       }
+      return null;
     } catch (e) {
       print('error: $e');
       throw Exception('Error fetching foods: $e');
@@ -60,7 +61,6 @@ class FoodRepository {
       }
       return null;
     } catch (e) {
-      print('error: $e');
       throw Exception('Error deleting food: $e');
     }
   }

@@ -24,7 +24,6 @@ class TablesRepository {
               'Bearer ${storageService.getString(StorageKeys.token)}'
         },
       );
-      print(response);
       if (response['success'] == true) {
         final data = response['data']['result'];
         if (data is List) {

@@ -48,7 +48,8 @@ dependencies:
   stylish_bottom_bar: ^1.0.3
   get: ^4.6.6
   flutter_dotenv: ^5.0.2
-  pushy_flutter: ^2.0.28
+  pushy_flutter: ^2.0.30
+  #  pushy_flutter: ^latest_version
   web_socket_channel: ^3.0.1
   flutter_localizations:
     sdk: flutter
