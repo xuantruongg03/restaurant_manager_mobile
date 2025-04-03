@@ -23,6 +23,7 @@ class TableScreen extends GetView<TablesController> {
           Get.toNamed(RouteNames.bill, arguments: {
             "idTable": idTable,
             "nameTable": name,
+            "timeArrive": time,
           }),
         }
       },

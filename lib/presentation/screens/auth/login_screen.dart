@@ -10,6 +10,7 @@ class LoginScreen extends GetView<LoginController> {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(LoginRepository());
     Get.put(LoginController(
       repository: LoginRepository(),
     ));

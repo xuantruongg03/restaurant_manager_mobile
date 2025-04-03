@@ -8,6 +8,8 @@ class AddMenuRequest {
     return {
       'name': name,
       'idRestaurant': idRestaurant,
+      'idMenu': '',
+      'status': '',
     };
   }
 }

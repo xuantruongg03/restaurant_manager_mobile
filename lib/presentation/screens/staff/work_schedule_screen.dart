@@ -139,10 +139,8 @@ class WorkScheduleScreen extends StatelessWidget {
       lastDate: DateTime(2100),
     );
 
-    if (pickedDate != null) {
-      controller.selectedDate.value = pickedDate;
+    // controller.selectedDate.value = pickedDate;
     }
-  }
 
   // Widget to show calendar
   Widget _buildCalendar(WorkScheduleController controller) {

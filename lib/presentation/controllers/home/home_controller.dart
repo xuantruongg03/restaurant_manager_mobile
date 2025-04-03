@@ -1,11 +1,14 @@
 import 'package:get/get.dart';
 import 'package:restaurant_manager_mobile/config/routes/route_names.dart';
+import 'package:restaurant_manager_mobile/data/models/restaurants/create_res_request.dart';
 import 'package:restaurant_manager_mobile/data/repositories/home/home_reponsitory.dart';
+import 'package:restaurant_manager_mobile/data/repositories/restaurants/restaurant_repository.dart';
 import 'package:restaurant_manager_mobile/data/services/storage_service.dart';
 import 'package:restaurant_manager_mobile/utils/constant.dart';
 
 class HomeController extends GetxController {
   final HomeRepository repository = HomeRepository();
+  final RestaurantRepository restaurantRepository = RestaurantRepository();
   final List<Map<String, dynamic>> quickAccessItems = [
     {
       'title': 'Báo cáo',
@@ -44,23 +47,37 @@ class HomeController extends GetxController {
     },
   ];
 
-  void checkRestaurant() async {
+  Future<void> getRestaurant() async {
     final storageService = await StorageService.getInstance();
-    final nameRestaurant = storageService.getString(StorageKeys.restaurantName);
-    if (nameRestaurant == '') {
-      final idAccount = storageService.getString(StorageKeys.userId);
-      if (idAccount == null) {
-        Get.offNamedUntil(RouteNames.login, (route) => false);
-        return;
-      }
-      const randomName = 'Nhà hàng 2';
+    String idAccount = "d19a3821-003f-4ec8-a136-9a32c8e07de0";
+    final response = await restaurantRepository.getRestaurant();
 
-      //call api to create restaurant and get restaurant id set to storage
-      final response = await repository.createRestaurant(randomName, idAccount);
-      if (response != null) {
-        storageService.setString(
-            StorageKeys.restaurantId, response['data']['data']['idRestaurant']);
-        storageService.setString(StorageKeys.restaurantName, randomName);
+    if (response != null && response['data']['result'] != null) {
+      // final List<dynamic> restaurants = response['data']['result'];
+      // for (var restaurant in restaurants) {
+      //   final idRestaurant = restaurant['idRestaurant'];
+      //   final nameRestaurant = restaurant['name'];
+      //   final statusRestaurant = restaurant['status'];
+      //   // Save info restaurant to storage
+      //   await storageService.setString(StorageKeys.restaurantId, idRestaurant);
+      //   await storageService.setString(StorageKeys.restaurantName, nameRestaurant);
+      //   await storageService.setString(StorageKeys.restaurantStatus, statusRestaurant);
+      // }
+      final idRestaurant = response['data']['result']['idRestaurant'];
+      final nameRestaurant = response['data']['result']['name'];
+      final statusRestaurant = response['data']['result']['status'];
+      // Save info restaurant to storage
+      await storageService.setString(StorageKeys.restaurantId, idRestaurant);
+      await storageService.setString(StorageKeys.restaurantName, nameRestaurant);
+      await storageService.setString(StorageKeys.restaurantStatus, statusRestaurant);
+    } else {
+      // Create restaurant
+      final createRestaurantRequest =
+          CreateRestaurantRequest(name: "Nhà hàng 1", idAccount: idAccount);
+      final responseCreateRestaurant =
+          await restaurantRepository.createRestaurant(createRestaurantRequest);
+      if (responseCreateRestaurant) {
+        getRestaurant();
       }
     }
   }
@@ -82,7 +99,7 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    checkRestaurant();
+    getRestaurant();
     registerDevicePushy();
   }
 }

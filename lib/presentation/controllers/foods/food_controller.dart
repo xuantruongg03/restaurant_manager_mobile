@@ -93,7 +93,7 @@ class FoodController extends GetxController {
 
     if (selectedCategory.value != 'Tất cả') {
       items = items
-          .where((item) => item.category == selectedCategory.value)
+          .where((item) => item.type == selectedCategory.value)
           .toList();
     }
 

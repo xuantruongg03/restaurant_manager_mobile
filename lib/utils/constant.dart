@@ -28,5 +28,6 @@ class StorageKeys {
   static const String salarytypel = 'salarytypel';
   static const String Bank = 'Bank';
   static const String idMenu = 'idMenu';
+  static const String restaurantStatus = 'restaurantStatus';
 }
 

@@ -25,7 +25,7 @@ class MenuRepository {
       final storageService = await StorageService.getInstance();
       String resId = storageService.getString(StorageKeys.restaurantId) ?? "";
       AddMenuRequest request =
-          new AddMenuRequest(name: name, idRestaurant: resId);
+          AddMenuRequest(name: name, idRestaurant: resId);
 
       final response = await ApiClient.post('/menu/create',
           headers: {
@@ -33,6 +33,7 @@ class MenuRepository {
                 'Bearer ${storageService.getString(StorageKeys.token)}'
           },
           body: request.toJson());
+      print('response: $response');
       if (response['success'] == true) {
         ScaffoldMessenger.of(Get.context!).showSnackBar(
           const SnackBar(content: Text('Thêm mới thành công')),
