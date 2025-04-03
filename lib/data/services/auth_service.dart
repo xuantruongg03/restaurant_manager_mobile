@@ -4,16 +4,14 @@ import 'package:restaurant_manager_mobile/utils/constant.dart';
 class AuthService {
   Future<Map?> getAuth() async {
     final storageService = await StorageService.getInstance();
-    final username = storageService.getString(StorageKeys.username);
-    final password = storageService.getString(StorageKeys.password);
+    final token = storageService.getString(StorageKeys.token);
 
-    if (username == null || password == null) {
+    if (token == null) {
       return null;
     }
 
     return {
-      'username': username,
-      'password': password,
+      'token': token,
     };
   }
 }

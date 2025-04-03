@@ -6,7 +6,7 @@ class DefaultScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
+    return const Material(
       child: MainLayout(),
     );
   }

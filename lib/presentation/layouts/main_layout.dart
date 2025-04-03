@@ -23,6 +23,8 @@ class MainLayout extends GetView<MainLayoutController> {
               controller.changeScreen(index);
               if (index == 1) {
                 controller.orderController.fetchOrders();
+              } else if (index == 4) {
+                controller.profileController.getProfile();
               }
             },
           )),

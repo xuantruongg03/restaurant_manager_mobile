@@ -6,13 +6,14 @@ import 'package:restaurant_manager_mobile/presentation/screens/modals/yn_modal.d
 
 class BillController extends GetxController {
   final billRepository = BillRepository();
-  final billList = <BillModel>[].obs;
+  final foodList = <Food>[].obs;
   final idTable = Get.arguments['idTable'];
   final nameTable = Get.arguments['nameTable'];
   final idBill = "".obs;
   final total = 0.0.obs;
   final loading = false.obs;
   final error = "".obs;
+  final timeArrive = Get.arguments['timeArrive'];
 
   @override
   void onInit() {
@@ -25,9 +26,8 @@ class BillController extends GetxController {
       loading.value = true;
       final bills = await billRepository.getBill(idTable);
       if (bills != null) {
-        billList.value = bills;
-        idBill.value = billList.first.idBill;
-        total.value = billList.fold(0, (sum, bill) => sum + bill.total);
+        foodList.value = bills.foods;
+        total.value = bills.total;
       }
     } catch (e) {
       error.value = e.toString();
@@ -35,6 +35,7 @@ class BillController extends GetxController {
       loading.value = false;
     }
   }
+  
 
   Future<void> closeBill() async {
     final result = await billRepository.closeBill(idBill.value);

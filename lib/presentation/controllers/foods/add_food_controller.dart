@@ -45,7 +45,7 @@ class AddFoodController extends GetxController {
     if (food != null) {
       nameController.text = food.name;
       priceController.text = food.price.toString();
-      selectedCategory.value = food.category;
+      selectedCategory.value = food.type;
       uploadedImageUrls.value = [food.image];
     }
   }
@@ -138,8 +138,8 @@ class AddFoodController extends GetxController {
         image: uploadedImageUrls[0],
         name: nameController.text,
         price: double.parse(priceController.text),
-        category: selectedCategory.value,
-        // images: uploadedImageUrls.map((image) => image).toList(),
+        type: selectedCategory.value,
+        idFood: '',
         idMenu: idMenu,
       );
       final response = await addFoodRepository.addFood(request);
@@ -169,7 +169,8 @@ class AddFoodController extends GetxController {
         image: uploadedImageUrls[0],
         name: nameController.text,
         price: double.parse(priceController.text),
-        category: selectedCategory.value,
+        type: selectedCategory.value,
+        idFood: idFood,
         idMenu: idMenu,
       );
       final response = await foodRepository.editFood(idFood, request);

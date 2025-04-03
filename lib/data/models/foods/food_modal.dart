@@ -3,16 +3,14 @@ class FoodModel {
   final String name;
   final double price;
   final String image;
-  final String category;
-  final String? type;
+  final String type;
 
   FoodModel({
     required this.idFood,
     required this.name,
     required this.price,
     required this.image,
-    required this.category,
-     this.type,
+    required this.type,
   });
 
   factory FoodModel.fromJson(Map<String, dynamic> json) {
@@ -21,8 +19,7 @@ class FoodModel {
       name: json['name'],
       price: json['price'],
       image: json['image'],
-      category: "Đồ ăn",
-      type: "Chiên",
+      type: json['type'],
     );
   }
 }

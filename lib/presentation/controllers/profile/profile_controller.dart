@@ -5,7 +5,7 @@ import 'package:restaurant_manager_mobile/presentation/screens/auth/update_user_
 import 'package:restaurant_manager_mobile/utils/constant.dart';
 
 class ProfileController extends GetxController {
-  final name = 'ádsadasd'.obs;
+  final name = ''.obs;
   final phone = ''.obs;
   final birthDate = ''.obs;
   final avt = ''.obs;
@@ -34,7 +34,6 @@ class ProfileController extends GetxController {
           birthDate: birthDate.value,
           avatar: avt.value,
         ));
-    print("Result received in ProfileController: $result");
 
     if (result != null) {
       // Cập nhật thông tin hiển thị khi quay lại màn hình hồ sơ

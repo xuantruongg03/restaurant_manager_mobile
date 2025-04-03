@@ -2,16 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:restaurant_manager_mobile/core/theme/color_schemes.dart';
-import 'package:restaurant_manager_mobile/presentation/screens/auth/update_user_screen.dart';
-import 'package:restaurant_manager_mobile/presentation/widgets/header.dart';
 import 'package:restaurant_manager_mobile/presentation/controllers/profile/profile_controller.dart';
+import 'package:restaurant_manager_mobile/presentation/widgets/header.dart';
 
 class ProfileScreen extends GetView<ProfileController> {
   const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    Get.put(ProfileController());
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
