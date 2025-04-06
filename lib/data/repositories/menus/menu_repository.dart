@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -23,7 +22,7 @@ class MenuRepository {
         return null;
       }
       final storageService = await StorageService.getInstance();
-      String resId = storageService.getString(StorageKeys.restaurantId) ?? "";
+      String resId = storageService.getString(StorageKeys.restaurants) ?? "";
       AddMenuRequest request =
           AddMenuRequest(name: name, idRestaurant: resId);
 
@@ -33,7 +32,6 @@ class MenuRepository {
                 'Bearer ${storageService.getString(StorageKeys.token)}'
           },
           body: request.toJson());
-      print('response: $response');
       if (response['success'] == true) {
         ScaffoldMessenger.of(Get.context!).showSnackBar(
           const SnackBar(content: Text('Thêm mới thành công')),

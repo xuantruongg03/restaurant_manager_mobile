@@ -66,6 +66,16 @@ class StorageService {
   //Get list
   List<Object>? getList(String key) {
     final String? value = _prefs.getString(key);
-    return value != null ? List<Object>.from(jsonDecode(value)) : null; 
+    if (value != null) {
+        final decoded = jsonDecode(value);
+        if (decoded is List) {
+            return List<Object>.from(decoded);
+        } else {
+            // Xử lý trường hợp không phải là danh sách
+            print('Dữ liệu không phải là danh sách: $decoded');
+            return null;
+        }
+    }
+    return null; 
   }
 }

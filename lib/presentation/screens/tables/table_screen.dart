@@ -15,6 +15,7 @@ class TableScreen extends GetView<TablesController> {
       required String name,
       required String status,
       required String time,
+      required String colorMerge,
       required bool isMerge}) {
     return GestureDetector(
       onLongPress: () => controller.showQRModal(name, idTable),
@@ -56,7 +57,7 @@ class TableScreen extends GetView<TablesController> {
                 if (isMerge)
                   GestureDetector(
                     onTap: () =>
-                        controller.showMergeModalWithTables("Bàn 1", "Bàn 2"),
+                        controller.showMergeModalWithTables(idTable),
                     child: Transform.rotate(
                       angle: 80 * 3.14159 / 180,
                       child: const Icon(
@@ -230,6 +231,7 @@ class TableScreen extends GetView<TablesController> {
                         status: table.status,
                         time: table.time,
                         isMerge: table.isMerge,
+                        colorMerge: table.color,
                       );
                     },
                   ),

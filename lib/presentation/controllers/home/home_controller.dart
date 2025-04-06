@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
 import 'package:restaurant_manager_mobile/config/routes/route_names.dart';
 import 'package:restaurant_manager_mobile/data/models/restaurants/create_res_request.dart';
@@ -49,27 +51,34 @@ class HomeController extends GetxController {
 
   Future<void> getRestaurant() async {
     final storageService = await StorageService.getInstance();
-    String idAccount = "d19a3821-003f-4ec8-a136-9a32c8e07de0";
+    // String idAccount = "d19a3821-003f-4ec8-a136-9a32c8e07de0";
+    String idAccount = storageService.getString(StorageKeys.userId) ?? '';
     final response = await restaurantRepository.getRestaurant();
+    if (response != null && response['data']['result'].length > 0) {
+      final List<dynamic> restaurants = response['data']['result'];
+      List<Map<String, dynamic>> restaurantList = []; // List to store restaurant objects
 
-    if (response != null && response['data']['result'] != null) {
-      // final List<dynamic> restaurants = response['data']['result'];
-      // for (var restaurant in restaurants) {
-      //   final idRestaurant = restaurant['idRestaurant'];
-      //   final nameRestaurant = restaurant['name'];
-      //   final statusRestaurant = restaurant['status'];
-      //   // Save info restaurant to storage
-      //   await storageService.setString(StorageKeys.restaurantId, idRestaurant);
-      //   await storageService.setString(StorageKeys.restaurantName, nameRestaurant);
-      //   await storageService.setString(StorageKeys.restaurantStatus, statusRestaurant);
-      // }
-      final idRestaurant = response['data']['result']['idRestaurant'];
-      final nameRestaurant = response['data']['result']['name'];
-      final statusRestaurant = response['data']['result']['status'];
-      // Save info restaurant to storage
-      await storageService.setString(StorageKeys.restaurantId, idRestaurant);
-      await storageService.setString(StorageKeys.restaurantName, nameRestaurant);
-      await storageService.setString(StorageKeys.restaurantStatus, statusRestaurant);
+      for (var i = 0; i < restaurants.length; i++) {
+        final restaurant = restaurants[i];
+        final idRestaurant = restaurant['idRestaurant'];
+        final nameRestaurant = restaurant['name'];
+        final statusRestaurant = restaurant['status'];
+        final addressRestaurant = restaurant['address'];
+        // Create a restaurant object and set selected for the first restaurant
+        restaurantList.add({
+          'id': idRestaurant,
+          'name': nameRestaurant,
+          'status': statusRestaurant,
+          'address': addressRestaurant,
+          'selected': i == 0, // Set selected to true for the first restaurant
+        });
+        if (i == 0) {
+          storageService.setString(StorageKeys.restaurantId, idRestaurant);
+        }
+      }
+
+      // Save the list of restaurant objects to storage
+      await storageService.setString(StorageKeys.restaurants, jsonEncode(restaurantList));
     } else {
       // Create restaurant
       final createRestaurantRequest =

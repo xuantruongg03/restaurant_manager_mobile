@@ -37,4 +37,47 @@ class TablesRepository {
       throw Exception('Failed to fetch tables: $e');
     }
   }
+
+  Future<bool> mergeTable(String idTable1, String idTable2) async {
+    final auth = await AuthService().getAuth();
+    if (auth == null) {
+      Get.toNamed(RouteNames.login);
+      return false;
+    }
+    final storageService = await StorageService.getInstance();
+    final response = await ApiClient.post(
+      '/bills/merge-table',
+      body: {
+        'idTable1': idTable1,
+        'idTable2': idTable2,
+      },
+      headers: {
+        'Authorization':
+            'Bearer ${storageService.getString(StorageKeys.token)}'
+      },
+    );
+    if (response['success'] == true) {
+      return true;
+    }
+    return false;
+  }
+
+  Future<bool> splitTable(String table) async {
+    final auth = await AuthService().getAuth();
+    if (auth == null) {
+      Get.toNamed(RouteNames.login);
+      return false;
+    }
+    final response = await ApiClient.post(
+      '/bills/un-merge-table/$table',
+      headers: {
+        'Authorization':
+            'Bearer ${auth['token']}'
+      },
+    );
+    if (response['success'] == true) {
+      return true;
+    }
+    return false;
+  }
 }
