@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
 import 'package:restaurant_manager_mobile/config/routes/route_names.dart';
 import 'package:restaurant_manager_mobile/data/services/storage_service.dart';
@@ -23,8 +25,13 @@ class ProfileController extends GetxController {
     status.value = storageService.getString(StorageKeys.statusUser) ?? '';
     role.value = storageService.getString(StorageKeys.role) ?? '';
     userId.value = storageService.getString(StorageKeys.userId) ?? '';
-    restaurantName.value =
-        storageService.getString(StorageKeys.restaurantName) ?? '';
+    final restaurants = storageService.getString(StorageKeys.restaurants);
+    if (restaurants != null) {
+      final listRestaurants = jsonDecode(restaurants) as List;
+      final selectedRestaurant = listRestaurants.firstWhere((element) => element['selected']);
+      restaurantName.value = selectedRestaurant['name'];
+    }
+    update();
   }
 
   Future<void> navigateToUpdateUser() async {

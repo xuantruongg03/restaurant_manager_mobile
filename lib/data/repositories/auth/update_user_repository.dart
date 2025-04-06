@@ -1,7 +1,5 @@
-import 'dart:convert';
 
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:restaurant_manager_mobile/config/api_client.dart';
 import 'package:restaurant_manager_mobile/config/routes/route_names.dart';
 import 'package:restaurant_manager_mobile/data/models/auth/userupdate_request.dart';

@@ -22,7 +22,7 @@ class AddTableController extends GetxController {
       }
       final request = AddTableRequest(
           tableName: nameController.text, idRestaurant: restaurantId);
-      print(nameController.text + 'and' + restaurantId);
+      print('${nameController.text}and$restaurantId');
       final response = await _addTableRepository.createTable(request);
       if (response != null) {
         ScaffoldMessenger.of(Get.context!).showSnackBar(

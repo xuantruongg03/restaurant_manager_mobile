@@ -6,8 +6,6 @@ import 'package:restaurant_manager_mobile/config/routes/route_names.dart';
 import 'package:restaurant_manager_mobile/data/models/foods/food_modal.dart';
 import 'package:restaurant_manager_mobile/data/models/foods/food_request.dart';
 import 'package:restaurant_manager_mobile/data/services/auth_service.dart';
-import 'package:restaurant_manager_mobile/data/services/storage_service.dart';
-import 'package:restaurant_manager_mobile/utils/constant.dart';
 
 class FoodRepository {
   Future<List<FoodModel>?> getFoods(String idMenu) async {

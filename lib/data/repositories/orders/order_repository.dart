@@ -61,7 +61,7 @@ class OrderRepository extends GetConnect {
       'idOrder': idOrder,
       'idRestaurant': storageService.getString(StorageKeys.restaurantId),
     });
-    print("response: ${response}");
+    print("response: $response");
     if (response['success'] == true) {
       return response;
     }

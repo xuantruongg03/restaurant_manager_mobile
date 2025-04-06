@@ -238,7 +238,7 @@ class _StatisticScreenState extends State<StatisticScreen> {
               ),
             ],
             baselineY: 0,
-            clipData: FlClipData.all(),
+            clipData: const FlClipData.all(),
           ),
         ),
       ),

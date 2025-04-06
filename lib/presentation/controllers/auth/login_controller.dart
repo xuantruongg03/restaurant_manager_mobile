@@ -55,27 +55,28 @@ class LoginController extends GetxController {
           Get.offNamed(RouteNames.splash);
 
           // Get my info
-          // final responseMyInfo = await repository.getMyInfo();
-          // print("responseMyInfo: ${responseMyInfo}");
-          // if (responseMyInfo != null) {
-          //   final token = responseMyInfo['data']['result']['token'];
-          //   idAccount = responseMyInfo['data']['result']['id'];
-          //   final role = responseMyInfo['data']['result']['role'];
-          //   final name = responseMyInfo['data']['result']['name'];
-          //   final status = responseMyInfo['data']['result']['status'];
-          //   final birthDay = responseMyInfo['data']['result']['birthDay'];
-          //   final phone = responseMyInfo['data']['result']['phone'];
-          //   final avt = responseMyInfo['data']['result']['avt'];
-          //   // Save my info to storage
-          //   await storageService.setString(StorageKeys.token, token);
-          //   await storageService.setString(StorageKeys.userId, idAccount);
-          //   await storageService.setString(StorageKeys.role, role);
-          //   await storageService.setString(StorageKeys.name, name);
-          //   await storageService.setString(StorageKeys.statusUser, status);
-          //   await storageService.setString(StorageKeys.birthDay, birthDay);
-          //   await storageService.setString(StorageKeys.phone, phone);
-          //   await storageService.setString(StorageKeys.avt, avt);
-          // }
+          final responseMyInfo = await repository.getMyInfo();
+          if (responseMyInfo != null) {
+            final idAccount = responseMyInfo['data']['result']['idAccount'];
+            final role = responseMyInfo['data']['result']['role'];
+            final name = responseMyInfo['data']['result']['name'];
+            final status = responseMyInfo['data']['result']['status'] ?? '';
+            final birthDay = responseMyInfo['data']['result']['birthdate'] ?? '';
+            final phone = responseMyInfo['data']['result']['phone'] ?? '';
+            final avt = responseMyInfo['data']['result']['avt'] ?? '';
+            // Save my info to storage
+            try {
+              await storageService.setString(StorageKeys.userId, idAccount);
+              await storageService.setString(StorageKeys.role, role);
+              await storageService.setString(StorageKeys.name, name);
+              await storageService.setString(StorageKeys.statusUser, status);
+              await storageService.setString(StorageKeys.birthDay, birthDay);
+              await storageService.setString(StorageKeys.phone, phone);
+              await storageService.setString(StorageKeys.avt, avt);
+            } catch (e) {
+              print('error: $e');
+            }
+          }
 
         }
       } catch (e) {
