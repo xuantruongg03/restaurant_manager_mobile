@@ -94,6 +94,7 @@ class ApiClient {
   static Map<String, dynamic> _handleResponse(http.Response response) {
     try {
       final decodedResponse = jsonDecode(utf8.decode(response.bodyBytes));
+      print('decodedResponse: $decodedResponse');
       if (response.statusCode >= 200 && response.statusCode < 300) {
         return {
           'success': true,
@@ -120,6 +121,7 @@ class ApiClient {
 
   // Xử lý lỗi
   static Map<String, dynamic> _handleError(dynamic error) {
+    print('error: $error');
     return {
       'success': false,
       'message': 'Có lỗi xảy ra: ${error.toString()}',
