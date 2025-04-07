@@ -18,12 +18,14 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: '.env');
+  
   await StorageService.getInstance();
-
   final stateService = Get.put(StateService());
   await stateService.checkAuth();
 
   final checkAuth = await AuthService().checkAuth();
+  
   final initialRoute = checkAuth ? RouteNames.home : RouteNames.login;
 
   Pushy.listen();
@@ -43,8 +45,6 @@ void main() async {
     statusBarColor: AppColors.primary,
     statusBarIconBrightness: Brightness.light,
   ));
-
-  await dotenv.load(fileName: '.env');
 
   runApp(MyApp(initialRoute: initialRoute));
 }

@@ -20,14 +20,17 @@ class AuthService {
     final storageService = await StorageService.getInstance();
     final token = storageService.getString(StorageKeys.token);
     if(token != null) {
-      final response = await ApiClient.post('/account/introspect', body: {
+      try {
+        final response = await ApiClient.post('/account/introspect', body: {
         'token': token
       }, headers: {
         'Authorization': 'Bearer $token'
-      });
-      print("introspect: ${response.toString()}");
-      if(response['success'] == true) {
-        return response['data']['result']['valid'];
+        });
+        if (response['success'] == true) {
+          return response['data']['result']['valid'];
+        }
+      } catch (e) {
+        print("error: $e");
       }
     }
     return false;
