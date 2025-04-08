@@ -20,6 +20,7 @@ class RouteNames {
   static const String strategy = '/strategy';
   static const String staff = '/staff';
   static const String schedule = '/schedule';
+  static const String restaurant = '/restaurant';
 
   // Feature Routes
   static const String orderDetails = '/orders/details';
@@ -37,4 +38,5 @@ class RouteNames {
   static const String payment = '/payment';
   static const String statistic = '/statistic';
   static const String workSchedule = '/work-schedule';
+  static const String addRestaurant = '/add-restaurant';
 }
