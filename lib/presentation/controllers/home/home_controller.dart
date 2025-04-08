@@ -51,13 +51,11 @@ class HomeController extends GetxController {
 
   Future<void> getRestaurant() async {
     final storageService = await StorageService.getInstance();
-    // String idAccount = "d19a3821-003f-4ec8-a136-9a32c8e07de0";
     String idAccount = storageService.getString(StorageKeys.userId) ?? '';
     final response = await restaurantRepository.getRestaurant();
     if (response != null && response['data']['result'].length > 0) {
       final List<dynamic> restaurants = response['data']['result'];
-      List<Map<String, dynamic>> restaurantList = []; // List to store restaurant objects
-
+      List<Map<String, dynamic>> restaurantList = []; 
       for (var i = 0; i < restaurants.length; i++) {
         final restaurant = restaurants[i];
         final idRestaurant = restaurant['idRestaurant'];
@@ -76,16 +74,15 @@ class HomeController extends GetxController {
           storageService.setString(StorageKeys.restaurantId, idRestaurant);
         }
       }
-
       // Save the list of restaurant objects to storage
       await storageService.setString(StorageKeys.restaurants, jsonEncode(restaurantList));
     } else {
       // Create restaurant
       final createRestaurantRequest =
-          CreateRestaurantRequest(name: "Nhà hàng 1", idAccount: idAccount);
+          CreateRestaurantRequest(name: "Nhà hàng 1", idAccount: idAccount, status: 'active', isSelected: false, address: '');
       final responseCreateRestaurant =
           await restaurantRepository.createRestaurant(createRestaurantRequest);
-      if (responseCreateRestaurant) {
+      if (responseCreateRestaurant != null) {
         getRestaurant();
       }
     }

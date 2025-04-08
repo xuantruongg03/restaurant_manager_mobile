@@ -65,7 +65,6 @@ class ProfileScreen extends GetView<ProfileController> {
                         ElevatedButton(
                           onPressed: () {
                             // Điều hướng sang màn hình cập nhật, truyền thông tin người dùng
-
                             controller.navigateToUpdateUser();
                           },
                           style: ElevatedButton.styleFrom(
@@ -144,7 +143,7 @@ class ProfileScreen extends GetView<ProfileController> {
                                   null),
                               _buildInfoItem(
                                   'Vai trò:',
-                                  controller.role.value == 'admin'
+                                  controller.role.value == 'Owner'
                                       ? 'Chủ nhà hàng'
                                       : 'Nhân viên',
                                   null),
