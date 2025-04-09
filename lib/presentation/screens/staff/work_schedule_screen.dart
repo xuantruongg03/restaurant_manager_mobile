@@ -1,60 +1,100 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:get/get.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 // import 'package:restaurant_manager_mobile/config/routes/route_names.dart';
 import 'package:restaurant_manager_mobile/core/theme/color_schemes.dart';
+import 'package:restaurant_manager_mobile/data/models/staff/create_work_day_staff_model.dart';
 import 'package:restaurant_manager_mobile/presentation/controllers/staff/work_schedule_controller.dart';
 import 'package:restaurant_manager_mobile/presentation/widgets/header.dart';
 import 'package:restaurant_manager_mobile/presentation/widgets/textfield_custom.dart';
+import 'package:restaurant_manager_mobile/utils/formats.dart';
 
 class WorkScheduleScreen extends StatelessWidget {
   const WorkScheduleScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Get controller
+    // Lấy controller
     final controller = Get.find<WorkScheduleController>();
 
     return Scaffold(
-        backgroundColor: AppColors.background,
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Obx(() => controller.isAdmin.value
-                ? Header(
-                    title: 'Lịch làm việc',
-                    showBackButton: true,
-                    showActionButton: true,
-                    actionButtonText: 'Báo cáo',
-                    onActionPressed: () {
-                      showReportProblem();
-                    },
-                  )
-                : const Header(
-                    title: "Lịch làm việc",
-                    showBackButton: true,
-                  )),
-            Expanded(
-              child: SingleChildScrollView(
-                keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior
-                    .onDrag, // Ẩn bàn phím khi cuộn
+      backgroundColor: AppColors.background,
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header section
+          Obx(() => controller.isOwner.value
+              ? Header(
+                  title: 'Lịch làm việc',
+                  showBackButton: true,
+                  showActionButton: true,
+                  actionButtonText: 'Báo cáo',
+                  onActionPressed: () {
+                    showReportProblem(controller);
+                  },
+                )
+              : const Header(
+                  title: "Lịch làm việc",
+                  showBackButton: true,
+                )),
+
+          // Loading indicator khi đang tải dữ liệu danh sách nhân viên
+          Obx(() {
+            if (controller.isStaffListLoading.value) {
+              return const Center(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildSearchBar(controller),
-                    _buildStaffInfo(),
-                    _buildCalendar(controller),
-                    _buildTest(controller),
-                    _buildTable(),
-                    const SizedBox(height: 10),
+                    SizedBox(
+                      height: 40,
+                    ),
+                    CircularProgressIndicator()
                   ],
                 ),
-              ),
-            ),
-          ],
-        ),
-        floatingActionButton: _buildFloattingButton(controller));
+              );
+            } else {
+              return Expanded(
+                child: Obx(
+                  () => SingleChildScrollView(
+                    keyboardDismissBehavior:
+                        ScrollViewKeyboardDismissBehavior.onDrag,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Search bar
+                        _buildSearchBar(controller),
+
+                        // CircularProgressIndicator khi đang tải thông tin nhân viên
+                        if (controller.isLoading.value)
+                          const Center(
+                            child: CircularProgressIndicator(),
+                          ),
+
+                        // Kiểm tra nếu danh sách nhân viên không rỗng
+                        if (controller.staffList.isNotEmpty) ...[
+                          _buildStaffInfo(controller),
+                          _buildSelecDate(controller),
+                          _buildCalendar(controller),
+                          _buildTable(controller),
+                          const SizedBox(height: 10),
+                        ] else
+                          // Nếu danh sách nhân viên rỗng, hiển thị thông báo
+                          const Center(
+                            child: Text("Không có dữ liệu nhân viên."),
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            }
+          }),
+        ],
+      ),
+      floatingActionButton: _buildFloattingButton(controller),
+    );
   }
 
   // Witget to show the delete button and search bar
@@ -71,8 +111,19 @@ class WorkScheduleScreen extends StatelessWidget {
   }
 
   // Widget to show info basic of staff
-  Widget _buildStaffInfo() {
-    return Padding(
+  Widget _buildStaffInfo(WorkScheduleController controller) {
+    return Obx(() {
+      final staff = controller.filteredStaff.value;
+      if (staff == null) {
+        return const Padding(
+          padding: EdgeInsets.symmetric(vertical: 10),
+          child: Center(
+            child: Text("Không tìm thấy nhân viên."),
+          ),
+        );
+      }
+
+      return Padding(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 16),
@@ -80,70 +131,76 @@ class WorkScheduleScreen extends StatelessWidget {
               border: Border.all(color: Colors.grey, width: 0.5),
               borderRadius: BorderRadius.circular(10),
               color: Colors.white),
-          child: const Column(
+          child: Column(
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Tên nhân viên: ',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w500)),
-                      Text('Liliana nè', style: TextStyle(fontSize: 16))
-                    ],
+                  SizedBox(
+                    width: 120,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text('Tên nhân viên: ',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w500)),
+                        Text(staff.name, style: const TextStyle(fontSize: 16))
+                      ],
+                    ),
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Chức vụ: ',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w500)),
-                      Text('Nhân viên', style: TextStyle(fontSize: 16))
-                    ],
-                  ),
+                  SizedBox(
+                    width: 100,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text('Chức vụ: ',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w500)),
+                        Text(staff.role, style: const TextStyle(fontSize: 16))
+                      ],
+                    ),
+                  )
                 ],
               ),
-              SizedBox(
-                height: 16,
-              ),
+              const SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Số điện thoại: ',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w500)),
-                      Text('0339643240', style: TextStyle(fontSize: 16))
-                    ],
+                  SizedBox(
+                    width: 120,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text('Số điện thoại: ',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w500)),
+                        Text(staff.phone, style: const TextStyle(fontSize: 16))
+                      ],
+                    ),
                   ),
                   SizedBox(
-                    width: 90,
+                    width: 100,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text('Loại lương: ',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w500)),
+                        Text(staff.type, style: const TextStyle(fontSize: 16))
+                      ],
+                    ),
                   )
                 ],
               ),
             ],
           ),
-        ));
+        ),
+      );
+    });
   }
 
-  Future<void> _selectDate(
-      BuildContext context, WorkScheduleController controller) async {
-    DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: controller.selectedDate.value,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
-    );
-
-    // controller.selectedDate.value = pickedDate;
-    }
-
   // Widget to show calendar
-  Widget _buildCalendar(WorkScheduleController controller) {
+  Widget _buildSelecDate(WorkScheduleController controller) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
@@ -151,15 +208,22 @@ class WorkScheduleScreen extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Obx(() => Text(
-                    "Chọn ngày: ${controller.selectedDate.value.day}/${controller.selectedDate.value.month}/${controller.selectedDate.value.year}",
-                    style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.w500),
-                  )),
+              Obx(() {
+                final selected = controller.selectedDateToShowWorkDay.value;
+                final text = selected != null
+                    ? "Chọn ngày: ${selected.day}/${selected.month}/${selected.year}"
+                    : "Chưa chọn ngày";
+
+                return Text(
+                  text,
+                  style: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.w500),
+                );
+              }),
               IconButton(
                 icon: Icon(Icons.calendar_month, color: Colors.grey[500]),
                 onPressed: () =>
-                    _selectDate(Get.context!, controller), // Gọi hàm chọn ngày
+                    controller.selectDateToShowWorkDay(Get.context!),
               ),
             ],
           ),
@@ -168,39 +232,56 @@ class WorkScheduleScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildTest(WorkScheduleController controller) {
-    DateTime now = DateTime.now();
-    int todayWeekday = now.weekday; // Lấy thứ hiện tại (1 = Monday, 7 = Sunday)
-    DateTime monday =
-        now.subtract(Duration(days: todayWeekday - 1)); // Tính thứ 2 của tuần
+  Widget _buildCalendar(WorkScheduleController controller) {
+    return Obx(() {
+      DateTime selectedDate =
+          controller.selectedDateToShowWorkDay.value ?? DateTime.now();
+      List<DateTime> weekDays = controller.getCurrentWeek(selectedDate);
 
-    List<Map<String, String>> weekDays = List.generate(7, (index) {
-      DateTime day = monday.add(Duration(days: index)); // Tính ngày từng thứ
-      return {
-        'day': DateFormat('E').format(day), // Lấy tên thứ (Mon, Tue, ...)
-        'date': DateFormat('d').format(day), // Lấy ngày (24, 25, 26, ...)
-      };
-    });
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: Column(
+          children: [
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.chevron_left),
+                  onPressed: () {
+                    controller.selectedDateToShowWorkDay.value = controller
+                        .selectedDateToShowWorkDay.value!
+                        .subtract(const Duration(days: 7));
+                  },
+                ),
+                Text(
+                  "Tuần của ${DateFormat('dd/MM').format(weekDays.first)} - ${DateFormat('dd/MM').format(weekDays.last)}",
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.chevron_right),
+                  onPressed: () {
+                    controller.selectedDateToShowWorkDay.value = controller
+                        .selectedDateToShowWorkDay.value!
+                        .add(const Duration(days: 7));
+                  },
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 70,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: weekDays.length,
+                itemBuilder: (context, index) {
+                  final date = weekDays[index];
+                  final isSelected = date.day == selectedDate.day &&
+                      date.month == selectedDate.month &&
+                      date.year == selectedDate.year;
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Column(
-        children: [
-          const SizedBox(height: 10),
-
-          // Danh sách ngày trong tuần
-          SizedBox(
-            height: 70,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: weekDays.length,
-              itemBuilder: (context, index) {
-                return Obx(() {
-                  bool isSelected = index == controller.selectedIndex.value;
                   return GestureDetector(
                     onTap: () {
-                      controller.selectedIndex.value =
-                          index; // Cập nhật giá trị
+                      controller.selectedDateToShowWorkDay.value = date;
                     },
                     child: Container(
                       width: 60,
@@ -221,7 +302,7 @@ class WorkScheduleScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            weekDays[index]['day']!,
+                            DateFormat('E', 'vi_VN').format(date),
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
@@ -231,7 +312,7 @@ class WorkScheduleScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: 5),
                           Text(
-                            weekDays[index]['date']!,
+                            DateFormat('d').format(date),
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -243,21 +324,21 @@ class WorkScheduleScreen extends StatelessWidget {
                       ),
                     ),
                   );
-                });
-              },
-            ),
-          )
-        ],
-      ),
-    );
+                },
+              ),
+            )
+          ],
+        ),
+      );
+    });
   }
 
   // Widget to show table
-  Widget _buildTable() {
+  Widget _buildTable(WorkScheduleController controller) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(
             height: 10,
@@ -276,25 +357,61 @@ class WorkScheduleScreen extends StatelessWidget {
                 ],
               ),
               // Hàng dữ liệu
-              TableRow(
+              // Dữ liệu từ workDayList
+              ...controller.filteredWorkDays.map((item) {
+                final workDateFormatted = formatWorkDate(item.workDate);
+                final startTime = formatWorkTime(item.startTime);
+                final endTime = formatWorkTime(item.endTime);
+                final timeRange = '$startTime - $endTime';
+                return TableRow(
                   decoration: const BoxDecoration(color: Colors.white),
                   children: [
-                    _buildTableCell('04/09/2024'),
-                    _buildTableCell('18:00 - 21:00'),
-                    _buildTableCellWithIcon(Icons.remove_red_eye),
-                  ]),
-              TableRow(
-                  decoration: const BoxDecoration(color: Colors.white),
-                  children: [
-                    _buildTableCell('05/09/2024'),
-                    _buildTableCell('17:00 - 21:00'),
-                    _buildTableCellWithIcon(Icons.remove_red_eye),
-                  ]),
+                    _buildTableCell(workDateFormatted),
+                    _buildTableCell(timeRange),
+                    controller.isOwner.value
+                        ? _buildTableCellWithTwoIcons(
+                            onEdit: () {
+                              showCreateWorkDayTimeDialog(controller,
+                                  data: CreateWorkDayStaffModel(
+                                      username: controller.staff.username,
+                                      dateOff: '',
+                                      workDay: workDateFormatted,
+                                      startTime: startTime,
+                                      endTime: endTime),
+                                  workDayId: item.idWorkDay);
+                            },
+                            onDelete: () {
+                              controller
+                                  .showDeleteConfirmDialog(item.idWorkDay);
+                            },
+                          )
+                        : _buildTableCellWithIcon(
+                            controller,
+                            Icons.remove_red_eye,
+                            workDateFormatted,
+                            item.idWorkDay),
+                  ],
+                );
+              }),
             ],
           ),
+          if (controller.filteredWorkDays.isEmpty)
+            Center(
+                child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: Text(
+                'Không có thông tin phù hợp',
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey[700]),
+              ),
+            )),
           const SizedBox(height: 10), // Khoảng cách với tổng công
-          const Text('Tổng công: 18 tiếng',
-              style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15))
+          if (controller.filteredWorkDays.isNotEmpty)
+            Text('Tổng công: ${controller.staff.shifts} tiếng',
+                style:
+                    const TextStyle(fontWeight: FontWeight.w500, fontSize: 15))
         ],
       ),
     );
@@ -317,14 +434,15 @@ class WorkScheduleScreen extends StatelessWidget {
   }
 
   /// Widget hỗ trợ căn giữa icon trong ô TableCell
-  Widget _buildTableCellWithIcon(IconData icon) {
+  Widget _buildTableCellWithIcon(WorkScheduleController controller,
+      IconData icon, String workDateFormatted, String idWorkDay) {
     return TableCell(
       verticalAlignment: TableCellVerticalAlignment.middle,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: InkWell(
           onTap: () {
-            showSiftDetails();
+            showSiftDetails(controller, workDateFormatted, idWorkDay);
           },
           borderRadius: BorderRadius.circular(16),
           splashColor: Colors.grey.withOpacity(0.3),
@@ -334,119 +452,203 @@ class WorkScheduleScreen extends StatelessWidget {
     );
   }
 
-  // Widget to show button
-  Widget _buildFloattingButton(WorkScheduleController controller) {
-    return FloatingActionButton(
-      backgroundColor: Colors.white,
-      foregroundColor: Colors.black,
-      tooltip: 'Thêm lịch làm việc',
-      onPressed: () {
-        showTimeSelectionDialog(controller);
-      },
-      child: const Icon(Icons.add),
+  Widget _buildTableCellWithTwoIcons({
+    required VoidCallback onEdit,
+    required VoidCallback onDelete,
+  }) {
+    return TableCell(
+      verticalAlignment: TableCellVerticalAlignment.middle,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            InkWell(
+              onTap: onEdit,
+              borderRadius: BorderRadius.circular(16),
+              splashColor: Colors.grey.withOpacity(0.3),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Icon(Icons.edit, color: Colors.grey[600]),
+              ),
+            ),
+            const SizedBox(width: 8),
+            InkWell(
+              onTap: onDelete,
+              borderRadius: BorderRadius.circular(16),
+              splashColor: Colors.grey.withOpacity(0.3),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Icon(Icons.delete, color: Colors.grey[600]),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
-  void showTimeSelectionDialog(WorkScheduleController controller) {
+  // Widget to show button
+  Widget _buildFloattingButton(WorkScheduleController controller) {
+    return Stack(
+      children: [
+        Positioned(
+            bottom: 20,
+            right: 20,
+            child: FloatingActionButton(
+              backgroundColor: Colors.white,
+              foregroundColor: Colors.black,
+              tooltip: 'Thêm lịch làm việc',
+              onPressed: () {
+                showCreateWorkDayTimeDialog(controller);
+              },
+              child: const Icon(Icons.add),
+            ))
+      ],
+    );
+  }
+
+  void showCreateWorkDayTimeDialog(WorkScheduleController controller,
+      {CreateWorkDayStaffModel? data, String? workDayId}) {
+    controller.resetSelection();
+
+    if (data != null) {
+      controller.selectedDate.value =
+          DateFormat('dd/MM/yyyy').parse(data.workDay);
+      controller.startTime.value = parseTimeStringToTimeOfDay(data.startTime);
+      controller.endTime.value = parseTimeStringToTimeOfDay(data.endTime);
+    }
+
     Get.dialog(
       Dialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Tiêu đề + Nút đóng
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Obx(() => Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    "Chọn thời gian làm",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  // Header
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text("Chọn thời gian làm",
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold)),
+                      IconButton(
+                          icon: const Icon(Icons.close),
+                          onPressed: () => Get.back())
+                    ],
                   ),
-                  IconButton(
-                    icon: const Icon(Icons.close),
-                    onPressed: () => Get.back(),
-                  )
-                ],
-              ),
-              const SizedBox(height: 10),
+                  const SizedBox(height: 10),
 
-              // Ô nhập ngày
-              _buildInputField("Ngày", Icons.calendar_today, () {
-                _selectDate(Get.context!, controller);
-              }),
+                  // Ngày
+                  _buildReactiveInput(
+                    "Ngày",
+                    Icons.calendar_today,
+                    () => controller.selectDate(Get.context!),
+                    controller.selectedDate.value != null
+                        ? DateFormat('dd/MM/yyyy')
+                            .format(controller.selectedDate.value!)
+                        : "Chọn ngày",
+                  ),
+                  const SizedBox(height: 10),
 
-              const SizedBox(height: 10),
+                  // Giờ bắt đầu & kết thúc
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _buildReactiveInput(
+                          "Bắt đầu",
+                          Icons.access_time,
+                          () => controller.selectTime(Get.context!, true),
+                          controller.startTime.value?.format(Get.context!) ??
+                              "Bắt đầu",
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: _buildReactiveInput(
+                          "Kết thúc",
+                          Icons.access_time,
+                          () => controller.selectTime(Get.context!, false),
+                          controller.endTime.value?.format(Get.context!) ??
+                              "Kết thúc",
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
 
-              // Ô nhập thời gian bắt đầu và kết thúc
-              Row(
-                children: [
-                  Expanded(
-                    child: _buildInputField("Bắt đầu", Icons.access_time,
-                        () async {
-                      TimeOfDay? pickedTime = await showTimePicker(
-                        context: Get.context!,
-                        initialTime:
-                            TimeOfDay.now(), // Giờ mặc định là hiện tại
-                      );
-
-                      if (pickedTime != null) {
-                        // Xử lý giờ được chọn (hiển thị hoặc lưu lại)
-                        print(
-                            "Giờ được chọn: ${pickedTime.format(Get.context!)}");
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: Colors.white,
+                      minimumSize: const Size(double.infinity, 45),
+                    ),
+                    onPressed: () {
+                      // Kiểm tra dữ liệu đã đủ chưa
+                      if (controller.selectedDate.value == null) {
+                        Get.snackbar(
+                          "Lỗi",
+                          "Vui lòng chọn ngày làm việc",
+                          backgroundColor: Colors.redAccent,
+                          colorText: Colors.white,
+                        );
+                        return;
                       }
-                    }),
+
+                      if (controller.startTime.value == null ||
+                          controller.endTime.value == null) {
+                        Get.snackbar(
+                          "Lỗi",
+                          "Vui lòng chọn giờ bắt đầu và giờ kết thúc",
+                          backgroundColor: Colors.redAccent,
+                          colorText: Colors.white,
+                        );
+                        return;
+                      }
+
+                      if (data == null && workDayId == null) {
+                        controller.createWorkDay();
+                      } else {
+                        controller.updateWorkDay(workDayId!);
+                      }
+
+                      Get.back();
+                    },
+                    child: const Text("Lưu"),
                   ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: _buildInputField("Kết thúc", Icons.access_time, () {
-                      // Xử lý chọn giờ kết thúc
-                    }),
+                  const SizedBox(height: 10),
+                  OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: AppColors.primary,
+                      minimumSize: const Size(double.infinity, 45),
+                      side:
+                          const BorderSide(color: AppColors.primary, width: 1),
+                    ),
+                    onPressed: () => Get.back(),
+                    child: const Text("Hủy"),
                   ),
                 ],
-              ),
-
-              const SizedBox(height: 20),
-
-              // Nút Lưu
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: Colors.white,
-                  minimumSize: const Size(double.infinity, 45),
-                ),
-                onPressed: () {
-                  // Xử lý lưu
-                  Get.back();
-                },
-                child: const Text("Lưu"),
-              ),
-
-              const SizedBox(height: 10),
-
-              // Nút Hủy
-              OutlinedButton(
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: AppColors.primary,
-                  minimumSize: const Size(double.infinity, 45),
-                  side: const BorderSide(color: AppColors.primary, width: 1),
-                ),
-                onPressed: () {
-                  Get.back();
-                },
-                child: const Text("Hủy"),
-              ),
-            ],
-          ),
+              )),
         ),
       ),
     );
   }
 
   // Show shift details
-  void showSiftDetails() {
+  void showSiftDetails(WorkScheduleController controller,
+      String workDateFormatted, String idWorkDay) async {
+    await controller.fetchReportDetail(idWorkDay);
+
+    if (controller.reportDetailRespone.value == null) {
+        ScaffoldMessenger.of(Get.context!).showSnackBar(
+          const SnackBar(content: Text('Không có thông tin chi tiết để xem')),
+        );
+        return;
+    }
+
     Get.dialog(
       Dialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -471,41 +673,53 @@ class WorkScheduleScreen extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 15),
-              const Text(
-                'Ngày làm: 28/04/2025',
-                style: TextStyle(fontSize: 16),
+              Text(
+                'Ngày làm: $workDateFormatted',
+                style: const TextStyle(fontSize: 16),
               ),
               const SizedBox(
                 height: 10,
               ),
-              const Text(
-                'Quản lý: Ana nè',
-                style: TextStyle(fontSize: 16),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              const Text(
-                'Ghi chú: Bể ly',
-                style: TextStyle(fontSize: 16),
+              Text(
+                'Ghi chú: ${controller.reportDetailRespone.value!.note}',
+                style: const TextStyle(fontSize: 16),
               ),
               const SizedBox(height: 10),
-              Row(
-                children: [
-                  _buildImageMini(),
-                  const SizedBox(
-                    width: 10,
+              // Kiểm tra nếu có ảnh
+              if ((controller
+                      .reportDetailRespone.value?.reportImages?.isNotEmpty ??
+                  false))
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: SizedBox(
+                    height: 80,
+                    child: ListView.separated(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: controller
+                          .reportDetailRespone.value!.reportImages.length,
+                      separatorBuilder: (_, __) => const SizedBox(width: 10),
+                      itemBuilder: (context, index) {
+                        final imageUrl = controller
+                            .reportDetailRespone.value!.reportImages[index].url;
+                        return ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: Image.network(
+                            imageUrl,
+                            width: 80,
+                            height: 80,
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, __, ___) => Container(
+                              width: 80,
+                              height: 80,
+                              color: Colors.grey.shade300,
+                              child: const Icon(Icons.broken_image),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
                   ),
-                  _buildImageMini(),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  _buildImageMini(),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                ],
-              ),
+                ),
               const SizedBox(height: 15),
               // Nút Lưu
               ElevatedButton(
@@ -527,22 +741,8 @@ class WorkScheduleScreen extends StatelessWidget {
     );
   }
 
-// Widget to buil image mini
-  Widget _buildImageMini(
-      {double width = 60, String filePath = 'assets/images/empty-image.png'}) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(16),
-      child: Image.asset(
-        filePath,
-        width: width,
-        height: width,
-        fit: BoxFit.cover,
-      ),
-    );
-  }
-
-// Widget input field cho ngày & giờ
-  Widget _buildInputField(String label, IconData icon, VoidCallback onTap) {
+  Widget _buildReactiveInput(
+      String label, IconData icon, VoidCallback onTap, String value) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -554,10 +754,8 @@ class WorkScheduleScreen extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              label,
-              style: const TextStyle(fontSize: 16, color: Colors.black54),
-            ),
+            Text(value,
+                style: const TextStyle(fontSize: 16, color: Colors.black87)),
             Icon(icon, color: Colors.black54, size: 20),
           ],
         ),
@@ -565,92 +763,111 @@ class WorkScheduleScreen extends StatelessWidget {
     );
   }
 
+  Widget _buildImagePickerRow(WorkScheduleController controller) {
+    return Obx(() => Row(
+          children: List.generate(4, (index) {
+            if (index < controller.selectedLocalImages.length) {
+              return _buildImageMini(
+                FileImage(controller.selectedLocalImages[index]),
+              );
+            } else {
+              return _buildImageMini(null, onTap: controller.pickImages);
+            }
+          }),
+        ));
+  }
+
+  Widget _buildImageMini(ImageProvider? image, {VoidCallback? onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 60,
+        height: 60,
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey),
+          image: image != null
+              ? DecorationImage(image: image, fit: BoxFit.cover)
+              : null,
+        ),
+        child: image == null ? const Icon(Icons.add_a_photo) : null,
+      ),
+    );
+  }
+
   // Show report proble
-  void showReportProblem() {
+  void showReportProblem(WorkScheduleController controller) {
     Get.dialog(
       Dialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Tiêu đề + Nút đóng
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    "Báo cáo sự cố",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.close),
-                    onPressed: () => Get.back(),
-                  )
-                ],
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              const TextField(
-                decoration: InputDecoration(
-                  hintText: "Nhập nội dung báo cáo...",
-                  hintStyle: TextStyle(fontSize: 16, color: Colors.blueGrey),
-                  border: InputBorder.none, // Ẩn viền
+          child: SingleChildScrollView(
+            // Đề phòng bàn phím tràn
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Tiêu đề + Nút đóng
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "Báo cáo sự cố",
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.close),
+                      onPressed: () => Get.back(),
+                    )
+                  ],
                 ),
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              Row(
-                children: [
-                  _buildImageMini(),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  _buildImageMini(),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  _buildImageMini(),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              // Nút Lưu
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: Colors.white,
-                  minimumSize: const Size(double.infinity, 45),
-                ),
-                onPressed: () {
-                  // Xử lý lưu
-                  Get.back();
-                },
-                child: const Text("Lưu"),
-              ),
+                const SizedBox(height: 16),
 
-              const SizedBox(height: 10),
-
-              // Nút Hủy
-              OutlinedButton(
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: AppColors.primary,
-                  minimumSize: const Size(double.infinity, 45),
-                  side: const BorderSide(color: AppColors.primary, width: 1),
+                // Nhập nội dung báo cáo
+                TextField(
+                  controller: controller.reportTextController,
+                  maxLines: 4,
+                  decoration: const InputDecoration(
+                    hintText: "Nhập nội dung báo cáo...",
+                    hintStyle: TextStyle(fontSize: 16, color: Colors.blueGrey),
+                    border: OutlineInputBorder(),
+                  ),
                 ),
-                onPressed: () {
-                  Get.back();
-                },
-                child: const Text("Hủy"),
-              ),
-            ],
+                const SizedBox(height: 16),
+
+                // Ảnh đã chọn / thêm ảnh
+                _buildImagePickerRow(controller),
+                const SizedBox(height: 16),
+
+                // Nút Lưu
+                Obx(() {
+                  return controller.isUploadLoading.value
+                      ? const Center(child: CircularProgressIndicator())
+                      : ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primary,
+                            foregroundColor: Colors.white,
+                            minimumSize: const Size(double.infinity, 45),
+                          ),
+                          onPressed: controller.sendReport,
+                          child: const Text("Lưu"),
+                        );
+                }),
+                const SizedBox(height: 10),
+
+                // Nút Hủy
+                OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: AppColors.primary,
+                    minimumSize: const Size(double.infinity, 45),
+                    side: const BorderSide(color: AppColors.primary, width: 1),
+                  ),
+                  onPressed: () => Get.back(),
+                  child: const Text("Hủy"),
+                ),
+              ],
+            ),
           ),
         ),
       ),

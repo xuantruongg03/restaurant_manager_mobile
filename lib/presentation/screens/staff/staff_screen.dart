@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:restaurant_manager_mobile/config/routes/route_names.dart';
 import 'package:restaurant_manager_mobile/core/theme/color_schemes.dart';
+import 'package:restaurant_manager_mobile/data/models/staff/staff_modal.dart';
 import 'package:restaurant_manager_mobile/presentation/widgets/header.dart';
 import 'package:restaurant_manager_mobile/presentation/widgets/textfield_custom.dart';
 import 'package:restaurant_manager_mobile/presentation/controllers/staff/staff_controller.dart';
@@ -26,7 +27,7 @@ class StaffScreen extends StatelessWidget {
               showBackButton: true,
             ),
             _buildSearchBar(controller),
-            // _buildFilterButton(controller),
+            _buildFilterButton(controller),
             const SizedBox(height: 10),
             _buildTableHeader(controller),
             Divider(height: 1, color: Colors.grey[300]),
@@ -34,7 +35,7 @@ class StaffScreen extends StatelessWidget {
           ],
         ),
         // Floating action button (two button: edit and add)
-        floatingActionButton: _buildFloattingButton());
+        floatingActionButton: _buildFloattingButton(controller));
   }
 
   // Witget to show the delete button and search bar
@@ -97,6 +98,7 @@ class StaffScreen extends StatelessWidget {
                   prefixIcon: PhosphorIconsRegular.magnifyingGlass,
                   onChanged: (value) {
                     controller.search.value = value;
+                    controller.applyFilter();
                     controller.refreshAllCheckBox();
                   },
                 ),
@@ -108,52 +110,79 @@ class StaffScreen extends StatelessWidget {
     );
   }
 
-  // Widget to show filter button
   Widget _buildFilterButton(StaffController controller) {
     return Obx(() {
-      if (controller.filteredStaff.isNotEmpty) {
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.end, // Đẩy nút sang phải
-          children: [
-            SizedBox(
-              width: 80,
-              child: Material(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                child: InkWell(
-                  onTap: () {},
-                  borderRadius: BorderRadius.circular(12),
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          'Lọc',
-                          style: TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.w500),
-                        ),
-                        const SizedBox(width: 3),
-                        Icon(
-                          Icons.filter_alt_rounded,
-                          color: Colors.grey[700],
-                          size: 15,
-                        ),
-                      ],
+      return controller.staffList.isNotEmpty
+          ? Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  InkWell(
+                    onTap: () {
+                      openFilterDialog(controller);
+                    },
+                    borderRadius: BorderRadius.circular(8),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(8),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 4,
+                            offset: Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.filter_alt, color: Colors.grey[600]),
+                          const SizedBox(width: 6),
+                          Text(
+                            controller.filteredRole.value,
+                            style: const TextStyle(fontWeight: FontWeight.w500),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
+                ],
               ),
-            ),
-            const SizedBox(
-              width: 15,
             )
-          ],
-        );
-      }
-      return const SizedBox.shrink();
+          : const SizedBox.shrink();
     });
+  }
+
+  void openFilterDialog(StaffController controller) {
+    Get.dialog(
+      AlertDialog(
+        title: const Text("Lọc theo chức vụ"),
+        content: SizedBox(
+          width: double.maxFinite,
+          child: ListView.builder(
+            shrinkWrap: true,
+            itemCount: controller.filterOptions.length,
+            itemBuilder: (context, index) {
+              final role = controller.filterOptions[index];
+              return Obx(() => RadioListTile<String>(
+                    title: Text(role),
+                    value: role,
+                    groupValue: controller.filteredRole.value,
+                    onChanged: (value) {
+                      controller.filteredRole.value = value!;
+                      controller.applyFilter();
+                      Get.back(); // đóng dialog sau khi chọn
+                    },
+                  ));
+            },
+          ),
+        ),
+      ),
+    );
   }
 
   // Widget to show header of table
@@ -170,7 +199,7 @@ class StaffScreen extends StatelessWidget {
           Expanded(
               child: _buildSortableColumn('Tên',
                   onTap: () =>
-                      controller.sortBy('name', controller.isNameyAscending))),
+                      controller.sortBy('name', controller.isNameAscending))),
           Expanded(
               child: _buildSortableColumn('Chức vụ',
                   onTap: () => controller.sortBy(
@@ -190,6 +219,18 @@ class StaffScreen extends StatelessWidget {
     return Obx(() {
       final staffList = controller.filteredStaff;
 
+      if (controller.isLoading.value) {
+        return const Center(
+            child: Column(
+          children: [
+            SizedBox(
+              height: 20,
+            ),
+            CircularProgressIndicator()
+          ],
+        ));
+      }
+
       if (staffList.isEmpty) {
         return const Center(
           child: Padding(
@@ -200,57 +241,65 @@ class StaffScreen extends StatelessWidget {
       }
 
       return Expanded(
+        child: RefreshIndicator(
+          onRefresh: () async {
+            await controller.fetchStaffList(); // Load lại danh sách
+            controller.refreshAllCheckBox(); // Nếu cần reset các checkbox
+            controller.applyFilter(); // Áp lại filter nếu đang dùng
+          },
           child: SingleChildScrollView(
-        child: ListView(
-            padding: EdgeInsets.zero,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            children: controller.filteredStaff.map((staff) {
-              return _buildStaffRow(staff, controller);
-            }).toList()),
-      ));
+            physics: const AlwaysScrollableScrollPhysics(), // Bắt buộc phải có
+            child: ListView(
+              padding: EdgeInsets.zero,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              children: controller.filteredStaff.map((staff) {
+                return _buildStaffRow(staff, controller);
+              }).toList(),
+            ),
+          ),
+        ),
+      );
     });
   }
 
   // Widget to show info for each row staff (show info of staff)
-  Widget _buildStaffRow(
-      Map<String, dynamic> staff, StaffController controller) {
+  Widget _buildStaffRow(StaffModel staff, StaffController controller) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         InkWell(
           onTap: () {
-            staff['isExpanded'].value = !staff['isExpanded'].value;
+            staff.isExpanded.value = !staff.isExpanded.value;
           },
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 2),
-            color:
-                staff['isExpanded'].value ? Colors.white : AppColors.background,
+            color: staff.isExpanded.value ? Colors.white : AppColors.background,
             child: Row(
               children: [
                 Obx(() =>
-                    _buildCheckbox(staff['isChecked'].value, onChanged: (v) {
-                      staff['isChecked'].value = v!;
+                    _buildCheckbox(staff.isSelected.value, onChanged: (v) {
+                      staff.isSelected.value = v!;
                       controller.refreshCheckBoxAll();
                     })),
                 Expanded(
-                    child: Text(staff['name'],
-                        style: const TextStyle(fontSize: 14))),
+                    child:
+                        Text(staff.name, style: const TextStyle(fontSize: 14))),
                 Expanded(
-                    child: Text(staff['position'],
-                        style: const TextStyle(fontSize: 14))),
+                    child:
+                        Text(staff.role, style: const TextStyle(fontSize: 14))),
                 Expanded(
-                    child: Text(formatMoney(staff['salary']),
+                    child: Text(formatMoney(staff.payment),
                         style: const TextStyle(fontSize: 14))),
                 IconButton(
                   icon: Icon(
-                    staff['isExpanded'].value
+                    staff.isExpanded.value
                         ? Icons.keyboard_arrow_up
                         : Icons.keyboard_arrow_down,
                     color: Colors.grey[0],
                   ),
                   onPressed: () {
-                    staff['isExpanded'].value = !staff['isExpanded'].value;
+                    staff.isExpanded.value = !staff.isExpanded.value;
                   },
                 ),
               ],
@@ -266,10 +315,10 @@ class StaffScreen extends StatelessWidget {
                   child: widget,
                 );
               },
-              child: staff['isExpanded'].value
+              child: staff.isExpanded.value
                   ? Container(
-                      key: ValueKey(staff[
-                          'id']), // Giúp AnimatedSwitcher nhận diện thay đổi
+                      key: ValueKey(staff
+                          .userId), // Giúp AnimatedSwitcher nhận diện thay đổi
                       color: Colors.white,
                       padding: const EdgeInsets.symmetric(
                           vertical: 10, horizontal: 2),
@@ -279,16 +328,18 @@ class StaffScreen extends StatelessWidget {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Ngày vào làm: ${staff['startDate']}'),
-                              Text('Số tài khoản: ${staff['bankAccount']}'),
-                              Text('Tổng cộng: ${staff['workHours']}'),
-                              Text('Lương: ${staff['hourlyWage']}'),
+                              Text('Ngày vào làm: ${staff.workStartDate}'),
+                              Text('Số tài khoản: ${staff.bankAccountNumber}'),
+                              Text('Tổng công: ${staff.shifts}'),
+                              Text(
+                                  'Lương: ${formatMoney(staff.baseSalary)} / ${staff.type == 'FullTime' ? 'ngày' : 'giờ'}'),
                             ],
                           ),
                           Material(
                             color: Colors.transparent,
                             child: InkWell(
-                              onTap: () => Get.toNamed(RouteNames.workSchedule),
+                              onTap: () => Get.toNamed(RouteNames.workSchedule,
+                                  arguments: staff),
                               borderRadius: BorderRadius.circular(5),
                               splashColor:
                                   Colors.grey.withOpacity(0.2), // Hiệu ứng nhấn
@@ -298,22 +349,50 @@ class StaffScreen extends StatelessWidget {
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 10, horizontal: 10),
                                 child: Column(
-                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
                                   children: [
-                                    const Text(
-                                      'Xem chi tiết',
-                                      style: TextStyle(
-                                        color: AppColors.primary,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                    Column(
+                                      children: [
+                                        const Text(
+                                          'Xem chi tiết',
+                                          style: TextStyle(
+                                            color: AppColors.primary,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 2),
+                                        Container(
+                                          width: 90,
+                                          height: 1,
+                                          color: AppColors.primary,
+                                        ),
+                                      ],
                                     ),
-                                    const SizedBox(height: 2),
-                                    Container(
-                                      width: 90,
-                                      height: 1,
-                                      color: AppColors.primary,
+                                    const SizedBox(
+                                      height: 15,
                                     ),
+                                    controller.currentRole.value != 'Owner'
+                                        ? InkWell(
+                                            onTap: () {
+                                              Get.toNamed(RouteNames.addStaff,
+                                                      arguments: staff)
+                                                  ?.then((_) {
+                                                controller.fetchStaffList();
+                                              });
+                                            },
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(6.0),
+                                              child: Icon(Icons.edit,
+                                                  color: Colors.grey[700]),
+                                            ),
+                                          )
+                                        : const SizedBox.shrink(),
                                   ],
                                 ),
                               ),
@@ -366,27 +445,21 @@ class StaffScreen extends StatelessWidget {
   }
 
   // Widget to show button
-  Widget _buildFloattingButton() {
+  Widget _buildFloattingButton(StaffController controller) {
     return Stack(
       children: [
         Positioned(
-          bottom: 0,
-          right: 0,
+          bottom: 15,
+          right: 15,
           child: FloatingActionButton(
-            onPressed: () => Get.toNamed(RouteNames.addStaff),
+            onPressed: () {
+              Get.toNamed(RouteNames.addStaff)?.then((_) {
+                controller.fetchStaffList();
+              });
+            },
             backgroundColor: Colors.white,
             foregroundColor: const Color.fromARGB(255, 92, 90, 90),
             child: const Icon(Icons.add),
-          ),
-        ),
-        Positioned(
-          bottom: 70,
-          right: 0,
-          child: FloatingActionButton(
-            onPressed: () => Get.toNamed(RouteNames.addStaff),
-            backgroundColor: Colors.white,
-            foregroundColor: const Color.fromARGB(255, 92, 90, 90),
-            child: const Icon(Icons.edit_outlined),
           ),
         ),
       ],

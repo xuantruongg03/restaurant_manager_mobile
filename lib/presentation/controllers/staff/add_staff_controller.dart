@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:restaurant_manager_mobile/data/models/staff/add_staff_request.dart';
+import 'package:restaurant_manager_mobile/data/models/staff/staff_modal.dart';
+import 'package:restaurant_manager_mobile/data/models/staff/update_staff_request.dart';
 import 'package:restaurant_manager_mobile/data/repositories/staff/add_staff_repository.dart';
 import 'package:restaurant_manager_mobile/data/services/storage_service.dart';
 import 'package:restaurant_manager_mobile/presentation/controllers/staff/staff_controller.dart';
@@ -11,6 +13,10 @@ class AddStaffController extends GetxController {
   final AddStaffRepository repository;
 
   AddStaffController({required this.repository});
+  final staffController = Get.find<StaffController>();
+  final isEdit = false.obs;
+
+  StaffModel? staff;
 
   final formKey = GlobalKey<FormState>();
   final TextEditingController nameController = TextEditingController();
@@ -18,12 +24,40 @@ class AddStaffController extends GetxController {
   final TextEditingController positionController = TextEditingController();
   final TextEditingController salaryTypeController = TextEditingController();
   final TextEditingController salaryController = TextEditingController();
-  final TextEditingController bankAccountController = TextEditingController();
+  final TextEditingController bankNameController = TextEditingController();
+  final TextEditingController bankNumberController = TextEditingController();
 
-  final selectedName = 'truong'.obs;
-  final selectedPhone = '0123456789'.obs;
-  final selectedPosition = 'Nhân viên phục vụ'.obs;
-  final selectedSalaryType = 'Theo tháng'.obs;
+  final selectedName = ''.obs;
+  final selectedPhone = ''.obs;
+  final selectedPosition = 'Phục vụ'.obs;
+  final RxDouble selectedSalary = 0.0.obs;
+  final selectedSalaryType = 'FullTime'.obs;
+  final selectedBankName = ''.obs;
+  final selectedBankNumber = ''.obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+
+    // Nhận argument truyền vào
+    staff = Get.arguments as StaffModel?;
+    if (staff != null) {
+      isEdit.value = true;
+      setName(staff!.name);
+      setPhone(staff!.phone);
+      setPosition(staff!.role);
+      setSalary(staff!.baseSalary);
+      setSalaryType(staff!.type);
+      setBankName(staff!.bank);
+      setBankNumber(staff!.bankAccountNumber);
+    } else {
+      // Set default values
+      nameController.text = selectedName.value;
+      phoneController.text = selectedPhone.value;
+      positionController.text = selectedPosition.value;
+      salaryTypeController.text = selectedSalaryType.value;
+    }
+  }
 
   void setName(String? name) {
     if (name != null) {
@@ -53,14 +87,19 @@ class AddStaffController extends GetxController {
     }
   }
 
-  @override
-  void onInit() {
-    super.onInit();
-    // Set default values
-    nameController.text = selectedName.value;
-    phoneController.text = selectedPhone.value;
-    positionController.text = selectedPosition.value;
-    salaryTypeController.text = selectedSalaryType.value;
+  void setSalary(double salary) {
+    selectedSalary.value = salary;
+    salaryController.text = salary.toInt().toString();
+  }
+
+  void setBankName(String bankName) {
+    selectedBankName.value = bankName;
+    bankNameController.text = bankName.toString();
+  }
+
+  void setBankNumber(String bankNumber) {
+    selectedBankNumber.value = bankNumber;
+    bankNumberController.text = bankNumber.toString();
   }
 
   @override
@@ -70,51 +109,98 @@ class AddStaffController extends GetxController {
     positionController.dispose();
     salaryTypeController.dispose();
     salaryController.dispose();
-    bankAccountController.dispose();
+    bankNameController.dispose();
+    bankNumberController.dispose();
     super.onClose();
   }
 
-  Future<void> addStaff() async {
+  Future<bool> addStaff() async {
     if (formKey.currentState!.validate()) {
       try {
         final storageService = await StorageService.getInstance();
-        String resId = storageService.getString(StorageKeys.restaurantId) ?? '';
-        String bankNumber = bankAccountController.text.split(' - ')[0];
-        String bankName = bankAccountController.text.split(' - ')[1];
+        String resId = storageService.getString(StorageKeys.restaurantId) ??
+            '917f554a-98f2-406f-8862-f07730a6b8f1';
+        String role = StaffModel.getRoleEN(selectedPosition.value);
+
         AddStaffRequest request = AddStaffRequest(
             username: convertFullNameToUsername(nameController.text),
             password: 'Nhanvien@24',
             name: nameController.text,
             phone: phoneController.text,
-            role: 'Owner',
+            role: role,
             idRestaurant: resId,
-            salary: '0',
-            type: 'month',
-            bankNumber: bankNumber,
-            bankName: bankName);
-        repository.createStaff(request);
-        Get.snackbar(
-          'Thành công',
-          'Thêm nhân viên thành công',
-          backgroundColor: Colors.green,
-          colorText: Colors.white,
-        );
+            salary: salaryController.text,
+            type: selectedSalaryType.value,
+            bankNumber: bankNumberController.text,
+            bankName: bankNameController.text);
 
-        clearForm();
-        Get.back();
+        bool success = await repository.createStaff(request);
+
+        if (success) {
+          Get.snackbar(
+            'Thành công',
+            'Thêm nhân viên thành công',
+            backgroundColor: Colors.green,
+            colorText: Colors.white,
+          );
+          Get.back();
+          return true;
+        } else {
+          return false;
+        }
       } catch (e) {
         Get.snackbar('Lỗi', 'Đã có lỗi xảy ra khi thêm nhân viên');
+        return false;
       }
     }
+
+    return false;
+  }
+
+  Future<bool> updateStaff(String userId) async {
+    if (formKey.currentState!.validate()) {
+      try {
+        String role = StaffModel.getRoleEN(selectedPosition.value);
+        UpdateStaffRequest request = UpdateStaffRequest(
+            name: nameController.text,
+            phone: phoneController.text,
+            role: role,
+            salary: salaryController.text,
+            type: selectedSalaryType.value,
+            bankNumber: bankNumberController.text,
+            bankName: bankNameController.text);
+
+        bool success = await repository.updateStaff(userId, request);
+
+        if (success) {
+          Get.snackbar(
+            'Thành công',
+            'Cập nhật nhân viên thành công',
+            backgroundColor: const Color.fromARGB(255, 95, 201, 98),
+            colorText: Colors.white,
+          );
+          Get.back();
+          return true;
+        } else {
+          return false;
+        }
+      } catch (e) {
+        Get.snackbar('Lỗi', 'Đã có lỗi xảy ra khi cập nhật nhân viên');
+        return false;
+      }
+    }
+
+    return false;
   }
 
   void clearForm() {
     nameController.clear();
     phoneController.clear();
     salaryController.clear();
-    bankAccountController.clear();
-    selectedName.value = 'truong';
-    selectedPhone.value = '0123456789';
+    bankNameController.clear();
+    bankNumberController.clear();
+    selectedName.value = '';
+    selectedPhone.value = '';
     selectedPosition.value = 'Nhân viên phục vụ';
     selectedSalaryType.value = 'Theo tháng';
     nameController.text = selectedName.value;

@@ -97,7 +97,7 @@ class FeatureScreen extends StatelessWidget {
                   icon: 'assets/icons/schedule.png',
                   label: 'Lịch làm việc',
                   color: Colors.indigo,
-                  onTap: () => Get.toNamed(RouteNames.schedule),
+                  onTap: () => Get.toNamed(RouteNames.workSchedule),
                 ),
               ],
             ),
