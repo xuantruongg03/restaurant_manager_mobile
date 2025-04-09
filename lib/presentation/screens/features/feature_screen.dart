@@ -73,13 +73,13 @@ class FeatureScreen extends StatelessWidget {
                   icon: 'assets/icons/billing.png',
                   label: 'Thanh toán',
                   color: Colors.amber,
-                  onTap: () => Get.toNamed(RouteNames.bill),
+                  onTap: () => Get.toNamed(RouteNames.payment),
                 ),
                 _buildFeatureItem(
                   icon: 'assets/icons/statistic.png',
                   label: 'Thống kê',
                   color: Colors.blue,
-                  onTap: () => Get.toNamed(RouteNames.splash),
+                  onTap: () => Get.toNamed(RouteNames.statistic),
                 ),
                 _buildFeatureItem(
                   icon: 'assets/icons/person-group.png',
@@ -98,6 +98,12 @@ class FeatureScreen extends StatelessWidget {
                   label: 'Lịch làm việc',
                   color: Colors.indigo,
                   onTap: () => Get.toNamed(RouteNames.schedule),
+                ),
+                _buildFeatureItem(
+                  icon: 'assets/icons/restaurant.png',
+                  label: 'Nhà hàng',
+                  color: Colors.purple,
+                  onTap: () => Get.toNamed(RouteNames.restaurant),
                 ),
               ],
             ),

@@ -1,9 +1,10 @@
 import 'dart:convert';
-import 'package:http/http.dart' as http;
+
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart' as http;
 
 class ApiClient {
-  static String baseUrl = dotenv.env['API_URL'] ?? 'http://localhost:8082';
+  static String baseUrl = dotenv.env['API_URL'] ?? '';
   static final http.Client _client = http.Client();
 
   // Headers mặc định cho mọi request
@@ -93,7 +94,6 @@ class ApiClient {
   static Map<String, dynamic> _handleResponse(http.Response response) {
     try {
       final decodedResponse = jsonDecode(utf8.decode(response.bodyBytes));
-
       if (response.statusCode >= 200 && response.statusCode < 300) {
         return {
           'success': true,

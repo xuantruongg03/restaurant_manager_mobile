@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:get/get.dart';
 import 'package:restaurant_manager_mobile/config/api_client.dart';
 import 'package:restaurant_manager_mobile/config/routes/route_names.dart';
@@ -14,11 +12,11 @@ class AddFoodRepository {
         Get.offAllNamed(RouteNames.login);
         return null;
       }
+
       final response = await ApiClient.post(
         '/food/create',
         headers: {
-          'Authorization':
-              'Basic ${base64Encode(utf8.encode('${auth['username']}:${auth['password']}'))}'
+          'Authorization': 'Bearer ${auth['token']}',
         },
         body: request.toJson(),
       );

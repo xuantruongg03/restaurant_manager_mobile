@@ -10,6 +10,7 @@ import 'package:restaurant_manager_mobile/data/models/foods/food_request.dart';
 import 'package:http/http.dart' as http;
 import 'package:restaurant_manager_mobile/data/repositories/foods/food_repository.dart';
 import 'package:restaurant_manager_mobile/presentation/controllers/foods/food_controller.dart';
+import 'package:restaurant_manager_mobile/utils/functions.dart';
 
 
 class AddFoodController extends GetxController {
@@ -45,7 +46,7 @@ class AddFoodController extends GetxController {
     if (food != null) {
       nameController.text = food.name;
       priceController.text = food.price.toString();
-      selectedCategory.value = food.category;
+      selectedCategory.value = food.type;
       uploadedImageUrls.value = [food.image];
     }
   }
@@ -56,7 +57,7 @@ class AddFoodController extends GetxController {
       if (images.isNotEmpty) {
         isUploading.value = true;
         for (XFile image in images) {
-          String? imageUrl = await uploadImageToCloudinary(File(image.path));
+          String? imageUrl = await Functions.uploadImageToCloudinary(File(image.path));
           if (imageUrl == null) {
             ScaffoldMessenger.of(Get.context!).showSnackBar(
               const SnackBar(
@@ -138,8 +139,8 @@ class AddFoodController extends GetxController {
         image: uploadedImageUrls[0],
         name: nameController.text,
         price: double.parse(priceController.text),
-        category: selectedCategory.value,
-        // images: uploadedImageUrls.map((image) => image).toList(),
+        type: selectedCategory.value,
+        idFood: '',
         idMenu: idMenu,
       );
       final response = await addFoodRepository.addFood(request);
@@ -169,7 +170,8 @@ class AddFoodController extends GetxController {
         image: uploadedImageUrls[0],
         name: nameController.text,
         price: double.parse(priceController.text),
-        category: selectedCategory.value,
+        type: selectedCategory.value,
+        idFood: idFood,
         idMenu: idMenu,
       );
       final response = await foodRepository.editFood(idFood, request);
@@ -183,34 +185,34 @@ class AddFoodController extends GetxController {
     }
   }
 
-  Future<String?> uploadImageToCloudinary(File imageFile) async {
-    try {
-      final String cloudName = dotenv.env['CLOUD_NAME'] ?? '';
-      final String apiKey = dotenv.env['API_KEY'] ?? '';
-      final String apiSecret = dotenv.env['API_SECRET'] ?? '';
+  // Future<String?> uploadImageToCloudinary(File imageFile) async {
+  //   try {
+  //     final String cloudName = dotenv.env['CLOUD_NAME'] ?? '';
+  //     final String apiKey = dotenv.env['API_KEY'] ?? '';
+  //     final String apiSecret = dotenv.env['API_SECRET'] ?? '';
 
-      final uri =
-          Uri.parse('https://api.cloudinary.com/v1_1/$cloudName/image/upload');
-      final request = http.MultipartRequest('POST', uri);
+  //     final uri =
+  //         Uri.parse('https://api.cloudinary.com/v1_1/$cloudName/image/upload');
+  //     final request = http.MultipartRequest('POST', uri);
 
-      request.fields['upload_preset'] = dotenv.env['UPLOAD_PRESET'] ?? '';
-      request.fields['api_key'] = apiKey;
-      request.fields['api_secret'] = apiSecret;
-      request.files
-          .add(await http.MultipartFile.fromPath('file', imageFile.path));
+  //     request.fields['upload_preset'] = dotenv.env['UPLOAD_PRESET'] ?? '';
+  //     request.fields['api_key'] = apiKey;
+  //     request.fields['api_secret'] = apiSecret;
+  //     request.files
+  //         .add(await http.MultipartFile.fromPath('file', imageFile.path));
 
-      final response = await request.send();
-      if (response.statusCode == 200) {
-        final responseData = await http.Response.fromStream(response);
-        final data = jsonDecode(responseData.body);
-        return data['secure_url'];
-      } else {
-        print('Failed to upload image: ${response.reasonPhrase}');
-        return null;
-      }
-    } catch (e) {
-      print('Error uploading image: $e');
-      return null;
-    }
-  }
+  //     final response = await request.send();
+  //     if (response.statusCode == 200) {
+  //       final responseData = await http.Response.fromStream(response);
+  //       final data = jsonDecode(responseData.body);
+  //       return data['secure_url'];
+  //     } else {
+  //       print('Failed to upload image: ${response.reasonPhrase}');
+  //       return null;
+  //     }
+  //   } catch (e) {
+  //     print('Error uploading image: $e');
+  //     return null;
+  //   }
+  // }
 }

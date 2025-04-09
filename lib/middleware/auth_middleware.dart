@@ -7,12 +7,6 @@ class AuthMiddleware extends GetMiddleware {
   @override
   RouteSettings? redirect(String? route) {
     final stateService = Get.find<StateService>();
-    final publicRoutes = [RouteNames.login];
-    
-    if (publicRoutes.contains(route)) {
-      return null;
-    }
-
     if (!stateService.isAuthenticated) {
       return const RouteSettings(name: RouteNames.login);
     }

@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:get/get.dart';
 import 'package:pushy_flutter/pushy_flutter.dart';
@@ -15,8 +14,10 @@ class HomeRepository {
       Get.offAllNamed(RouteNames.login);
       return null;
     }
+
+          final storageService = await StorageService.getInstance();
     final response = await ApiClient.post('/restaurant/create', headers: {
-      'Authorization': 'Basic ${base64Encode(utf8.encode('${auth['username']}:${auth['password']}'))}'
+      'Authorization': 'Bearer ${storageService.getString(StorageKeys.token)}'
     }, body: {
       'name': name,
       'idAccount': idAccount,
@@ -39,15 +40,15 @@ class HomeRepository {
 
       final storageService = await StorageService.getInstance();
       await storageService.setString(StorageKeys.deviceToken, deviceToken);
-      
-      storageService.getString(StorageKeys.deviceToken);
-
+      final idAccount = storageService.getString(StorageKeys.userId);
       // register device token to server
       final response = await ApiClient.post('/account/update-device-token', headers: {
-        'Authorization': 'Basic ${base64Encode(utf8.encode('${auth['username']}:${auth['password']}'))}'
+        'Authorization': 'Bearer ${storageService.getString(StorageKeys.token)}'
       }, body: {
         'deviceToken': deviceToken,
+        'idAccount': idAccount,
         });
+      print('response: $response');
       if (response['success'] == true) {
         print('Register device pushy success');
       } else {

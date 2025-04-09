@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:restaurant_manager_mobile/data/models/menus/menu_modal.dart';
 import 'package:restaurant_manager_mobile/data/repositories/menus/menu_repository.dart';
+import 'package:restaurant_manager_mobile/data/services/storage_service.dart';
+import 'package:restaurant_manager_mobile/utils/constant.dart';
 
 class MenusController extends GetxController {
   final MenuRepository repository;
@@ -9,7 +11,7 @@ class MenusController extends GetxController {
   MenusController({required this.repository});
 
   final RxList<MenuModel> menuItems = <MenuModel>[].obs;
-  final filterOptions = ['Tất cả', 'Hoạt động', 'Không HĐ'].obs;
+  final filterOptions = ['Tất cả', 'Hoạt động', 'Không hoạt động'].obs;
   final RxBool isLoading = false.obs;
   final RxBool isUpdating = false.obs;
   final RxString error = ''.obs;
@@ -30,6 +32,13 @@ class MenusController extends GetxController {
       final items = await repository.getMenuItems();
       if (items == null) {
         return;
+      }
+      final storage = await StorageService.getInstance();
+      for (var item in items) {
+        if (item.isActive) {
+          storage.setString(StorageKeys.idMenu, item.idMenu);
+          break;
+        }
       }
       menuItems.value = items;
     } catch (e) {
@@ -60,8 +69,8 @@ class MenusController extends GetxController {
     if (selectedFilter.value == 'Tất cả') return menuItems;
     return menuItems
         .where((item) => selectedFilter.value == 'Hoạt động'
-            ? item.status == 'active'
-            : item.status == 'inactive')
+            ? item.status == 'Active'
+            : item.status == 'Inactive')
         .toList();
   }
 

@@ -11,6 +11,13 @@ import 'package:restaurant_manager_mobile/presentation/bindings/foods/add_food_b
 import 'package:restaurant_manager_mobile/presentation/bindings/foods/food_binding.dart';
 import 'package:restaurant_manager_mobile/presentation/bindings/menus/add_menu_binding.dart';
 import 'package:restaurant_manager_mobile/presentation/bindings/menus/menu_binding.dart';
+import 'package:restaurant_manager_mobile/presentation/bindings/payment/payment_binding.dart';
+import 'package:restaurant_manager_mobile/presentation/bindings/restaurants/add_restaurant_binding.dart';
+import 'package:restaurant_manager_mobile/presentation/bindings/restaurants/restaurant_binding.dart';
+import 'package:restaurant_manager_mobile/presentation/bindings/staff/add_staff_binding.dart';
+import 'package:restaurant_manager_mobile/presentation/bindings/staff/staff_binding.dart';
+import 'package:restaurant_manager_mobile/presentation/bindings/staff/work_schedule_binding.dart';
+import 'package:restaurant_manager_mobile/presentation/bindings/statistic/statistic_binding.dart';
 import 'package:restaurant_manager_mobile/presentation/bindings/table/add_table_binding.dart';
 import 'package:restaurant_manager_mobile/presentation/bindings/table/table_binding.dart';
 import 'package:restaurant_manager_mobile/presentation/layouts/main_layout.dart';
@@ -24,6 +31,13 @@ import 'package:restaurant_manager_mobile/presentation/screens/foods/add_food_sc
 import 'package:restaurant_manager_mobile/presentation/screens/foods/food_screen.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/menu/add_menu_screen.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/menu/menu_screen.dart';
+import 'package:restaurant_manager_mobile/presentation/screens/payment/payment_screen.dart';
+import 'package:restaurant_manager_mobile/presentation/screens/restaurants/add_restaurant_screen.dart';
+import 'package:restaurant_manager_mobile/presentation/screens/restaurants/restaurant_screen.dart';
+import 'package:restaurant_manager_mobile/presentation/screens/staff/add_staff_screen.dart';
+import 'package:restaurant_manager_mobile/presentation/screens/staff/staff_screen.dart';
+import 'package:restaurant_manager_mobile/presentation/screens/staff/work_schedule_screen.dart';
+import 'package:restaurant_manager_mobile/presentation/screens/statistic/statistic_screen.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/tables/add_table_screen.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/tables/table_screen.dart';
 
@@ -115,5 +129,53 @@ class AppPages {
       middlewares: [AuthMiddleware()],
     ),
 
+    GetPage(
+      name: RouteNames.staff,
+      page: () => const StaffScreen(),
+      binding: StaffBinding(),
+      middlewares: [AuthMiddleware()],
+    ),
+
+    GetPage(
+      name: RouteNames.addStaff,
+      page: () => const AddStaffScreen(),
+      binding: AddStaffBinding(),
+      middlewares: [AuthMiddleware()],
+    ),
+
+    GetPage(
+      name: RouteNames.payment,
+      page: () => const PaymentScreen(),
+      binding: PaymentBinding(),
+      middlewares: [AuthMiddleware()],
+    ),
+
+    GetPage(
+      name: RouteNames.statistic,
+      page: () => const StatisticScreen(),
+      binding: StatisticBinding(),
+      middlewares: [AuthMiddleware()],
+    ),
+
+    GetPage(
+      name: RouteNames.workSchedule,
+      page: () => const WorkScheduleScreen(),
+      binding: WorkSheduleBinding(),
+      middlewares: [AuthMiddleware()],
+    ),
+
+    GetPage(
+      name: RouteNames.restaurant,
+      page: () => const RestaurantScreen(),
+      binding: RestaurantBinding(),
+      middlewares: [AuthMiddleware()],
+    ),
+
+    GetPage(
+      name: RouteNames.addRestaurant,
+      page: () => const AddRestaurantScreen(),
+      binding: AddRestaurantBinding(),
+      middlewares: [AuthMiddleware()],
+    ),
   ];
 }

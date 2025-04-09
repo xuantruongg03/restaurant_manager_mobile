@@ -19,7 +19,7 @@ class OrderRepository extends GetConnect {
       final storageService = await StorageService.getInstance();
       final response = await ApiClient.get('/bills/get-all-order', headers: {
         'Authorization':
-            'Basic ${base64Encode(utf8.encode('${auth['username']}:${auth['password']}'))}'
+            'Bearer ${storageService.getString(StorageKeys.token)}'
       }, queryParams: {
         'idRestaurant': storageService.getString(StorageKeys.restaurantId),
       });
@@ -56,12 +56,12 @@ class OrderRepository extends GetConnect {
     }
     final response = await ApiClient.get('/bills/order-update', headers: {
       'Authorization':
-          'Basic ${base64Encode(utf8.encode('${auth['username']}:${auth['password']}'))}'
+          'Bearer ${storageService.getString(StorageKeys.token)}'
     }, queryParams: {
       'idOrder': idOrder,
       'idRestaurant': storageService.getString(StorageKeys.restaurantId),
     });
-    print("response: ${response}");
+    print("response: $response");
     if (response['success'] == true) {
       return response;
     }

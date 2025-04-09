@@ -23,5 +23,14 @@ class StorageKeys {
   static const String phone = 'phone';
   static const String birthDay = 'birthDay';
   static const String avt = 'avt';
+  static const String position = 'position';
+  static const String wage = 'wage';
+  static const String salarytypel = 'salarytypel';
+  static const String Bank = 'Bank';
+  static const String idMenu = 'idMenu';
+  static const String restaurantStatus = 'restaurantStatus';
+  static const String mergeTables = 'mergeTables';
+  static const String restaurants = 'restaurants';
 }
+
 

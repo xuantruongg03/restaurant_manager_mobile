@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
-class QRModal extends StatelessWidget {
+class QRModal extends StatefulWidget {
   final String name;
-  final VoidCallback onDownload;
   final VoidCallback onPrint;
   final String tableId;
   final String idMenu;
@@ -13,12 +12,51 @@ class QRModal extends StatelessWidget {
   const QRModal({
     super.key,
     required this.name,
-    required this.onDownload,
     required this.onPrint,
     required this.tableId,
     required this.idMenu,
     required this.idRestaurant,
   });
+
+  @override
+  State<QRModal> createState() => _QRModalState();
+}
+
+class _QRModalState extends State<QRModal> {
+  final GlobalKey qrKey = GlobalKey();
+
+  // Future<void> _downloadQR() async {
+  //   try {
+  //     // Capture QR code as image
+  //     RenderRepaintBoundary boundary =
+  //         qrKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
+  //     ui.Image image = await boundary.toImage(pixelRatio: 3.0);
+  //     ByteData? byteData =
+  //         await image.toByteData(format: ui.ImageByteFormat.png);
+
+  //     if (byteData != null) {
+  //       // Save to gallery
+  //       final result = await ImageGallerySaver.saveImage(
+  //           byteData.buffer.asUint8List(),
+  //           quality: 100,
+  //           name: "QR_${widget.name}_${DateTime.now().millisecondsSinceEpoch}");
+
+  //       if (result['isSuccess']) {
+  //         ScaffoldMessenger.of(context).showSnackBar(
+  //           const SnackBar(
+  //               content: Text('QR code đã được lưu vào thư viện ảnh')),
+  //         );
+  //         Get.back();
+  //       } else {
+  //         throw Exception('Không thể lưu QR code');
+  //       }
+  //     }
+  //   } catch (e) {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(content: Text('Lỗi khi tải QR code: $e')),
+  //     );
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +75,7 @@ class QRModal extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Mã QR $name',
+                    'Mã QR ${widget.name}',
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -50,13 +88,20 @@ class QRModal extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 20),
-              QrImageView(
-                data: '${dotenv.env['WEB_URL']}/menu?a=$idMenu&b=$idRestaurant&c=$tableId',
-                size: 200,
+              RepaintBoundary(
+                key: qrKey,
+                child: Container(
+                  color: Colors.white,
+                  child: QrImageView(
+                    data:
+                        '${dotenv.env['WEB_URL']}/menu?a=${widget.idMenu}&b=${widget.idRestaurant}&c=${widget.tableId}',
+                    size: 200,
+                  ),
+                ),
               ),
               const SizedBox(height: 20),
               ElevatedButton(
-                onPressed: onDownload,
+                onPressed: () {},
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.orange,
                   minimumSize: const Size(double.infinity, 48),
@@ -68,16 +113,14 @@ class QRModal extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               OutlinedButton(
-                onPressed: onPrint,
+                onPressed: widget.onPrint,
                 style: OutlinedButton.styleFrom(
-                  minimumSize: const Size(double.infinity, 48),
-                  side: const BorderSide(
-                      color: Colors.orange,
-                      width: 1.5),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+                    minimumSize: const Size(double.infinity, 48),
+                    side: const BorderSide(color: Colors.orange, width: 1.5),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
-                ),
                 child: const Text(
                   'In',
                   style: TextStyle(color: Colors.orange),

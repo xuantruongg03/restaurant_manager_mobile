@@ -81,7 +81,7 @@ Required environment variables:
 - `API_SECRET`: Cloudinary API secret
 - `UPLOAD_PRESET`: Cloudinary upload preset
 
-## Dependencies
+## **Dependencies**
 
 Key dependencies include:
 - `get`: State management and routing

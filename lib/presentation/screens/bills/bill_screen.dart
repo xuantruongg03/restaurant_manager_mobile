@@ -14,7 +14,7 @@ class BillScreen extends GetView<BillController> {
       body: Column(
         children: [
           const Header(
-            title: 'Thanh toán',
+            title: 'Hóa đơn',
             showBackButton: true,
           ),
           Expanded(
@@ -22,8 +22,8 @@ class BillScreen extends GetView<BillController> {
               if (controller.loading.value) {
                 return const Center(child: CircularProgressIndicator());
               }
-              if (controller.error.isNotEmpty) {
-                return Center(child: Text(controller.error.value));
+              if (controller.foodList.isEmpty) {
+                return const Center(child: Text('Không có đơn hàng'));
               }
               return Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -45,7 +45,7 @@ class BillScreen extends GetView<BillController> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              _buildInfoRow('Giờ vào:', '18:00'),
+                              _buildInfoRow('Giờ vào:', controller.timeArrive),
                               _buildInfoRow('Tên bàn:', controller.nameTable),
                             ],
                           ),
@@ -91,15 +91,15 @@ class BillScreen extends GetView<BillController> {
                         },
                         children: [
                           _buildTableHeader(),
-                          ...controller.billList.asMap().entries.map((entry) {
+                          ...controller.foodList.asMap().entries.map((entry) {
                             final index = entry.key;
-                            final bill = entry.value;
+                            final food = entry.value;
                             return _buildTableRow(
                               (index + 1).toString(),
-                              bill.nameFood,
-                              bill.quantity.toString(),
-                              bill.total,
-                              bill.statusOrder,
+                              food.name,
+                              food.quantity.toString(),
+                              food.price,
+                              food.paid,
                             );
                           }),
                         ],

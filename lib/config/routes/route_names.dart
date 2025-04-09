@@ -1,14 +1,14 @@
 class RouteNames {
   // Prevent instantiation
   const RouteNames._();
-  
+
   // Auth Routes
   static const String splash = '/';
   static const String login = '/login';
   static const String signUp = '/sign-up';
   static const String forgotPassword = '/forgot-password';
   static const String verify = '/verify';
-  
+
   // Main Routes
   static const String home = '/home';
   static const String feature = '/feature';
@@ -20,7 +20,8 @@ class RouteNames {
   static const String strategy = '/strategy';
   static const String staff = '/staff';
   static const String schedule = '/schedule';
-  
+  static const String restaurant = '/restaurant';
+
   // Feature Routes
   static const String orderDetails = '/orders/details';
   static const String tableDetails = '/tables/details';
@@ -33,5 +34,9 @@ class RouteNames {
   static const String addTable = '/add-table';
   static const String bill = '/bill';
   static const String confirmPhone = '/confirm-phone';
-
+  static const String addStaff = '/add-staff';
+  static const String payment = '/payment';
+  static const String statistic = '/statistic';
+  static const String workSchedule = '/work-schedule';
+  static const String addRestaurant = '/add-restaurant';
 }
