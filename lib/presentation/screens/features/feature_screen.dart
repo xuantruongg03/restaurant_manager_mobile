@@ -100,7 +100,7 @@ class FeatureScreen extends StatelessWidget {
                   onTap: () => Get.toNamed(RouteNames.schedule),
                 ),
                 _buildFeatureItem(
-                  icon: 'assets/icons/schedule.png',
+                  icon: 'assets/icons/restaurant.png',
                   label: 'Nhà hàng',
                   color: Colors.purple,
                   onTap: () => Get.toNamed(RouteNames.restaurant),
