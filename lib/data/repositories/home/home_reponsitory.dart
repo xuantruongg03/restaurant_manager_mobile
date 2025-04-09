@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:get/get.dart';
 import 'package:pushy_flutter/pushy_flutter.dart';
@@ -41,15 +40,15 @@ class HomeRepository {
 
       final storageService = await StorageService.getInstance();
       await storageService.setString(StorageKeys.deviceToken, deviceToken);
-      
-      storageService.getString(StorageKeys.deviceToken);
-
+      final idAccount = storageService.getString(StorageKeys.userId);
       // register device token to server
       final response = await ApiClient.post('/account/update-device-token', headers: {
         'Authorization': 'Bearer ${storageService.getString(StorageKeys.token)}'
       }, body: {
         'deviceToken': deviceToken,
+        'idAccount': idAccount,
         });
+      print('response: $response');
       if (response['success'] == true) {
         print('Register device pushy success');
       } else {

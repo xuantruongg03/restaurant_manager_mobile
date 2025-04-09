@@ -1,8 +1,7 @@
 import 'dart:convert';
-import 'package:http/http.dart' as http;
+
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:restaurant_manager_mobile/data/services/storage_service.dart';
-import 'package:restaurant_manager_mobile/utils/constant.dart';
+import 'package:http/http.dart' as http;
 
 class ApiClient {
   static String baseUrl = dotenv.env['API_URL'] ?? '';
@@ -97,7 +96,6 @@ class ApiClient {
   static Map<String, dynamic> _handleResponse(http.Response response) {
     try {
       final decodedResponse = jsonDecode(utf8.decode(response.bodyBytes));
-
       if (response.statusCode >= 200 && response.statusCode < 300) {
         return {
           'success': true,

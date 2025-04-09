@@ -13,7 +13,7 @@ class LoginRepository {
     if (response['success'] == true) {
       return response;
     } else {
-      if (response['message'] == "Invalid credentials") {
+      if (response['message'] == "Unauthenticated") {
         Functions.showSnackbar("Tài khoản hoặc mật khẩu không đúng");
       } else if (response['message'] == "Account not activated") {
         Functions.showSnackbar("Tài khoản của bạn chưa được kích hoạt");

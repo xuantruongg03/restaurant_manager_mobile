@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:restaurant_manager_mobile/config/bindings/app_binding.dart';
 import 'package:restaurant_manager_mobile/config/routes/app_pages.dart';
 import 'package:restaurant_manager_mobile/config/routes/route_names.dart';
+import 'package:restaurant_manager_mobile/data/services/auth_service.dart';
 import 'package:restaurant_manager_mobile/data/services/state_service.dart';
 import 'package:restaurant_manager_mobile/core/theme/app_theme.dart';
 import 'package:restaurant_manager_mobile/core/theme/color_schemes.dart';
@@ -17,10 +18,15 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: '.env');
+  
   await StorageService.getInstance();
-
   final stateService = Get.put(StateService());
   await stateService.checkAuth();
+
+  final checkAuth = await AuthService().checkAuth();
+  
+  final initialRoute = checkAuth ? RouteNames.home : RouteNames.login;
 
   Pushy.listen();
   Pushy.toggleInAppBanner(true);
@@ -40,9 +46,7 @@ void main() async {
     statusBarIconBrightness: Brightness.light,
   ));
 
-  await dotenv.load(fileName: '.env');
-
-  runApp(const MyApp());
+  runApp(MyApp(initialRoute: initialRoute));
 }
 
 @pragma('vm:entry-point')
@@ -54,8 +58,11 @@ void backgroundNotificationListener(Map<String, dynamic> data) {
   Pushy.notify(notificationTitle, notificationText, data);
   Pushy.clearBadge();
 }
+
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final String initialRoute;
+
+  const MyApp({super.key, required this.initialRoute});
 
   @override
   Widget build(BuildContext context) {
@@ -63,8 +70,7 @@ class MyApp extends StatelessWidget {
       title: 'Restaurant 4.0',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
-      // home: const MainLayout(),
-      initialRoute: RouteNames.splash,
+      initialRoute: initialRoute,
       getPages: AppPages.routes,
       initialBinding: AppBinding(),
       localizationsDelegates: const [

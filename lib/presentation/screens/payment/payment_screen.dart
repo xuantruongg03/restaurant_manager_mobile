@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:restaurant_manager_mobile/presentation/widgets/header.dart';
+import 'package:restaurant_manager_mobile/presentation/controllers/payment/payment_controller.dart';
 
-class PaymentScreen extends StatelessWidget {
+class PaymentScreen extends GetView<PaymentController> {
   const PaymentScreen({super.key});
 
   @override
@@ -9,12 +11,19 @@ class PaymentScreen extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: [
-          const Header(
-            title: 'Cấu hình thanh toán',
-            showBackButton: true,
-            showActionButton: true,
-            
-          ),
+          Obx(() => Header(
+                title: 'Cấu hình thanh toán',
+                showBackButton: true,
+                showActionButton: true,
+                actionButtonText: controller.mode.value == 'create' ? 'Tạo' : 'Cập nhật',
+                onActionPressed: () {
+                  if (controller.mode.value == 'create') {
+                    controller.createPayment();
+                  } else {
+                    controller.updatePayment();
+                  }
+                },
+              )),
           Expanded(
             child: SingleChildScrollView(
               child: Padding(
@@ -67,18 +76,19 @@ class PaymentScreen extends StatelessWidget {
           _buildTextField(
             hint: 'Nhập partner code...',
             icon: Icons.business,
+            controller: controller.partnercode,
           ),
           const SizedBox(height: 16),
           _buildTextField(
             hint: 'Nhập secret key...',
             icon: Icons.key,
-            isPassword: true,
+            controller: controller.secretkey,
           ),
           const SizedBox(height: 16),
           _buildTextField(
             hint: 'Nhập access key...',
             icon: Icons.vpn_key,
-            isPassword: true,
+            controller: controller.accesskey,
           ),
         ],
       ),
@@ -89,8 +99,10 @@ class PaymentScreen extends StatelessWidget {
     required String hint,
     required IconData icon,
     bool isPassword = false,
+    required TextEditingController controller,
   }) {
     return TextFormField(
+      controller: controller,
       obscureText: isPassword,
       decoration: InputDecoration(
         hintText: hint,

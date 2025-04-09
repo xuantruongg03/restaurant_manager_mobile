@@ -5,7 +5,8 @@ class TableModel {
   final String name;
   final String status;
   final String time;
-  final bool isMerge;
+  bool isMerge;
+  String color;
 
   TableModel({
     required this.idTable,
@@ -13,6 +14,7 @@ class TableModel {
     required this.status,
     required this.time,
     required this.isMerge,
+    required this.color,
   });
 
   factory TableModel.fromJson(Map<String, dynamic> json) {
@@ -23,6 +25,7 @@ class TableModel {
       status: json['status'],
       time: json['status'] == 'Available' ? 'Chưa có' : formatTime(now), 
       isMerge: json['mergedTo'] != null,
+      color: '',
     );
   }
 }
