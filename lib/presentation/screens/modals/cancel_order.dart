@@ -5,13 +5,15 @@ class CancelOrderModal extends StatefulWidget {
   final String nameFood;
   final num quantity;
   final String nameTable;
+  final Function(String) onCancel;
 
   const CancelOrderModal(
       {super.key,
       required this.orderId,
       required this.nameFood,
       required this.quantity,
-      required this.nameTable});
+      required this.nameTable,
+      required this.onCancel});
 
   @override
   State<CancelOrderModal> createState() => _CancelOrderModalState();
@@ -112,7 +114,11 @@ class _CancelOrderModalState extends State<CancelOrderModal> {
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(
-                  onPressed: _voidCancelOrder,
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      widget.onCancel(widget.orderId);
+                    }
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.orange,
                     minimumSize: const Size(double.infinity, 48),
@@ -147,9 +153,4 @@ class _CancelOrderModalState extends State<CancelOrderModal> {
     );
   }
 
-  void _voidCancelOrder() {
-    if (_formKey.currentState!.validate()) {
-      print('Lý do huỷ: ${_reasonController.text}');
-    }
-  }
 }

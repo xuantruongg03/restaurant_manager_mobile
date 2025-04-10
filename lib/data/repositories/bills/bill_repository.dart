@@ -15,9 +15,8 @@ class BillRepository {
         Get.offAllNamed(RouteNames.login);
         return null;
       }
-      final response = await ApiClient.get('/bills/get-all-order-client/$idTable', headers: {
-        'Authorization': 'Bearer ${auth['token']}'
-        });
+      final response = await ApiClient.get('/bills/get-all-order-client/$idTable');
+      print("response: $response");
       if (response['success'] == true) {
         final data = response['data']['result'];
         try {
@@ -33,21 +32,19 @@ class BillRepository {
     }
   }
 
-  Future<Map<String, dynamic>?> closeBill(String idBill) async {
+  Future<Map<String, dynamic>?> closeBill(String idTable) async {
     final auth = await AuthService().getAuth();
     if (auth == null) {
       Get.offAllNamed(RouteNames.login);
       return null;
     }
-    final response = await ApiClient.get(
-      '/bills/close-bill',
+    final response = await ApiClient.put(
+      '/bills/close-bill/$idTable',
       headers: {
-        'Authorization': 'Bearer ${storageService.getString(StorageKeys.token)}'
-      },
-      queryParams: {
-        'idBill': idBill,
-      },
+        'Authorization': 'Bearer ${auth['token']}'
+      }
     );
+    print("response: $response");
     if (response['success'] == true) {
       return response;
     }

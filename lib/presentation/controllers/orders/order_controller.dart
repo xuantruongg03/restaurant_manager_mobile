@@ -71,13 +71,35 @@ class OrderController extends GetxController {
     }
   }
 
-  Future<void> updateOrderStatus(String idOrder) async {
-    final response = await orderRepository.updateOrderStatus(idOrder);
+  Future<void> updateOrderReceivedStatus(String idOrder) async {
+    final response = await orderRepository.updateOrderReceivedStatus(idOrder);
     if (response != null) {
       fetchOrders();
       ScaffoldMessenger.of(Get.context!).showSnackBar(
         const SnackBar(
-            content: Text('Cập nhật trạng thái đơn hàng thành công')),
+            content: Text('Đã nhận đơn hàng')),
+      );
+    }
+  }
+
+  Future<void> updateOrderSuccessStatus(String idOrder) async {
+    final response = await orderRepository.updateOrderSuccessStatus(idOrder);
+    if (response != null) {
+      fetchOrders();
+      ScaffoldMessenger.of(Get.context!).showSnackBar(
+        const SnackBar(
+            content: Text('Hoàn thành đơn hàng thành công')),
+      );
+    }
+  }
+
+  Future<void> updateOrderCancelStatus(String idOrder) async {
+    final response = await orderRepository.updateOrderCancelStatus(idOrder);
+    if (response != null) {
+      fetchOrders();
+      ScaffoldMessenger.of(Get.context!).showSnackBar(
+        const SnackBar(
+            content: Text('Huỷ đơn hàng thành công')),
       );
     }
   }
@@ -123,6 +145,9 @@ class OrderController extends GetxController {
         nameFood: nameFood,
         quantity: quantity,
         nameTable: nameTable,
+        onCancel: (idOrder) {
+          updateOrderCancelStatus(idOrder);
+        },
       ),
     );
   }
@@ -136,7 +161,7 @@ class OrderController extends GetxController {
         quantity: quantity,
         nameTable: nameTable,
         onSuccess: (idOrder) {
-          updateOrderStatus(idOrder);
+          updateOrderSuccessStatus(idOrder);
         },
       ),
     );

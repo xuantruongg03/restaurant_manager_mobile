@@ -17,25 +17,32 @@ class OrderRepository extends GetConnect {
         return [];
       }
       final storageService = await StorageService.getInstance();
-      final response = await ApiClient.get('/bills/get-all-order', headers: {
+      final idRestaurant = storageService.getString(StorageKeys.restaurantId);
+      final response = await ApiClient.get('/bills/get-all-order/$idRestaurant', headers: {
         'Authorization':
             'Bearer ${storageService.getString(StorageKeys.token)}'
-      }, queryParams: {
-        'idRestaurant': storageService.getString(StorageKeys.restaurantId),
       });
       if (response['success'] == true) {
-        final data = response['data']['data'];
+        final data = response['data']['result'];
         if (data is List && data.isNotEmpty) {
           final res = data[0];
-          final foodDetails = res['foodDetails'];
-          if (foodDetails is List) {
-            final orders = foodDetails
+          var foods = res['foods'];
+          if (foods is String) {
+            try {
+              foods = jsonDecode(foods);
+            } catch (e) {
+              print("Error parsing foods string: $e");
+              throw Exception('Invalid foods data format');
+            }
+          }
+          if (foods is List) {
+            final orders = foods
                 .map((food) => OrderModal.fromJson(food, res['nameTable']))
-                  .toList();
+                .toList();
             return orders;
           } else {
             throw Exception(
-                'Invalid format for foodDetails: Expected List but got ${foodDetails.runtimeType}');
+                'Invalid format for foods: Expected List but got ${foods.runtimeType}');
           }
         } 
         return null;
@@ -47,24 +54,54 @@ class OrderRepository extends GetConnect {
     }
   }
 
-  Future<Map<String, dynamic>?> updateOrderStatus(String idOrder) async {
-    final storageService = await StorageService.getInstance();
+  Future<Map<String, dynamic>?> updateOrderReceivedStatus(String idOrder) async {
     final auth = await AuthService().getAuth();
     if (auth == null) {
       Get.toNamed(RouteNames.login);
       return null;
     }
-    final response = await ApiClient.get('/bills/order-update', headers: {
+    final response = await ApiClient.put('/bills/order-update-received/$idOrder', headers: {
       'Authorization':
-          'Bearer ${storageService.getString(StorageKeys.token)}'
-    }, queryParams: {
-      'idOrder': idOrder,
-      'idRestaurant': storageService.getString(StorageKeys.restaurantId),
+          'Bearer ${auth['token']}'
     });
     print("response: $response");
     if (response['success'] == true) {
       return response;
     }
     return null;
+  }
+
+  Future<Map<String, dynamic>?> updateOrderSuccessStatus(String idOrder) async {
+    final auth = await AuthService().getAuth();
+    if (auth == null) {
+      Get.toNamed(RouteNames.login);
+      return null;
+    }
+    final response = await ApiClient.put('/bills/order-update-complete/$idOrder', headers: {
+      'Authorization':
+          'Bearer ${auth['token']}'
+    });
+    print("response: $response");
+    if (response['success'] == true) {
+      return response;
+    }
+    return null;
+  }
+
+  Future<Map<String, dynamic>?> updateOrderCancelStatus(String idOrder) async {
+    final auth = await AuthService().getAuth();
+    if (auth == null) {
+      Get.toNamed(RouteNames.login);
+      return null;
+    }
+    final response = await ApiClient.delete('/bills/order-cancel/$idOrder', headers: {
+      'Authorization':
+          'Bearer ${auth['token']}'
+    });
+    print("response: $response");
+    if (response['success'] == true) {
+      return response;
+    }
+    return null;  
   }
 }
