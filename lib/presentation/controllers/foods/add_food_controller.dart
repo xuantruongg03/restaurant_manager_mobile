@@ -1,13 +1,11 @@
-import 'dart:convert';
 import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:restaurant_manager_mobile/core/theme/color_schemes.dart';
-import 'package:restaurant_manager_mobile/data/repositories/foods/add_food_repository.dart';
 import 'package:restaurant_manager_mobile/data/models/foods/food_request.dart';
-import 'package:http/http.dart' as http;
+import 'package:restaurant_manager_mobile/data/repositories/foods/add_food_repository.dart';
 import 'package:restaurant_manager_mobile/data/repositories/foods/food_repository.dart';
 import 'package:restaurant_manager_mobile/presentation/controllers/foods/food_controller.dart';
 import 'package:restaurant_manager_mobile/utils/functions.dart';

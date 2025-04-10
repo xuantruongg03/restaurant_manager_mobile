@@ -154,7 +154,7 @@ class TableScreen extends GetView<TablesController> {
             onActionPressed: () {
               Get.toNamed(RouteNames.addTable);
             },
-            actionButtonText: "Thêm bàn",
+            actionButtonText: "Thêm",
           ),
           Container(
             height: 50,

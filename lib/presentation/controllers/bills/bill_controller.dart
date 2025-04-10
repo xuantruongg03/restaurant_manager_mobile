@@ -38,7 +38,7 @@ class BillController extends GetxController {
   
 
   Future<void> closeBill() async {
-    final result = await billRepository.closeBill(idBill.value);
+    final result = await billRepository.closeBill(idTable);
     if (result != null) {
       Get.back();
       Get.find<TablesController>().fetchTables();
