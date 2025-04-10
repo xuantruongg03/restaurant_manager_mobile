@@ -500,7 +500,15 @@ class WorkScheduleScreen extends StatelessWidget {
               foregroundColor: Colors.black,
               tooltip: 'Thêm lịch làm việc',
               onPressed: () {
-                showCreateWorkDayTimeDialog(controller);
+                if (controller.staff.type == 'FullTime') {
+                  ScaffoldMessenger.of(Get.context!).showSnackBar(
+                    const SnackBar(
+                        content: Text(
+                            'Không thể tạo lịch làm việc cho nhân viên FullTime')),
+                  );
+                } else {
+                  showCreateWorkDayTimeDialog(controller);
+                }
               },
               child: const Icon(Icons.add),
             ))
@@ -643,10 +651,10 @@ class WorkScheduleScreen extends StatelessWidget {
     await controller.fetchReportDetail(idWorkDay);
 
     if (controller.reportDetailRespone.value == null) {
-        ScaffoldMessenger.of(Get.context!).showSnackBar(
-          const SnackBar(content: Text('Không có thông tin chi tiết để xem')),
-        );
-        return;
+      ScaffoldMessenger.of(Get.context!).showSnackBar(
+        const SnackBar(content: Text('Không có thông tin chi tiết để xem')),
+      );
+      return;
     }
 
     Get.dialog(

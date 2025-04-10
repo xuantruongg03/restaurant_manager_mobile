@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:restaurant_manager_mobile/config/api_client.dart';
@@ -22,9 +21,8 @@ class MenuRepository {
         return null;
       }
       final storageService = await StorageService.getInstance();
-      String resId = storageService.getString(StorageKeys.restaurants) ?? "";
-      AddMenuRequest request =
-          AddMenuRequest(name: name, idRestaurant: resId);
+      String resId = storageService.getString(StorageKeys.restaurantId) ?? "";
+      AddMenuRequest request = AddMenuRequest(name: name, idRestaurant: resId);
 
       final response = await ApiClient.post('/menu/create',
           headers: {
@@ -32,6 +30,9 @@ class MenuRepository {
                 'Bearer ${storageService.getString(StorageKeys.token)}'
           },
           body: request.toJson());
+
+      print("Res ID: " + resId);
+      print("Phan hồi khi tạo menu: " + response.toString());
       if (response['success'] == true) {
         ScaffoldMessenger.of(Get.context!).showSnackBar(
           const SnackBar(content: Text('Thêm mới thành công')),

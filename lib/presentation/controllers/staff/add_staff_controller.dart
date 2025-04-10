@@ -7,6 +7,7 @@ import 'package:restaurant_manager_mobile/data/repositories/staff/add_staff_repo
 import 'package:restaurant_manager_mobile/data/services/storage_service.dart';
 import 'package:restaurant_manager_mobile/utils/constant.dart';
 import 'package:restaurant_manager_mobile/utils/formats.dart';
+import 'package:restaurant_manager_mobile/presentation/controllers/staff/staff_controller.dart';
 
 class AddStaffController extends GetxController {
   final AddStaffRepository repository;
