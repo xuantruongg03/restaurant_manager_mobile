@@ -22,7 +22,7 @@ class MenuRepository {
         return null;
       }
       final storageService = await StorageService.getInstance();
-      String resId = storageService.getString(StorageKeys.restaurants) ?? "";
+      String resId = storageService.getString(StorageKeys.restaurantId) ?? "";
       AddMenuRequest request =
           AddMenuRequest(name: name, idRestaurant: resId);
 

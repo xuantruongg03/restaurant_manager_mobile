@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:restaurant_manager_mobile/core/theme/color_schemes.dart';
-import 'package:restaurant_manager_mobile/presentation/controllers/restaurants/add_menu_controller.dart';
+import 'package:restaurant_manager_mobile/presentation/controllers/restaurants/add_restaurant_controller.dart';
 import 'package:restaurant_manager_mobile/presentation/widgets/header.dart';
 import 'package:restaurant_manager_mobile/presentation/widgets/textfield_custom.dart';
 
