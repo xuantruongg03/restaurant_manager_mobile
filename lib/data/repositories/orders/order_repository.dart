@@ -18,10 +18,12 @@ class OrderRepository extends GetConnect {
       }
       final storageService = await StorageService.getInstance();
       final idRestaurant = storageService.getString(StorageKeys.restaurantId);
+      // print("idRestaurant: $idRestaurant");
       final response = await ApiClient.get('/bills/get-all-order/$idRestaurant', headers: {
         'Authorization':
             'Bearer ${storageService.getString(StorageKeys.token)}'
       });
+      print("response: $response");
       if (response['success'] == true) {
         final data = response['data']['result'];
         if (data is List && data.isNotEmpty) {

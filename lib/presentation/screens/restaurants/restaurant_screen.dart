@@ -25,11 +25,15 @@ class RestaurantScreen extends GetView<RestaurantController> {
     required String status,
     required bool isSelected,
   }) {
+    print("idRestaurant: $idRestaurant");
+    print("isSelected: $isSelected");
     return InkWell(
       onTap: () {
         _showEditNameRestaurantModal(RestaurantModel(id: idRestaurant, name: title, address: address, color: color, isSelected: isSelected, status: status));
       },
-      onDoubleTap: () => controller.selectRestaurant(idRestaurant),
+      onDoubleTap: () => {
+        controller.selectRestaurant(idRestaurant)
+      },
       onLongPress: () => controller.deleteRestaurant(idRestaurant),
       child: Container(
         margin: const EdgeInsets.only(bottom: 12),
@@ -91,7 +95,7 @@ class RestaurantScreen extends GetView<RestaurantController> {
                 ],
               ),
             ),
-            if (status == 'active')
+            if (isSelected)
               Container(
                 padding: const EdgeInsets.all(2),
                 decoration: const BoxDecoration(

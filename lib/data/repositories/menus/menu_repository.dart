@@ -31,8 +31,6 @@ class MenuRepository {
           },
           body: request.toJson());
 
-      print("Res ID: " + resId);
-      print("Phan hồi khi tạo menu: " + response.toString());
       if (response['success'] == true) {
         ScaffoldMessenger.of(Get.context!).showSnackBar(
           const SnackBar(content: Text('Thêm mới thành công')),
@@ -87,7 +85,7 @@ class MenuRepository {
   }
 
   Future<Map<String, dynamic>?> updateMenu(
-      String idMenu, String nameMenu) async {
+      String idMenu, String nameMenu, String status) async {
     try {
       final auth = await AuthService().getAuth();
       if (auth == null) {
@@ -101,7 +99,7 @@ class MenuRepository {
         'idMenu': idMenu,
         'name': nameMenu,
         'idRestaurant': storageService.getString(StorageKeys.restaurantId),
-        'status': 'Inactive'
+        'status': status
       });
       if (response["success"] == true) {
         return response;
@@ -112,4 +110,5 @@ class MenuRepository {
       throw Exception('Error updating menu: $e');
     }
   }
+
 }

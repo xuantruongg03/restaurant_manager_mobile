@@ -3,7 +3,6 @@ import 'package:restaurant_manager_mobile/config/api_client.dart';
 import 'package:restaurant_manager_mobile/config/routes/route_names.dart';
 import 'package:restaurant_manager_mobile/data/models/bills/bill_modal.dart';
 import 'package:restaurant_manager_mobile/data/services/auth_service.dart';
-import 'package:restaurant_manager_mobile/utils/constant.dart';
 
 class BillRepository {
   get storageService => null;
@@ -16,7 +15,6 @@ class BillRepository {
         return null;
       }
       final response = await ApiClient.get('/bills/get-all-order-client/$idTable');
-      print("response: $response");
       if (response['success'] == true) {
         final data = response['data']['result'];
         try {
@@ -44,7 +42,6 @@ class BillRepository {
         'Authorization': 'Bearer ${auth['token']}'
       }
     );
-    print("response: $response");
     if (response['success'] == true) {
       return response;
     }

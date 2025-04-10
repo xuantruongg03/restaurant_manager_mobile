@@ -25,14 +25,14 @@ class AddRestaurantController extends GetxController {
         final res = CreateRestaurantRequest(name: nameController.text, idAccount: userId, status: 'active', isSelected: false, address: addressController.text);
         final response = await repository.createRestaurant(res);
         if (response != null) {
-          Get.find<RestaurantController>().getRestaurant();
           // Add new restaurant to storage
-          final storageService = await StorageService.getInstance();
-          final restaurants = storageService.getString(StorageKeys.restaurants);
-          final listRestaurants = jsonDecode(restaurants ?? '[]') as List;
-          listRestaurants.add(res);
-          final updatedRestaurants = jsonEncode(listRestaurants);
-          storageService.setString(StorageKeys.restaurants, updatedRestaurants);
+          // final storageService = await StorageService.getInstance();
+          // final restaurants = storageService.getString(StorageKeys.restaurants);
+          // final listRestaurants = jsonDecode(restaurants ?? '[]') as List;
+          // listRestaurants.add(res);
+          // final updatedRestaurants = jsonEncode(listRestaurants);
+          // storageService.setString(StorageKeys.restaurants, updatedRestaurants);
+          Get.find<RestaurantController>().getRestaurant();
           Get.back();
         }
       }

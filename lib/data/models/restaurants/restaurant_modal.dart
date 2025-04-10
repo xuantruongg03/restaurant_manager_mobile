@@ -21,11 +21,11 @@ class RestaurantModel {
 
   factory RestaurantModel.fromJson(Map<String, dynamic> json) {
     return RestaurantModel(
-      id: json['id'],
-      name: json['name'],
+      id: json['idRestaurant'] ?? '',
+      name: json['name'] ?? '',
       address: json['address'] ?? '',
       color: json['color'] ?? Colors.white,
-      isSelected: json['isSelected'] ?? false,
+      isSelected: json['selected'] ?? false,
       status: json['status'] ?? "active",
     );
   }

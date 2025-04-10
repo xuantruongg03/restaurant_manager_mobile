@@ -21,13 +21,19 @@ class RestaurantController extends GetxController {
   Future<void> getRestaurant() async {
     final storageService = await StorageService.getInstance();
     final restaurants = storageService.getString(StorageKeys.restaurants);
-
-    if (restaurants != null && restaurants.isNotEmpty) {
+    final res = await repository.getRestaurant();
+    if (restaurants != null && restaurants.isNotEmpty && res != null) {
       final listRestaurants = jsonDecode(restaurants) as List;
       restaurantItems.clear();
       for (var restaurant in listRestaurants) {
         if (restaurant != null) {
-          restaurantItems.add(RestaurantModel.fromJson(restaurant));
+          for (var item in res['data']['result'] as List) {
+            if (item['name'] == restaurant['name']) {
+              // Thay thế res trong storage bằng res mới và thêm isSelected vào res mới
+              item['selected'] = restaurant['selected'];
+              restaurantItems.add(RestaurantModel.fromJson(item));
+            }
+          }
         }
       }
     } else {}
@@ -37,10 +43,27 @@ class RestaurantController extends GetxController {
     final storageService = await StorageService.getInstance();
     final restaurants = storageService.getString(StorageKeys.restaurants);
     final listRestaurants = jsonDecode(restaurants ?? '[]') as List;
-    listRestaurants.map((element) => element['id'] == idRestaurant ? element['isSelected'] = true : element['isSelected'] = false);
+    
+    // Cập nhật selected trong storage
+    for (var item in listRestaurants) {
+      if (item['idRestaurant'] == idRestaurant) {
+        item['selected'] = true;
+        storageService.setString(StorageKeys.restaurantId, item['idRestaurant']);
+      } else {
+        item['selected'] = false;
+      }
+    }
     final updatedRestaurants = jsonEncode(listRestaurants);
     storageService.setString(StorageKeys.restaurants, updatedRestaurants);
-    await getRestaurant();
+
+    // Cập nhật UI
+    restaurantItems.clear();
+    for (var restaurant in listRestaurants) {
+      if (restaurant != null) {
+        restaurantItems.add(RestaurantModel.fromJson(restaurant));
+      }
+    }
+    update();
   }
 
   Future<void> deleteRestaurant(String idRestaurant) async {

@@ -5,13 +5,15 @@ class AcceptOrderModal extends StatefulWidget {
   final String nameFood;
   final String nameTable;
   final num quantity;
+  final Function(String) onAccept;
 
   const AcceptOrderModal(
       {super.key,
       required this.orderId,
       required this.nameFood,
       required this.quantity,
-      required this.nameTable});
+      required this.nameTable,
+      required this.onAccept});
 
   @override
   State<AcceptOrderModal> createState() => _AcceptOrderModalState();
@@ -72,7 +74,9 @@ class _AcceptOrderModalState extends State<AcceptOrderModal> {
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    widget.onAccept(widget.orderId);
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.orange,
                     minimumSize: const Size(double.infinity, 48),

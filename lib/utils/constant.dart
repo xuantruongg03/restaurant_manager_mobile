@@ -31,6 +31,7 @@ class StorageKeys {
   static const String restaurantStatus = 'restaurantStatus';
   static const String mergeTables = 'mergeTables';
   static const String restaurants = 'restaurants';
+  static const String menu = 'menu';
 }
 
 

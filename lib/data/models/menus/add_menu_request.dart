@@ -9,7 +9,7 @@ class AddMenuRequest {
       'name': name,
       'idRestaurant': idRestaurant,
       'idMenu': '',
-      'status': '',
+      'status': 'Active',
     };
   }
 }

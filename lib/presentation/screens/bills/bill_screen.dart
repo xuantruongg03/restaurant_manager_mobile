@@ -99,7 +99,7 @@ class BillScreen extends GetView<BillController> {
                               food.name,
                               food.quantity.toString(),
                               food.price,
-                              food.paid,
+                              food.status,
                             );
                           }),
                         ],

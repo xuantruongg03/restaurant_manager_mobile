@@ -76,10 +76,10 @@ class OrderScreen extends GetView<OrderController> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    if (order.status == 'Đang chờ') {
+                    if (order.status == 'Processing') {
                       controller.showAcceptOrderModal(order.idOrder,
                           order.nameFood, order.quantity, order.nameTable);
-                    } else if (order.status == 'Xác nhận') {
+                    } else if (order.status == 'Received') {
                       controller.showSuccessOrderModal(order.idOrder,
                           order.nameFood, order.quantity, order.nameTable);
                     }
@@ -90,23 +90,24 @@ class OrderScreen extends GetView<OrderController> {
                 const SizedBox(width: 4),
                 GestureDetector(
                   onTap: () {
-                    if (order.status == 'Đang chờ') {
+                    if (order.status == 'Processing') {
                       controller.showCancelOrderModal(order.idOrder,
                           order.nameFood, order.quantity, order.nameTable);
                     }
                   },
                   child: Icon(
-                      order.status == 'Đang chờ'
+                      order.status == 'Processing'
                           ? Icons.delete_outline
                           : PhosphorIconsBold.bowlSteam,
                       size: 26,
-                      color: order.status == 'Đang chờ'
+                      color: order.status == 'Processing'
                           ? Colors.grey[600]
                           : AppColors.primary),
                 ),
               ],
             ),
           ),
+          const SizedBox(height: 10),
         ],
       ),
     );

@@ -60,10 +60,12 @@ class OrderController extends GetxController {
     try {
       isLoading.value = true;
       final items = await orderRepository.getOrders();
+      orders.clear();
       if (items == null) {
         return;
       }
-      orders.value = items;
+      orders.addAll(items);
+      update();
     } catch (e) {
       error.value = e.toString();
     } finally {
@@ -74,11 +76,12 @@ class OrderController extends GetxController {
   Future<void> updateOrderReceivedStatus(String idOrder) async {
     final response = await orderRepository.updateOrderReceivedStatus(idOrder);
     if (response != null) {
-      fetchOrders();
       ScaffoldMessenger.of(Get.context!).showSnackBar(
         const SnackBar(
             content: Text('Đã nhận đơn hàng')),
       );
+      Get.back();
+      fetchOrders();
     }
   }
 
@@ -133,6 +136,9 @@ class OrderController extends GetxController {
         nameFood: nameFood,
         quantity: quantity,
         nameTable: nameTable,
+        onAccept: (idOrder) {
+          updateOrderReceivedStatus(idOrder);
+        },
       ),
     );
   }

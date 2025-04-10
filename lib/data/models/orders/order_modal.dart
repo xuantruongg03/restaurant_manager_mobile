@@ -25,8 +25,8 @@ class OrderModal {
       nameFood: json['name'],
       quantity: json['quantity'],
       nameTable: nameTable,
-      status: "Xác nhận",
-      createdAt: "10/10/2024",
+      status: json['status'],
+      createdAt: "10/04/2025",
       image: json['image'],
       idOrder: json['idOrder'],
     );

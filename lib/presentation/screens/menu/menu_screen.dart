@@ -11,9 +11,9 @@ import 'package:restaurant_manager_mobile/utils/formats.dart';
 class MenuScreen extends GetView<MenusController> {
   const MenuScreen({super.key});
 
-  void _showEditNameMenuModal(String idMenu, String nameMenu) {
+  void _showEditNameMenuModal(String idMenu, String nameMenu, String status) {
     Get.dialog(EditNameMenuModal(idMenu: idMenu, nameMenu: nameMenu, onUpdateNameMenu: (value) {
-      controller.updateNameMenu(idMenu, value);
+      controller.updateNameMenu(idMenu, value, status);
     }));
   }
 
@@ -24,6 +24,7 @@ class MenuScreen extends GetView<MenusController> {
     required String createdAt,
     required Color color,
     required bool isActive,
+    required bool isSelected,
     required String idMenu,
   }) {
     return InkWell(
@@ -32,7 +33,8 @@ class MenuScreen extends GetView<MenusController> {
           'idMenu': idMenu,
         });
       },
-      onLongPress: () => _showEditNameMenuModal(idMenu, title),
+      onLongPress: () => _showEditNameMenuModal(idMenu, title, isActive ? 'Active' : 'Inactive'),
+      onDoubleTap: () => controller.updateStatusMenu(idMenu, title),
       child: Container(
         margin: const EdgeInsets.only(bottom: 12),
         decoration: BoxDecoration(
@@ -93,7 +95,7 @@ class MenuScreen extends GetView<MenusController> {
                 ],
               ),
             ),
-            if (isActive)
+            if (isSelected)
               Container(
                 padding: const EdgeInsets.all(2),
                 decoration: const BoxDecoration(
@@ -167,7 +169,7 @@ class MenuScreen extends GetView<MenusController> {
                   await controller.fetchMenuItems();
                 },
                 child: ListView.builder(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(bottom: 16),
                   itemCount: controller.sortedMenuItems.length,
                   itemBuilder: (context, index) {
                     final item = controller.sortedMenuItems[index];
@@ -179,6 +181,7 @@ class MenuScreen extends GetView<MenusController> {
                       color: item.color,
                       isActive: item.isActive,
                       idMenu: item.idMenu,
+                      isSelected: item.isSelected,
                     );
                   },
                 ),

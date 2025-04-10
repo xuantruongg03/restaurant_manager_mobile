@@ -6,6 +6,7 @@ class Food {
   final int quantity;
   final String idOrder;
   final String paid;
+  final String status;
 
   Food({
     required this.idFood,
@@ -15,6 +16,7 @@ class Food {
     required this.quantity,
     required this.idOrder,
     required this.paid,
+    required this.status,
   });
 
   factory Food.fromJson(Map<String, dynamic> json) {
@@ -26,6 +28,7 @@ class Food {
       quantity: json['quantity'],
       idOrder: json['idOrder'],
       paid: json['paid'],
+      status: json['status'],
     );
   }
 
@@ -38,7 +41,8 @@ class Food {
       'quantity': quantity,
       'idOrder': idOrder,
       'paid': paid,
-    };
+      'status': status,
+      };
   }
 }
 

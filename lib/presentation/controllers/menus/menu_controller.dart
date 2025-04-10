@@ -34,10 +34,13 @@ class MenusController extends GetxController {
         return;
       }
       final storage = await StorageService.getInstance();
+      final menu = storage.getList(StorageKeys.menu);
       for (var item in items) {
-        if (item.isActive) {
-          storage.setString(StorageKeys.idMenu, item.idMenu);
-          break;
+        final List<Map<String, dynamic>> menuList = List<Map<String, dynamic>>.from(menu as List);
+        for (var itemMenu in menuList) {
+          if (itemMenu['idMenu'] == item.idMenu) {
+            item.isSelected = itemMenu['isSelected'];
+          }
         }
       }
       menuItems.value = items;
@@ -48,21 +51,44 @@ class MenusController extends GetxController {
     }
   }
 
-  Future<void> updateNameMenu(String idMenu, String nameMenu) async {
+  Future<void> updateStatusMenu(String idMenu, String status) async {
+    final storage = await StorageService.getInstance();
+    final menu = storage.getList(StorageKeys.menu);
+    final List<Map<String, dynamic>> menuList = List<Map<String, dynamic>>.from(menu as List);
+    for (var item in menuList) {
+      if (item['idMenu'] == idMenu) {
+        item['isSelected'] = true;
+        storage.setString(StorageKeys.idMenu, idMenu);
+      } else {
+        item['isSelected'] = false;
+      }
+    }
+    print("menuList $menuList");
+    storage.setList(StorageKeys.menu, menuList);
+    fetchMenuItems();
+  }
+
+  Future<void> updateNameMenu(String idMenu, String nameMenu, String status) async {
     isUpdating.value = true;
-    final response = await repository.updateMenu(idMenu, nameMenu);
+    final response = await repository.updateMenu(idMenu, nameMenu, status);
     if (response == null) {
       ScaffoldMessenger.of(Get.context!).showSnackBar(
-        const SnackBar(content: Text('Cập nhật tên menu thất bại')),
+        const SnackBar(content: Text('Cập nhật menu thất bại')),
       );
       return;
     }
     ScaffoldMessenger.of(Get.context!).showSnackBar(
-      const SnackBar(content: Text('Cập nhật tên menu thành công')),
+      const SnackBar(content: Text('Cập nhật menu thành công')),
     );
     fetchMenuItems();
     Get.back();
     isUpdating.value = false;
+  }
+
+  Future<void> selectedMenu(String idMenu) async {
+    final storage = await StorageService.getInstance();
+    storage.setString(StorageKeys.idMenu, idMenu);
+    fetchMenuItems();
   }
 
   List<MenuModel> get filteredMenuItems {
