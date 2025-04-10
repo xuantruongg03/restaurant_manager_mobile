@@ -332,7 +332,7 @@ class StaffScreen extends StatelessWidget {
                               Text('Số tài khoản: ${staff.bankAccountNumber}'),
                               Text('Tổng công: ${staff.shifts}'),
                               Text(
-                                  'Lương: ${formatMoney(staff.baseSalary)} / ${staff.type == 'FullTime' ? 'ngày' : 'giờ'}'),
+                                  'Lương: ${formatMoney(staff.baseSalary)} / ${staff.type == 'FullTime' ? 'tháng' : 'giờ'}'),
                             ],
                           ),
                           Material(
@@ -374,7 +374,7 @@ class StaffScreen extends StatelessWidget {
                                     const SizedBox(
                                       height: 15,
                                     ),
-                                    controller.currentRole.value != 'Owner'
+                                    controller.currentRole.value == 'Owner'
                                         ? InkWell(
                                             onTap: () {
                                               Get.toNamed(RouteNames.addStaff,
