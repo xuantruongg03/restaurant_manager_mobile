@@ -142,7 +142,8 @@ class WorkScheduleController extends GetxController {
     try {
       final storageService = await StorageService.getInstance();
       currentRole.value = storageService.getString(StorageKeys.role) ?? 'Owner';
-      isOwner.value = currentRole.value == 'Owner';
+      isOwner.value =
+          currentRole.value == 'Owner' || currentRole.value == 'Manager';
       // isOwner.value = false;
 
       final result = await staffRepository.getStaffList();
@@ -194,6 +195,11 @@ class WorkScheduleController extends GetxController {
             await workScheduleRepository.deleteWorkDay(workDayId);
             await fetchWorkDays();
             _filterWorkDaysBySelectedDate();
+            await fetchStaffList();
+            // staff.value = filteredStaff.value;
+            staff.value = staffList.firstWhere(
+              (s) => s.username == staff.value!.username,
+            );
           }
         },
       ),
@@ -256,10 +262,11 @@ class WorkScheduleController extends GetxController {
     if (result) {
       await fetchWorkDays();
       _filterWorkDaysBySelectedDate();
-      staff.value = filteredStaff.value;
-      // staff.value = staffList.firstWhere(
-      //   (s) => s.username == staff.value!.username,
-      // );
+      await fetchStaffList();
+      // staff.value = filteredStaff.value;
+      staff.value = staffList.firstWhere(
+        (s) => s.username == staff.value!.username,
+      );
     }
   }
 
