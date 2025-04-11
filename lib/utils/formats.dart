@@ -52,9 +52,18 @@ String formatWorkDate(String rawDateTime) {
   return DateFormat('dd/MM/yyyy').format(dateTime);
 }
 
+// String formatWorkTime(String rawTime) {
+//   final parts = rawTime.split(':');
+//   return '${parts[0].padLeft(2, '0')}:${parts[1].padLeft(2, '0')}';
+// }
+
 String formatWorkTime(String rawTime) {
   final parts = rawTime.split(':');
-  return '${parts[0].padLeft(2, '0')}:${parts[1].padLeft(2, '0')}';
+  if (parts.length >= 2) {
+    return '${parts[0].padLeft(2, '0')}:${parts[1].padLeft(2, '0')}';
+  } else {
+    return 'Giờ không hợp lệ';
+  }
 }
 
 String convertTimeOfDayToString(TimeOfDay time) {

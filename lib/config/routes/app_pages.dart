@@ -12,6 +12,7 @@ import 'package:restaurant_manager_mobile/presentation/bindings/foods/food_bindi
 import 'package:restaurant_manager_mobile/presentation/bindings/menus/add_menu_binding.dart';
 import 'package:restaurant_manager_mobile/presentation/bindings/menus/menu_binding.dart';
 import 'package:restaurant_manager_mobile/presentation/bindings/payment/payment_binding.dart';
+import 'package:restaurant_manager_mobile/presentation/bindings/report/report_binding.dart';
 import 'package:restaurant_manager_mobile/presentation/bindings/restaurants/add_restaurant_binding.dart';
 import 'package:restaurant_manager_mobile/presentation/bindings/restaurants/restaurant_binding.dart';
 import 'package:restaurant_manager_mobile/presentation/bindings/staff/add_staff_binding.dart';
@@ -32,6 +33,7 @@ import 'package:restaurant_manager_mobile/presentation/screens/foods/food_screen
 import 'package:restaurant_manager_mobile/presentation/screens/menu/add_menu_screen.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/menu/menu_screen.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/payment/payment_screen.dart';
+import 'package:restaurant_manager_mobile/presentation/screens/report/report_screen.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/restaurants/add_restaurant_screen.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/restaurants/restaurant_screen.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/staff/add_staff_screen.dart';
@@ -175,6 +177,13 @@ class AppPages {
       name: RouteNames.addRestaurant,
       page: () => const AddRestaurantScreen(),
       binding: AddRestaurantBinding(),
+      middlewares: [AuthMiddleware()],
+    ),
+
+    GetPage(
+      name: RouteNames.report,
+      page: () => const ReportScreen(),
+      binding: ReportBinding(),
       middlewares: [AuthMiddleware()],
     ),
   ];
