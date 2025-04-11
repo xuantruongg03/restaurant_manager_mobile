@@ -11,7 +11,7 @@ import 'package:restaurant_manager_mobile/data/models/staff/create_work_day_staf
 import 'package:restaurant_manager_mobile/data/models/staff/report_detail_resonse.dart';
 import 'package:restaurant_manager_mobile/data/models/staff/staff_modal.dart';
 import 'package:restaurant_manager_mobile/data/models/staff/work_day_staff_modal.dart';
-import 'package:restaurant_manager_mobile/data/repositories/staff/report_repository.dart';
+import 'package:restaurant_manager_mobile/data/repositories/report/report_repository.dart';
 import 'package:restaurant_manager_mobile/data/repositories/staff/staff_repository.dart';
 import 'package:restaurant_manager_mobile/data/repositories/staff/work_schedule_repository.dart';
 import 'package:restaurant_manager_mobile/data/services/storage_service.dart';
@@ -84,6 +84,8 @@ class WorkScheduleController extends GetxController {
     try {
       await fetchStaffList();
 
+      print(staffList);
+
       if (Get.arguments != null) {
         staff = Get.arguments as StaffModel;
       } else if (staffList.isNotEmpty) {
@@ -125,8 +127,9 @@ class WorkScheduleController extends GetxController {
   // Gọi API để lấy danh sách work day
   Future<void> fetchWorkDays() async {
     try {
+      final now = DateTime.now();
       final data = await workScheduleRepository.getWorkDayByUserIdAndMonth(
-          staff.userId, 4, 2025);
+          staff.userId, now.month, now.year);
       workDayList.value = data;
     } catch (e) {
       errorMessage.value = 'Lỗi khi tải ngày làm việc: $e';

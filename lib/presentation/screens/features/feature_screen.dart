@@ -44,7 +44,7 @@ class FeatureScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.background,
       body: Column(
-      children: [
+        children: [
           // Header
           const Header(title: "Chức năng"),
 
@@ -58,7 +58,7 @@ class FeatureScreen extends StatelessWidget {
               childAspectRatio: 0.85,
               children: [
                 _buildFeatureItem(
-                  icon: 'assets/icons/menu.png', 
+                  icon: 'assets/icons/menu.png',
                   label: 'Menu',
                   color: Colors.green,
                   onTap: () => Get.toNamed(RouteNames.menu),
@@ -104,6 +104,12 @@ class FeatureScreen extends StatelessWidget {
                   label: 'Nhà hàng',
                   color: Colors.purple,
                   onTap: () => Get.toNamed(RouteNames.restaurant),
+                ),
+                _buildFeatureItem(
+                  icon: 'assets/icons/report.png',
+                  label: 'Báo cáo',
+                  color: Colors.purple,
+                  onTap: () => Get.toNamed(RouteNames.report),
                 ),
               ],
             ),

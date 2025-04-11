@@ -21,6 +21,7 @@ class RouteNames {
   static const String staff = '/staff';
   static const String schedule = '/schedule';
   static const String restaurant = '/restaurant';
+  static const String report = '/report';
 
   // Feature Routes
   static const String orderDetails = '/orders/details';
