@@ -23,28 +23,10 @@ class UpdateUserRepository {
             'Bearer ${storageService.getString(StorageKeys.token)}'
       }, body: request.toJson());
 
-      // Kiểm tra phản hồi
-      if (response['statusCode'] == 200) {
-        // Thành công
-        return {'success': true, 'message': 'OK'};
-      } else if (response['statusCode'] == 417) {
-        // EXPECTATION_FAILED
-        Functions.showSnackbar(
-            "Cập nhật thất bại: Không thể cập nhật thông tin.");
-        return {'success': false, 'message': 'EXPECTATION_FAILED'};
-      } else if (response['statusCode'] == 401) {
-        // UNAUTHORIZED
-        Functions.showSnackbar(
-            "Cập nhật thất bại: Người dùng không được phép.");
-        return {'success': false, 'message': 'UNAUTHORIZED'};
+      if (response['success'] == true) {
+        return response;
       } else {
-        // Lỗi không xác định
-        Functions.showSnackbar(
-            "Đã xảy ra lỗi: ${response['message'] ?? 'Unknown error'}");
-        return {
-          'success': false,
-          'message': response['message'] ?? 'Unknown error'
-        };
+        return null;
       }
     } catch (e) {
       // Lỗi kết nối hoặc xử lý yêu cầu

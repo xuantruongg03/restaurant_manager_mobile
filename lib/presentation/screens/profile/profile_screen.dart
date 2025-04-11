@@ -105,8 +105,13 @@ class ProfileScreen extends GetView<ProfileController> {
                                   'Ngày sinh:',
                                   controller.birthDate.value.isEmpty
                                       ? 'Chưa cập nhật'
-                                      : controller
-                                          .birthDate.value, // Hiển thị ngày sinh
+                                      : DateTime.parse(controller.birthDate.value)
+                                          .toLocal()
+                                          .toString()
+                                          .split(' ')[0]
+                                          .split('-')
+                                          .reversed
+                                          .join('/'), 
                                   PhosphorIconsRegular.calendar,
                                 );
                               }),

@@ -47,10 +47,8 @@ class UpdateUserController extends GetxController {
       );
 
       final response = await repository.UpdateUser(request);
-
       if (response != null && response['success'] == true) {
         Functions.showSnackbar("Cập nhật thông tin thành công!");
-      print("Result to return: {name: $name, avt: $imageUrl.value, birthDate: ${birthDate?.toIso8601String()}}");
 
         // Truyền dữ liệu đã cập nhật về màn hình trước đó
         Get.back(result: {

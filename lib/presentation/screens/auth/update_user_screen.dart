@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -5,7 +7,6 @@ import 'package:restaurant_manager_mobile/core/theme/color_schemes.dart';
 import 'package:restaurant_manager_mobile/data/repositories/auth/update_user_repository.dart';
 import 'package:restaurant_manager_mobile/presentation/controllers/auth/update_user_controller.dart';
 import 'package:restaurant_manager_mobile/presentation/widgets/header.dart';
-import 'dart:io';
 
 class UpdateUserScreen extends StatelessWidget {
   final String idAccount;
