@@ -339,7 +339,10 @@ class StaffScreen extends StatelessWidget {
                             color: Colors.transparent,
                             child: InkWell(
                               onTap: () => Get.toNamed(RouteNames.workSchedule,
-                                  arguments: staff),
+                                      arguments: staff)
+                                  ?.then((_) {
+                                controller.fetchStaffList();
+                              }),
                               borderRadius: BorderRadius.circular(5),
                               splashColor:
                                   Colors.grey.withOpacity(0.2), // Hiệu ứng nhấn
