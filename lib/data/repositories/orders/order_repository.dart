@@ -23,30 +23,35 @@ class OrderRepository extends GetConnect {
         'Authorization':
             'Bearer ${storageService.getString(StorageKeys.token)}'
       });
-      print("response: $response");
-      if (response['success'] == true) {
+            if (response['success'] == true) {
         final data = response['data']['result'];
         if (data is List && data.isNotEmpty) {
-          final res = data[0];
-          var foods = res['foods'];
-          if (foods is String) {
-            try {
-              foods = jsonDecode(foods);
-            } catch (e) {
-              print("Error parsing foods string: $e");
-              throw Exception('Invalid foods data format');
+          List<OrderModal> allOrders = [];
+          
+          for (var tableData in data) {
+            var foods = tableData['foods'];
+            if (foods is String) {
+              try {
+                foods = jsonDecode(foods);
+              } catch (e) {
+                print("Error parsing foods string: $e");
+                throw Exception('Invalid foods data format');
+              }
+            }
+            
+            if (foods is List) {
+              final orders = foods
+                  .map((food) => OrderModal.fromJson(food, tableData['nameTable']))
+                  .toList();
+              allOrders.addAll(orders);
+            } else {
+              throw Exception(
+                  'Invalid format for foods: Expected List but got ${foods.runtimeType}');
             }
           }
-          if (foods is List) {
-            final orders = foods
-                .map((food) => OrderModal.fromJson(food, res['nameTable']))
-                .toList();
-            return orders;
-          } else {
-            throw Exception(
-                'Invalid format for foods: Expected List but got ${foods.runtimeType}');
-          }
-        } 
+          
+          return allOrders;
+        }
         return null;
       }
       return null;

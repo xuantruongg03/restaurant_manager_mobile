@@ -59,8 +59,9 @@ class OrderController extends GetxController {
   Future<void> fetchOrders() async {
     try {
       isLoading.value = true;
-      final items = await orderRepository.getOrders();
       orders.clear();
+      final items = await orderRepository.getOrders();
+      print('items $items');
       if (items == null) {
         return;
       }

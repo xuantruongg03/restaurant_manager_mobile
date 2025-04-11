@@ -27,18 +27,14 @@ class RestaurantScreen extends GetView<RestaurantController> {
     required String status,
     required bool isSelected,
   }) {
-    return FutureBuilder<bool>(
-      future: PermissionUtils.checkPrimarySelectionPermission(),
-      builder: (context, snapshot) {
-        final bool canSelect = snapshot.data ?? false;
-        
-        return InkWell(
+    print('idRestaurant $idRestaurant');
+    return InkWell(
           onTap: () {
             _showEditNameRestaurantModal(RestaurantModel(id: idRestaurant, name: title, address: address, color: color, isSelected: isSelected, status: status));
           },
-          onDoubleTap: canSelect ? () => {
+          onDoubleTap: () => {
             controller.selectRestaurant(idRestaurant)
-          } : null,
+          },
           onLongPress: () async {
             if (await PermissionUtils.checkDeletePermissionWithModal()) {
               controller.deleteRestaurant(idRestaurant);
@@ -122,8 +118,6 @@ class RestaurantScreen extends GetView<RestaurantController> {
             ),
           ),
         );
-      }
-    );
   }
 
   @override

@@ -41,19 +41,19 @@ class RestaurantController extends GetxController {
   }
 
   Future<void> selectRestaurant(String idRestaurant) async {
-    if (!await PermissionUtils.checkPrimarySelectionPermissionWithModal()) {
+    if (!await PermissionUtils.checkOwnerPermission()) {
       return;
     }
-
+    print('selectRestaurant $idRestaurant');
     final storageService = await StorageService.getInstance();
     final restaurants = storageService.getString(StorageKeys.restaurants);
     final listRestaurants = jsonDecode(restaurants ?? '[]') as List;
     
     // Cập nhật selected trong storage
     for (var item in listRestaurants) {
-      if (item['idRestaurant'] == idRestaurant) {
+      if (item['id'] == idRestaurant) {
         item['selected'] = true;
-        storageService.setString(StorageKeys.restaurantId, item['idRestaurant']);
+        storageService.setString(StorageKeys.restaurantId, item['id']);
       } else {
         item['selected'] = false;
       }
