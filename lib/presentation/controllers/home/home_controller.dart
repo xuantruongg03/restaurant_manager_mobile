@@ -19,32 +19,32 @@ class HomeController extends GetxController {
     },
     {
       'title': 'Thống kê',
-      'icon': 'assets/icons/menu.png',
+      'icon': 'assets/icons/chart.png',
       'route': RouteNames.menu
     },
     {
-      'title': 'Thống kê',
-      'icon': 'assets/icons/menu.png',
+      'title': 'Bàn',
+      'icon': 'assets/icons/table.png',
       'route': RouteNames.menu
     },
     {
-      'title': 'Thống kê',
-      'icon': 'assets/icons/menu.png',
+      'title': 'Thanh toán',
+      'icon': 'assets/icons/payment.png',
       'route': RouteNames.menu
     },
     {
-      'title': 'Thống kê',
-      'icon': 'assets/icons/menu.png',
+      'title': 'Lịch làm việc',
+      'icon': 'assets/icons/schedule.png',
       'route': RouteNames.menu
     },
     {
-      'title': 'Thống kê',
-      'icon': 'assets/icons/menu.png',
+      'title': 'Nhà hàng',
+      'icon': 'assets/icons/restaurant.png',
       'route': RouteNames.menu
     },
     {
-      'title': 'Thống kê',
-      'icon': 'assets/icons/menu.png',
+      'title': 'Báo cáo',
+      'icon': 'assets/icons/report.png',
       'route': RouteNames.feature
     },
   ];

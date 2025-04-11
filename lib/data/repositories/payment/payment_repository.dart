@@ -21,16 +21,20 @@ class PaymentRepository extends GetConnect {
     }
   }
 
-  Future<PaymentModel> getPayment() async {
+  Future<PaymentModel?> getPayment() async {
     final storage = await StorageService.getInstance();
-    const idUser = "d19a3821-003f-4ec8-a136-9a32c8e07de0";
-    // final idUser = storage.getString(StorageKeys.userId);
+    final idUser = storage.getString(StorageKeys.userId);
     final response = await ApiClient.get(
         '/payment/get/$idUser',
         headers: {
           'Authorization': 'Bearer ${storage.getString(StorageKeys.token)}',
         });
-    return PaymentModel.fromJson(response['data']['result']);
+    print('response: $response');
+    if (response['success'] == true) {
+      return PaymentModel.fromJson(response['data']['result']);
+    } else {
+      return null;
+    }
   }
 
   Future<bool> updatePayment(PaymentModel payment) async {

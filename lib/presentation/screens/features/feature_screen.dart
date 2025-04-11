@@ -116,7 +116,7 @@ class FeatureScreen extends StatelessWidget {
                   icon: 'assets/icons/report.png',
                   label: 'Báo cáo',
                   color: Colors.purple,
-                  onTap: () => Get.toNamed(RouteNames.report),
+                  onTap: () => PermissionUtils.navigateIfOwner(RouteNames.report),
                 ),
               ],
             ),

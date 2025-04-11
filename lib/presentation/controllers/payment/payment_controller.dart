@@ -30,11 +30,15 @@ class PaymentController extends GetxController {
     isLoading.value = true;
     try {
       final fetchedPayment = await repository.getPayment();
-      partnercode.text = fetchedPayment.partnercode;
-      secretkey.text = fetchedPayment.secretkey;
-      accesskey.text = fetchedPayment.accesskey;
-      idPayment.value = fetchedPayment.idPayment;
-      mode.value = 'update';
+      if (fetchedPayment != null) {
+        partnercode.text = fetchedPayment.partnercode;
+        secretkey.text = fetchedPayment.secretkey;
+        accesskey.text = fetchedPayment.accesskey;
+        idPayment.value = fetchedPayment.idPayment;
+        mode.value = 'update';
+      } else {
+        mode.value = 'create';
+      }
     } catch (e) {
       Functions.showSnackbar("Lỗi lấy thanh toán");
     } finally {
