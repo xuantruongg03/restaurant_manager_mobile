@@ -1,14 +1,14 @@
-import 'dart:convert';
-
 import 'package:get/get.dart';
 import 'package:restaurant_manager_mobile/data/models/tables/table_modal.dart';
 import 'package:restaurant_manager_mobile/data/repositories/tables/table_repository.dart';
 import 'package:restaurant_manager_mobile/data/services/storage_service.dart';
+import 'package:restaurant_manager_mobile/presentation/controllers/tables/merge_table_controller.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/modals/merge_modal.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/modals/qr_modal.dart';
+import 'package:restaurant_manager_mobile/presentation/screens/modals/yn_modal.dart';
 import 'package:restaurant_manager_mobile/utils/constant.dart';
 import 'package:restaurant_manager_mobile/utils/functions.dart';
-import 'package:restaurant_manager_mobile/presentation/controllers/tables/merge_table_controller.dart';
+import 'package:restaurant_manager_mobile/utils/permission_utils.dart';
 
 class TablesController extends GetxController {
   final TablesRepository repository;
@@ -119,5 +119,28 @@ class TablesController extends GetxController {
       return 'Trống';
     }
     return 'Đang hoạt động';
+  }
+
+  Future<void> deleteTable(String tableId) async {
+    if (!await PermissionUtils.checkOwnerPermissionWithModal()) {
+      return;
+    }
+
+    Get.dialog(
+      YNModal(
+        title: "Xóa bàn",
+        content: "Bạn có chắc muốn xóa bàn này không?",
+        yesText: "Có",
+        noText: "Không",
+        onYes: (value) async {
+          if (value) {
+            final response = await repository.deleteTable(tableId);
+            if (response) {
+              fetchTables();
+            }
+          }
+        },
+      ),
+    );
   }
 }

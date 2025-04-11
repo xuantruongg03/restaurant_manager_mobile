@@ -7,6 +7,7 @@ import 'package:restaurant_manager_mobile/presentation/widgets/header.dart';
 import 'package:restaurant_manager_mobile/presentation/controllers/menus/menu_controller.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/modals/edit_name_menu_modal.dart';
 import 'package:restaurant_manager_mobile/utils/formats.dart';
+import 'package:restaurant_manager_mobile/utils/permission_utils.dart';
 
 class MenuScreen extends GetView<MenusController> {
   const MenuScreen({super.key});
@@ -125,7 +126,10 @@ class MenuScreen extends GetView<MenusController> {
               title: "Menu",
               showActionButton: true,
               showBackButton: true,
-              onActionPressed: () {
+              onActionPressed: () async {
+                if (!await PermissionUtils.checkOwnerPermissionWithModal()) {
+                  return;
+                }
                 Get.toNamed(RouteNames.addMenu);
               }),
           const SizedBox(height: 12),

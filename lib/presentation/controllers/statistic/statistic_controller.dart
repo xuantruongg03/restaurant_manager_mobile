@@ -6,6 +6,7 @@ class StatisticController extends GetxController {
   final StatisticRepository _statisticRepository = StatisticRepository();
 
   final RxList<StatisticModel> _statisticList = <StatisticModel>[].obs;
+  final RxString selectedFilter = '7D'.obs;
   final RxBool _isLoading = false.obs;
   final RxString _error = ''.obs;
 

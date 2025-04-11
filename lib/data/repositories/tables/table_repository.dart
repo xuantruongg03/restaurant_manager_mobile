@@ -80,4 +80,23 @@ class TablesRepository {
     }
     return false;
   }
+
+  Future<bool> deleteTable(String tableId) async {
+    final auth = await AuthService().getAuth();
+    if (auth == null) {
+      Get.toNamed(RouteNames.login);
+      return false;
+    }
+    final storageService = await StorageService.getInstance();
+    final response = await ApiClient.delete(
+      '/table/$tableId',
+      headers: {
+        'Authorization': 'Bearer ${storageService.getString(StorageKeys.token)}'
+      },
+    );
+    if (response['success'] == true) {
+      return true;
+    }
+    return false;
+  }
 }

@@ -1,47 +1,61 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:restaurant_manager_mobile/presentation/widgets/header.dart';
+import 'package:get/get.dart';
+import 'package:restaurant_manager_mobile/utils/permission_utils.dart';
+import 'package:restaurant_manager_mobile/presentation/screens/modals/permission_denied_modal.dart';
+import 'package:restaurant_manager_mobile/presentation/controllers/statistic/statistic_controller.dart';
 
-class StatisticScreen extends StatefulWidget {
+class StatisticScreen extends GetView<StatisticController> {
   const StatisticScreen({super.key});
 
   @override
-  _StatisticScreenState createState() => _StatisticScreenState();
-}
-
-class _StatisticScreenState extends State<StatisticScreen> {
-  String _selectedFilter = '7D';
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          const Header(
-            title: 'Thống kê',
-            showBackButton: true,
-          ),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    _buildTitle(),
-                    const SizedBox(height: 24),
-                    _buildChart(),
-                    const SizedBox(height: 24),
-                    _buildTimeFilter(),
-                    const SizedBox(height: 24),
-                    _buildLegend(),
-                  ],
+    return FutureBuilder<bool>(
+      future: PermissionUtils.checkOwnerPermission(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (snapshot.data != true) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            Get.back();
+            Get.dialog(const PermissionDeniedModal());
+          });
+          return const SizedBox.shrink();
+        }
+
+        return Scaffold(
+          body: Column(
+            children: [
+              const Header(
+                title: 'Thống kê',
+                showBackButton: true,
+              ),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        _buildTitle(),
+                        const SizedBox(height: 24),
+                        _buildChart(),
+                        const SizedBox(height: 24),
+                        _buildTimeFilter(),
+                        const SizedBox(height: 24),
+                        _buildLegend(),
+                      ],
+                    ),
+                  ),
                 ),
               ),
-            ),
+            ],
           ),
-        ],
-      ),
+        );
+      }
     );
   }
 
@@ -58,7 +72,7 @@ class _StatisticScreenState extends State<StatisticScreen> {
   }
 
   List<FlSpot> _getRevenueSpots() {
-    switch (_selectedFilter) {
+    switch (controller.selectedFilter.value) {
       case '7D':
         return [
           const FlSpot(0, 1.5),
@@ -93,7 +107,7 @@ class _StatisticScreenState extends State<StatisticScreen> {
   }
 
   List<FlSpot> _getCostSpots() {
-    switch (_selectedFilter) {
+    switch (controller.selectedFilter.value) {
       case '7D':
         return [
           const FlSpot(0, 1.0),
@@ -128,8 +142,8 @@ class _StatisticScreenState extends State<StatisticScreen> {
   }
 
   Widget _buildChart() {
-    double maxX = _selectedFilter == '7D' ? 6 : _selectedFilter == '1M' ? 28 : 12;
-    double interval = _selectedFilter == '7D' ? 1 : _selectedFilter == '1M' ? 7 : 2;
+    double maxX = controller.selectedFilter.value == '7D' ? 6 : controller.selectedFilter.value == '1M' ? 28 : 12;
+    double interval = controller.selectedFilter.value == '7D' ? 1 : controller.selectedFilter.value == '1M' ? 7 : 2;
 
     return Container(
       height: 300,
@@ -183,9 +197,9 @@ class _StatisticScreenState extends State<StatisticScreen> {
                   reservedSize: 30,
                   getTitlesWidget: (value, meta) {
                     String text;
-                    if (_selectedFilter == '1M') {
+                    if (controller.selectedFilter.value == '1M') {
                       text = '${value.toInt()}d';
-                    } else if (_selectedFilter == '1Y') {
+                    } else if (controller.selectedFilter.value == '1Y') {
                       text = 'T${value.toInt() + 1}';
                     } else {
                       text = '${value.toInt() + 1}';
@@ -226,7 +240,7 @@ class _StatisticScreenState extends State<StatisticScreen> {
             minX: 0,
             maxX: maxX,
             minY: 0,
-            maxY: _selectedFilter == '1Y' ? 5 : 4,
+            maxY: controller.selectedFilter.value == '1Y' ? 5 : 4,
             lineBarsData: [
               _createLineChartBarData(
                 spots: _getRevenueSpots(),
@@ -256,7 +270,7 @@ class _StatisticScreenState extends State<StatisticScreen> {
       barWidth: 3,
       isStrokeCapRound: true,
       dotData: FlDotData(
-        show: _selectedFilter != '7D',
+          show: controller.selectedFilter.value != '7D',
         getDotPainter: (spot, percent, barData, index) {
           return FlDotCirclePainter(
             radius: 4,
@@ -294,22 +308,16 @@ class _StatisticScreenState extends State<StatisticScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          _buildFilterOption('7D', isSelected: _selectedFilter == '7D', onTap: () {
-            setState(() {
-              _selectedFilter = '7D';
-            });
+          _buildFilterOption('7D', isSelected: controller.selectedFilter.value == '7D', onTap: () {
+            controller.selectedFilter.value = '7D';
           }),
           const SizedBox(width: 16),
-          _buildFilterOption('1M', isSelected: _selectedFilter == '1M', onTap: () {
-            setState(() {
-              _selectedFilter = '1M';
-            });
+          _buildFilterOption('1M', isSelected: controller.selectedFilter.value == '1M', onTap: () {
+            controller.selectedFilter.value = '1M';
           }),
           const SizedBox(width: 16),
-          _buildFilterOption('1Y', isSelected: _selectedFilter == '1Y', onTap: () {
-            setState(() {
-              _selectedFilter = '1Y';
-            });
+          _buildFilterOption('1Y', isSelected: controller.selectedFilter.value == '1Y', onTap: () {
+            controller.selectedFilter.value = '1Y';
           }),
         ],
       ),

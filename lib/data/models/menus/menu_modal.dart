@@ -29,7 +29,7 @@ class MenuModel {
       status: json['status'],
       createdBy: "truong",
       createdAt: json['createAt'],
-      isActive: json['status'] == "Active",
+      isActive: true,
       color: json['color'] != null 
           ? Color(json['color']) 
           : Color((Random().nextDouble() * 0xFFFFFF).toInt()).withOpacity(1.0),

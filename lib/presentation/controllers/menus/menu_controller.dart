@@ -4,6 +4,7 @@ import 'package:restaurant_manager_mobile/data/models/menus/menu_modal.dart';
 import 'package:restaurant_manager_mobile/data/repositories/menus/menu_repository.dart';
 import 'package:restaurant_manager_mobile/data/services/storage_service.dart';
 import 'package:restaurant_manager_mobile/utils/constant.dart';
+import 'package:restaurant_manager_mobile/utils/permission_utils.dart';
 
 class MenusController extends GetxController {
   final MenuRepository repository;
@@ -36,7 +37,8 @@ class MenusController extends GetxController {
       final storage = await StorageService.getInstance();
       final menu = storage.getList(StorageKeys.menu);
       for (var item in items) {
-        final List<Map<String, dynamic>> menuList = List<Map<String, dynamic>>.from(menu as List);
+        final List<Map<String, dynamic>> menuList =
+            List<Map<String, dynamic>>.from(menu as List);
         for (var itemMenu in menuList) {
           if (itemMenu['idMenu'] == item.idMenu) {
             item.isSelected = itemMenu['isSelected'];
@@ -52,9 +54,13 @@ class MenusController extends GetxController {
   }
 
   Future<void> updateStatusMenu(String idMenu, String status) async {
+    if (!await PermissionUtils.checkOwnerPermissionWithModal()) {
+      return;
+    }
     final storage = await StorageService.getInstance();
     final menu = storage.getList(StorageKeys.menu);
-    final List<Map<String, dynamic>> menuList = List<Map<String, dynamic>>.from(menu as List);
+    final List<Map<String, dynamic>> menuList =
+        List<Map<String, dynamic>>.from(menu as List);
     for (var item in menuList) {
       if (item['idMenu'] == idMenu) {
         item['isSelected'] = true;
@@ -63,12 +69,12 @@ class MenusController extends GetxController {
         item['isSelected'] = false;
       }
     }
-    print("menuList $menuList");
     storage.setList(StorageKeys.menu, menuList);
     fetchMenuItems();
   }
 
-  Future<void> updateNameMenu(String idMenu, String nameMenu, String status) async {
+  Future<void> updateNameMenu(
+      String idMenu, String nameMenu, String status) async {
     isUpdating.value = true;
     final response = await repository.updateMenu(idMenu, nameMenu, status);
     if (response == null) {

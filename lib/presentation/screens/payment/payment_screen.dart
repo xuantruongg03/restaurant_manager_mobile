@@ -2,45 +2,64 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:restaurant_manager_mobile/presentation/widgets/header.dart';
 import 'package:restaurant_manager_mobile/presentation/controllers/payment/payment_controller.dart';
+import 'package:restaurant_manager_mobile/utils/permission_utils.dart';
+import 'package:restaurant_manager_mobile/presentation/screens/modals/permission_denied_modal.dart';
 
 class PaymentScreen extends GetView<PaymentController> {
   const PaymentScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          Obx(() => Header(
-                title: 'Cấu hình thanh toán',
-                showBackButton: true,
-                showActionButton: true,
-                actionButtonText: controller.mode.value == 'create' ? 'Tạo' : 'Cập nhật',
-                onActionPressed: () {
-                  if (controller.mode.value == 'create') {
-                    controller.createPayment();
-                  } else {
-                    controller.updatePayment();
-                  }
-                },
-              )),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildWarningSection(),
-                    const SizedBox(height: 32),
-                    _buildPaymentForm(),
-                  ],
+    return FutureBuilder<bool>(
+      future: PermissionUtils.checkOwnerPermissionWithModal(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (snapshot.data != true) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            Get.back();
+            Get.dialog(const PermissionDeniedModal());
+          });
+          return const SizedBox.shrink();
+        }
+
+        return Scaffold(
+          body: Column(
+            children: [
+              Obx(() => Header(
+                    title: 'Cấu hình thanh toán',
+                    showBackButton: true,
+                    showActionButton: true,
+                    actionButtonText: controller.mode.value == 'create' ? 'Tạo' : 'Cập nhật',
+                    onActionPressed: () {
+                      if (controller.mode.value == 'create') {
+                        controller.createPayment();
+                      } else {
+                        controller.updatePayment();
+                      }
+                    },
+                  )),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildWarningSection(),
+                        const SizedBox(height: 32),
+                        _buildPaymentForm(),
+                      ],
+                    ),
+                  ),
                 ),
               ),
-            ),
+            ],
           ),
-        ],
-      ),
+        );
+      }
     );
   }
 

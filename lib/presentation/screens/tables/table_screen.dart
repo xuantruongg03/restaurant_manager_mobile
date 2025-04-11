@@ -6,6 +6,7 @@ import 'package:restaurant_manager_mobile/config/routes/route_names.dart';
 import 'package:restaurant_manager_mobile/core/theme/color_schemes.dart';
 import 'package:restaurant_manager_mobile/presentation/controllers/tables/table_controller.dart';
 import 'package:restaurant_manager_mobile/presentation/widgets/header.dart';
+import 'package:restaurant_manager_mobile/utils/permission_utils.dart';
 
 class TableScreen extends GetView<TablesController> {
   const TableScreen({super.key});
@@ -19,6 +20,7 @@ class TableScreen extends GetView<TablesController> {
       required bool isMerge}) {
     return GestureDetector(
       onLongPress: () => controller.showQRModal(name, idTable),
+      onDoubleTap: () => controller.deleteTable(idTable),
       onTap: () => {
         if (status != "Available") {
           Get.toNamed(RouteNames.bill, arguments: {
@@ -151,7 +153,10 @@ class TableScreen extends GetView<TablesController> {
             title: "Bàn",
             showBackButton: true,
             showActionButton: true,
-            onActionPressed: () {
+            onActionPressed: () async {
+              if (!await PermissionUtils.checkOwnerPermissionWithModal()) {
+                return;
+              }
               Get.toNamed(RouteNames.addTable);
             },
             actionButtonText: "Thêm",

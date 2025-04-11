@@ -7,6 +7,7 @@ import 'package:restaurant_manager_mobile/data/repositories/restaurants/restaura
 import 'package:restaurant_manager_mobile/data/services/storage_service.dart';
 import 'package:restaurant_manager_mobile/presentation/screens/modals/yn_modal.dart';
 import 'package:restaurant_manager_mobile/utils/constant.dart';
+import 'package:restaurant_manager_mobile/utils/permission_utils.dart';
 
 class RestaurantController extends GetxController {
   final RestaurantRepository repository = RestaurantRepository();
@@ -40,6 +41,10 @@ class RestaurantController extends GetxController {
   }
 
   Future<void> selectRestaurant(String idRestaurant) async {
+    if (!await PermissionUtils.checkPrimarySelectionPermissionWithModal()) {
+      return;
+    }
+
     final storageService = await StorageService.getInstance();
     final restaurants = storageService.getString(StorageKeys.restaurants);
     final listRestaurants = jsonDecode(restaurants ?? '[]') as List;

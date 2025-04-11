@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:restaurant_manager_mobile/config/routes/route_names.dart';
 import 'package:restaurant_manager_mobile/core/theme/color_schemes.dart';
 import 'package:restaurant_manager_mobile/presentation/widgets/header.dart';
+import 'package:restaurant_manager_mobile/utils/permission_utils.dart';
 
 class FeatureScreen extends StatelessWidget {
   const FeatureScreen({super.key});
@@ -61,25 +62,31 @@ class FeatureScreen extends StatelessWidget {
                   icon: 'assets/icons/menu.png', 
                   label: 'Menu',
                   color: Colors.green,
-                  onTap: () => Get.toNamed(RouteNames.menu),
+                  onTap: () => PermissionUtils.navigateIfHasPermission(
+                    RouteNames.menu,
+                    ['Owner', 'Manager'],
+                  ),
                 ),
                 _buildFeatureItem(
                   icon: 'assets/icons/reservation.png',
                   label: 'Bàn',
                   color: Colors.brown,
-                  onTap: () => Get.toNamed(RouteNames.tables),
+                  onTap: () => PermissionUtils.navigateIfHasPermission(
+                    RouteNames.tables,
+                    ['Owner', 'Manager', 'Waiter'],
+                  ),
                 ),
                 _buildFeatureItem(
                   icon: 'assets/icons/billing.png',
                   label: 'Thanh toán',
                   color: Colors.amber,
-                  onTap: () => Get.toNamed(RouteNames.payment),
+                  onTap: () => PermissionUtils.navigateIfOwner(RouteNames.payment),
                 ),
                 _buildFeatureItem(
                   icon: 'assets/icons/statistic.png',
                   label: 'Thống kê',
                   color: Colors.blue,
-                  onTap: () => Get.toNamed(RouteNames.statistic),
+                  onTap: () => PermissionUtils.navigateIfOwner(RouteNames.statistic),
                 ),
                 _buildFeatureItem(
                   icon: 'assets/icons/person-group.png',
@@ -87,12 +94,12 @@ class FeatureScreen extends StatelessWidget {
                   color: Colors.orange,
                   onTap: () => Get.toNamed(RouteNames.staff),
                 ),
-                _buildFeatureItem(
-                  icon: 'assets/icons/sale.png',
-                  label: 'Chiến lược',
-                  color: Colors.red,
-                  onTap: () => Get.toNamed(RouteNames.strategy),
-                ),
+                // _buildFeatureItem(
+                //   icon: 'assets/icons/sale.png',
+                //   label: 'Chiến lược',
+                //   color: Colors.red,
+                //   onTap: () => Get.toNamed(RouteNames.strategy),
+                // ),
                 _buildFeatureItem(
                   icon: 'assets/icons/schedule.png',
                   label: 'Lịch làm việc',
@@ -103,7 +110,7 @@ class FeatureScreen extends StatelessWidget {
                   icon: 'assets/icons/restaurant.png',
                   label: 'Nhà hàng',
                   color: Colors.purple,
-                  onTap: () => Get.toNamed(RouteNames.restaurant),
+                  onTap: () => PermissionUtils.navigateIfOwner(RouteNames.restaurant),
                 ),
               ],
             ),

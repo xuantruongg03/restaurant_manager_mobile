@@ -6,11 +6,12 @@ class EditNameMenuModal extends StatefulWidget {
   final String nameMenu;
   final Function(String) onUpdateNameMenu;
 
-  const EditNameMenuModal(
-      {super.key,
-      required this.idMenu,
-      required this.nameMenu,
-      required this.onUpdateNameMenu});
+  const EditNameMenuModal({
+    super.key,
+    required this.idMenu,
+    required this.nameMenu,
+    required this.onUpdateNameMenu,
+  });
 
   @override
   State<EditNameMenuModal> createState() => _EditNameMenuModalState();
@@ -129,7 +130,7 @@ class _EditNameMenuModalState extends State<EditNameMenuModal> {
                 const SizedBox(height: 12),
                 OutlinedButton(
                   onPressed: () {
-                    Navigator.pop(context);
+                    Get.back();
                   },
                   style: OutlinedButton.styleFrom(
                     minimumSize: const Size(double.infinity, 48),
