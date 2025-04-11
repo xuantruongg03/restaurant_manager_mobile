@@ -13,39 +13,39 @@ class HomeController extends GetxController {
   final RestaurantRepository restaurantRepository = RestaurantRepository();
   final List<Map<String, dynamic>> quickAccessItems = [
     {
-      'title': 'Báo cáo',
+      'title': 'Menu',
       'icon': 'assets/icons/menu.png',
       'route': RouteNames.menu
     },
     {
       'title': 'Thống kê',
-      'icon': 'assets/icons/chart.png',
-      'route': RouteNames.menu
+      'icon': 'assets/icons/statistic.png',
+      'route': RouteNames.statistic
     },
     {
       'title': 'Bàn',
-      'icon': 'assets/icons/table.png',
-      'route': RouteNames.menu
+      'icon': 'assets/icons/reservation.png',
+      'route': RouteNames.tables
     },
     {
       'title': 'Thanh toán',
-      'icon': 'assets/icons/payment.png',
-      'route': RouteNames.menu
+      'icon': 'assets/icons/billing.png',
+      'route': RouteNames.payment
     },
     {
       'title': 'Lịch làm việc',
       'icon': 'assets/icons/schedule.png',
-      'route': RouteNames.menu
+      'route': RouteNames.schedule
     },
     {
       'title': 'Nhà hàng',
       'icon': 'assets/icons/restaurant.png',
-      'route': RouteNames.menu
+      'route': RouteNames.restaurant
     },
     {
       'title': 'Báo cáo',
       'icon': 'assets/icons/report.png',
-      'route': RouteNames.feature
+      'route': RouteNames.report
     },
   ];
 
