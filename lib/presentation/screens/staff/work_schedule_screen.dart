@@ -33,6 +33,15 @@ class WorkScheduleScreen extends StatelessWidget {
                   showActionButton: true,
                   actionButtonText: 'Báo cáo',
                   onActionPressed: () {
+                    if (controller.staff.value!.type == 'FullTime') {
+                      ScaffoldMessenger.of(Get.context!).showSnackBar(
+                        const SnackBar(
+                            content: Text(
+                                'Không thể tạo báo cáo cho nhân viên FullTime')),
+                      );
+                      return;
+                    }
+
                     showReportProblem(controller);
                   },
                 )
@@ -335,86 +344,89 @@ class WorkScheduleScreen extends StatelessWidget {
 
   // Widget to show table
   Widget _buildTable(WorkScheduleController controller) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(
-            height: 10,
-          ),
-          Table(
-            border: TableBorder.all(color: Colors.grey, width: 1),
-            children: [
-              // Hàng tiêu đề
-              TableRow(
-                decoration: BoxDecoration(
-                    color: Colors.grey[300]), // Màu nền cho header
-                children: [
-                  _buildTableCell('Ngày', isHeader: true),
-                  _buildTableCell('Giờ', isHeader: true),
-                  _buildTableCell('Hành động', isHeader: true),
-                ],
-              ),
-              // Hàng dữ liệu
-              // Dữ liệu từ workDayList
-              ...controller.filteredWorkDays.map((item) {
-                final workDateFormatted = formatWorkDate(item.workDate);
-                final startTime = formatWorkTime(item.startTime);
-                final endTime = formatWorkTime(item.endTime);
-                final timeRange = '$startTime - $endTime';
-                return TableRow(
-                  decoration: const BoxDecoration(color: Colors.white),
+    return Obx(() {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(
+              height: 10,
+            ),
+            Table(
+              border: TableBorder.all(color: Colors.grey, width: 1),
+              children: [
+                // Hàng tiêu đề
+                TableRow(
+                  decoration: BoxDecoration(
+                      color: Colors.grey[300]), // Màu nền cho header
                   children: [
-                    _buildTableCell(workDateFormatted),
-                    _buildTableCell(timeRange),
-                    controller.isOwner.value
-                        ? _buildTableCellWithTwoIcons(
-                            onEdit: () {
-                              showCreateWorkDayTimeDialog(controller,
-                                  data: CreateWorkDayStaffModel(
-                                      username: controller.staff.username,
-                                      dateOff: '',
-                                      workDay: workDateFormatted,
-                                      startTime: startTime,
-                                      endTime: endTime),
-                                  workDayId: item.idWorkDay);
-                            },
-                            onDelete: () {
-                              controller
-                                  .showDeleteConfirmDialog(item.idWorkDay);
-                            },
-                          )
-                        : _buildTableCellWithIcon(
-                            controller,
-                            Icons.remove_red_eye,
-                            workDateFormatted,
-                            item.idWorkDay),
+                    _buildTableCell('Ngày', isHeader: true),
+                    _buildTableCell('Giờ', isHeader: true),
+                    _buildTableCell('Hành động', isHeader: true),
                   ],
-                );
-              }),
-            ],
-          ),
-          if (controller.filteredWorkDays.isEmpty)
-            Center(
-                child: Padding(
-              padding: const EdgeInsets.all(10),
-              child: Text(
-                'Không có thông tin phù hợp',
-                style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.grey[700]),
-              ),
-            )),
-          const SizedBox(height: 10), // Khoảng cách với tổng công
-          if (controller.filteredWorkDays.isNotEmpty)
-            Text('Tổng công: ${controller.staff.shifts} tiếng',
-                style:
-                    const TextStyle(fontWeight: FontWeight.w500, fontSize: 15))
-        ],
-      ),
-    );
+                ),
+                // Hàng dữ liệu
+                // Dữ liệu từ workDayList
+                ...controller.filteredWorkDays.map((item) {
+                  final workDateFormatted = formatWorkDate(item.workDate);
+                  final startTime = formatWorkTime(item.startTime);
+                  final endTime = formatWorkTime(item.endTime);
+                  final timeRange = '$startTime - $endTime';
+                  return TableRow(
+                    decoration: const BoxDecoration(color: Colors.white),
+                    children: [
+                      _buildTableCell(workDateFormatted),
+                      _buildTableCell(timeRange),
+                      controller.isOwner.value
+                          ? _buildTableCellWithTwoIcons(
+                              onEdit: () {
+                                showCreateWorkDayTimeDialog(controller,
+                                    data: CreateWorkDayStaffModel(
+                                        username:
+                                            controller.staff.value!.username,
+                                        dateOff: '',
+                                        workDay: workDateFormatted,
+                                        startTime: startTime,
+                                        endTime: endTime),
+                                    workDayId: item.idWorkDay);
+                              },
+                              onDelete: () {
+                                controller
+                                    .showDeleteConfirmDialog(item.idWorkDay);
+                              },
+                            )
+                          : _buildTableCellWithIcon(
+                              controller,
+                              Icons.remove_red_eye,
+                              workDateFormatted,
+                              item.idWorkDay),
+                    ],
+                  );
+                }),
+              ],
+            ),
+            if (controller.filteredWorkDays.isEmpty)
+              Center(
+                  child: Padding(
+                padding: const EdgeInsets.all(10),
+                child: Text(
+                  'Không có thông tin phù hợp',
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.grey[700]),
+                ),
+              )),
+            const SizedBox(height: 10), // Khoảng cách với tổng công
+            if (controller.filteredWorkDays.isNotEmpty)
+              Text('Tổng công: ${controller.staff.value!.shifts} tiếng',
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w500, fontSize: 15))
+          ],
+        ),
+      );
+    });
   }
 
   /// Widget hỗ trợ căn giữa nội dung trong TableCell và thêm padding
@@ -500,7 +512,7 @@ class WorkScheduleScreen extends StatelessWidget {
               foregroundColor: Colors.black,
               tooltip: 'Thêm lịch làm việc',
               onPressed: () {
-                if (controller.staff.type == 'FullTime') {
+                if (controller.staff.value!.type == 'FullTime') {
                   ScaffoldMessenger.of(Get.context!).showSnackBar(
                     const SnackBar(
                         content: Text(

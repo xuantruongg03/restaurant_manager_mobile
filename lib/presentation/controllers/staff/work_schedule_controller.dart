@@ -30,7 +30,8 @@ class WorkScheduleController extends GetxController {
       required this.staffRepository,
       required this.reportRepository});
 
-  late StaffModel staff;
+  // late StaffModel staff;
+  final Rx<StaffModel?> staff = Rx<StaffModel?>(null);
   final RxList<StaffModel> staffList = <StaffModel>[].obs;
   final Rx<StaffModel?> filteredStaff = Rx<StaffModel?>(null);
   final RxList<WorkDayStaffModal> workDayList = <WorkDayStaffModal>[].obs;
@@ -87,12 +88,12 @@ class WorkScheduleController extends GetxController {
       print(staffList);
 
       if (Get.arguments != null) {
-        staff = Get.arguments as StaffModel;
+        staff.value = Get.arguments as StaffModel;
       } else if (staffList.isNotEmpty) {
-        staff = staffList[0];
+        staff.value = staffList[0];
       }
 
-      filteredStaff.value = staff;
+      filteredStaff.value = staff.value;
 
       await fetchWorkDays(); // Phải là await thật sự
 
@@ -129,7 +130,7 @@ class WorkScheduleController extends GetxController {
     try {
       final now = DateTime.now();
       final data = await workScheduleRepository.getWorkDayByUserIdAndMonth(
-          staff.userId, now.month, now.year);
+          staff.value!.userId, now.month, now.year);
       workDayList.value = data;
     } catch (e) {
       errorMessage.value = 'Lỗi khi tải ngày làm việc: $e';
@@ -245,7 +246,7 @@ class WorkScheduleController extends GetxController {
 
   Future<void> createWorkDay() async {
     CreateWorkDayStaffModel asq = CreateWorkDayStaffModel(
-        username: staff.username,
+        username: staff.value!.username,
         dateOff: '',
         workDay: convertDateTimeToYMD(selectedDate.value!),
         startTime: convertTimeOfDayToString(startTime.value!),
@@ -255,6 +256,10 @@ class WorkScheduleController extends GetxController {
     if (result) {
       await fetchWorkDays();
       _filterWorkDaysBySelectedDate();
+      staff.value = filteredStaff.value;
+      // staff.value = staffList.firstWhere(
+      //   (s) => s.username == staff.value!.username,
+      // );
     }
   }
 
@@ -269,6 +274,11 @@ class WorkScheduleController extends GetxController {
     if (result) {
       await fetchWorkDays();
       _filterWorkDaysBySelectedDate();
+      await fetchStaffList();
+      // staff.value = filteredStaff.value;
+      staff.value = staffList.firstWhere(
+        (s) => s.username == staff.value!.username,
+      );
     }
   }
 

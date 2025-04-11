@@ -38,6 +38,14 @@ class StaffController extends GetxController {
     fetchStaffList();
   }
 
+  @override
+  void onReady() {
+    super.onReady();
+    print("Có quay lại");
+    fetchStaffList();
+    applyFilter();
+  }
+
   // Gọi API để lấy danh sách nhân viên từ repository
   Future<void> fetchStaffList() async {
     try {

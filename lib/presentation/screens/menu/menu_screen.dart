@@ -13,9 +13,12 @@ class MenuScreen extends GetView<MenusController> {
   const MenuScreen({super.key});
 
   void _showEditNameMenuModal(String idMenu, String nameMenu, String status) {
-    Get.dialog(EditNameMenuModal(idMenu: idMenu, nameMenu: nameMenu, onUpdateNameMenu: (value) {
-      controller.updateNameMenu(idMenu, value, status);
-    }));
+    Get.dialog(EditNameMenuModal(
+        idMenu: idMenu,
+        nameMenu: nameMenu,
+        onUpdateNameMenu: (value) {
+          controller.updateNameMenu(idMenu, value, status);
+        }));
   }
 
   Widget _buildMenuItem({
@@ -34,7 +37,8 @@ class MenuScreen extends GetView<MenusController> {
           'idMenu': idMenu,
         });
       },
-      onLongPress: () => _showEditNameMenuModal(idMenu, title, isActive ? 'Active' : 'Inactive'),
+      onLongPress: () => _showEditNameMenuModal(
+          idMenu, title, isActive ? 'Active' : 'Inactive'),
       onDoubleTap: () => controller.updateStatusMenu(idMenu, title),
       child: Container(
         margin: const EdgeInsets.only(bottom: 12),
@@ -173,7 +177,8 @@ class MenuScreen extends GetView<MenusController> {
                   await controller.fetchMenuItems();
                 },
                 child: ListView.builder(
-                  padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(bottom: 16),
+                  padding: const EdgeInsets.symmetric(horizontal: 16)
+                      .copyWith(bottom: 16),
                   itemCount: controller.sortedMenuItems.length,
                   itemBuilder: (context, index) {
                     final item = controller.sortedMenuItems[index];
